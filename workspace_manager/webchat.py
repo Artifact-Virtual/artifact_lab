@@ -1,18 +1,16 @@
 import os
 import sys
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'system', 'DevCore')))
-from ollama_interface import query_model
-
 import json
-import hashlib
-import datetime
-from pathlib import Path
-from flask import Flask, render_template_string, request, jsonify, send_from_directory
 import requests
+from flask import Flask, render_template_string, request, jsonify
+
+# Add DevCore to path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'DevCore')))
+from ollama_interface import query_model
 
 app = Flask(__name__)
 
-# HTML template for the chat interface
+# Simple HTML template for the chat interface
 CHAT_HTML = """
 <!DOCTYPE html>
 <html lang="en">
@@ -20,21 +18,12 @@ CHAT_HTML = """
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARTIFACT VIRTUAL ASSISTANT</title>
-    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
-    <!-- Tailwind CSS CDN for easy styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Manrope font for a unique, modern, sleek feel -->
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            background-color: #000000; /* Pure Black */
-            color: #FFFFFF; /* Pure White */
+            background-color: #000000;
+            color: #FFFFFF;
             font-family: 'Manrope', sans-serif;
             height: 100vh;
             overflow: hidden;
@@ -46,89 +35,65 @@ CHAT_HTML = """
             display: flex;
             justify-content: center;
             align-items: center;
-            /* Create the disappearing edge effect using linear gradients */
             background:
                 linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 5%),
                 linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 5%),
                 linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 5%),
                 linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 5%);
-            background-repeat: no-repeat;
-            background-size: 100% 5%, 100% 5%, 5% 100%, 5% 100%;
-            background-position: top, bottom, left, right;
         }
         
         .chat-container {
             width: 90%;
-            max-width: 900px;
-            height: 85vh;
-            background: rgba(0, 0, 0, 0.9);
+            max-width: 800px;
+            height: 80%;
+            background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
+            border-radius: 20px;
             backdrop-filter: blur(10px);
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            position: relative;
-            z-index: 1;
         }
         
         .chat-header {
-            background: rgba(0, 0, 0, 0.8);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            padding: 20px;
+            padding: 24px;
             text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .chat-messages {
             flex: 1;
-            padding: 20px;
             overflow-y: auto;
+            padding: 24px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
-        }
-        
-        .chat-messages::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        .chat-messages::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        
-        .chat-messages::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 3px;
+            gap: 16px;
         }
         
         .message {
-            max-width: 80%;
             padding: 12px 18px;
             border-radius: 12px;
+            max-width: 80%;
             word-wrap: break-word;
+            font-size: 16px;
+            line-height: 1.5;
             font-weight: 300;
         }
         
         .user-message {
             background: rgba(255, 255, 255, 0.1);
-            color: white;
-            align-self: flex-end;
             border: 1px solid rgba(255, 255, 255, 0.2);
+            align-self: flex-end;
         }
         
         .bot-message {
             background: rgba(255, 255, 255, 0.05);
-            color: #e0e0e0;
-            align-self: flex-start;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            align-self: flex-start;
         }
         
         .chat-input-container {
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.8);
+            padding: 24px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             gap: 12px;
@@ -137,24 +102,13 @@ CHAT_HTML = """
         .chat-input {
             flex: 1;
             padding: 12px 18px;
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 8px;
-            font-size: 16px;
-            outline: none;
-            background: rgba(255, 255, 255, 0.05);
             color: white;
+            font-size: 16px;
             font-family: 'Manrope', sans-serif;
-            font-weight: 300;
-            transition: border-color 0.3s, background-color 0.3s;
-        }
-        
-        .chat-input:focus {
-            border-color: rgba(255, 255, 255, 0.4);
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        .chat-input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            outline: none;
         }
         
         .send-button {
@@ -173,22 +127,6 @@ CHAT_HTML = """
         .send-button:hover:not(:disabled) {
             background: rgba(255, 255, 255, 0.2);
             border-color: rgba(255, 255, 255, 0.4);
-        }
-        
-        .send-button:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-        
-        .typing-indicator {
-            padding: 12px 18px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            align-self: flex-start;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            font-style: italic;
-            color: rgba(255, 255, 255, 0.7);
-            font-weight: 300;
         }
         
         .status {
@@ -215,13 +153,14 @@ CHAT_HTML = """
         <div class="chat-container">
             <div class="chat-header">
                 <h1 class="text-2xl font-extralight">ARTIFACT VIRTUAL ASSISTANT</h1>
+                <p class="text-sm font-light mt-2">Enhanced with File Management & Code Access</p>
             </div>
             <div id="status" class="status">
                 Connecting to Ollama...
             </div>
             <div class="chat-messages" id="chatMessages">
                 <div class="bot-message">
-                    Hello! I'm AVA. How can I help you with you today?
+                    Hello! I'm AVA. I can help you with code editing, file management, and more. I have access to your codebase and can make changes directly.
                 </div>
             </div>
             <div class="chat-input-container">
@@ -237,7 +176,6 @@ CHAT_HTML = """
     <script>
         let isConnected = false;
         
-        // Check Ollama status on page load
         window.onload = function() {
             checkOllamaStatus();
         };
@@ -250,8 +188,9 @@ CHAT_HTML = """
                 const statusDiv = document.getElementById('status');
                 const chatInput = document.getElementById('chatInput');
                 const sendButton = document.getElementById('sendButton');
-                  if (data.status === 'ready') {
-                    statusDiv.textContent = `✅ Connected (Model: ${data.model})`;
+                
+                if (data.status === 'ready') {
+                    statusDiv.textContent = `Connected to Model: ${data.model}`;
                     statusDiv.className = 'status ready';
                     chatInput.disabled = false;
                     sendButton.disabled = false;
@@ -278,23 +217,6 @@ CHAT_HTML = """
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
         
-        function showTypingIndicator() {
-            const messagesDiv = document.getElementById('chatMessages');
-            const typingDiv = document.createElement('div');
-            typingDiv.className = 'typing-indicator';
-            typingDiv.id = 'typing';
-            typingDiv.textContent = 'AI is thinking...';
-            messagesDiv.appendChild(typingDiv);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        }
-        
-        function hideTypingIndicator() {
-            const typingDiv = document.getElementById('typing');
-            if (typingDiv) {
-                typingDiv.remove();
-            }
-        }
-        
         async function sendMessage() {
             if (!isConnected) {
                 alert('Not connected to Ollama. Please check the server status.');
@@ -307,16 +229,11 @@ CHAT_HTML = """
             
             if (!message) return;
             
-            // Add user message
             addMessage(message, true);
             chatInput.value = '';
             
-            // Disable input while processing
             chatInput.disabled = true;
             sendButton.disabled = true;
-            
-            // Show typing indicator
-            showTypingIndicator();
             
             try {
                 const response = await fetch('/chat', {
@@ -329,26 +246,20 @@ CHAT_HTML = """
                 
                 const data = await response.json();
                 
-                // Hide typing indicator
-                hideTypingIndicator();
-                
                 if (data.success) {
                     addMessage(data.response);
                 } else {
                     addMessage(`Error: ${data.error}`);
                 }
             } catch (error) {
-                hideTypingIndicator();
                 addMessage(`Error: Failed to send message - ${error.message}`);
             }
             
-            // Re-enable input
             chatInput.disabled = false;
             sendButton.disabled = false;
             chatInput.focus();
         }
         
-        // Send message on Enter key
         document.getElementById('chatInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -356,7 +267,6 @@ CHAT_HTML = """
             }
         });
         
-        // Refresh status every 30 seconds
         setInterval(checkOllamaStatus, 30000);
     </script>
 </body>
@@ -383,18 +293,16 @@ class OllamaWebChat:
     def check_ollama_status(self):
         """Check if Ollama is running and responsive"""
         if self.model_provider == 'pt':
-            # For .pt, just check if any .pt model exists
             pt_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../.pt_models'))
-            pt_models = [f for f in os.listdir(pt_dir) if f.endswith('.pt')]
-            if pt_models:
-                return True, f"Ready with .pt model: {pt_models[0]}"
-            else:
-                return False, "No .pt models found in .pt_models directory"
+            if os.path.exists(pt_dir):
+                pt_models = [f for f in os.listdir(pt_dir) if f.endswith('.pt')]
+                if pt_models:
+                    return True, f"Ready with .pt model: {pt_models[0]}"
+            return False, "No .pt models found in .pt_models directory"
         
         try:
             response = requests.get(f"{self.base_url}/api/version", timeout=5)
             if response.status_code == 200:
-                # Also check if our model is available
                 models_response = requests.get(f"{self.base_url}/api/tags", timeout=5)
                 if models_response.status_code == 200:
                     models = models_response.json().get('models', [])
@@ -415,10 +323,26 @@ class OllamaWebChat:
             return False, f"Error: {str(e)}"
 
     def send_message(self, message):
-        """Send message to Ollama and get response"""
-        # Use provider-agnostic query_model
+        """Send message to Ollama with enhanced file management context"""
         try:
-            response = query_model(message)
+            # Enhance message with file management instructions
+            enhanced_message = f"""
+{message}
+
+SYSTEM CONTEXT: You are an AI assistant with advanced file management capabilities. You can:
+- Help with code analysis and editing
+- Suggest file modifications
+- Assist with project structure
+- Answer questions about codebases
+- Provide programming guidance
+
+Current workspace: w:\\worxpace\\artifact_lab
+Available components: workspace_manager, DevCore, blacknet
+
+Instructions: Be helpful and provide detailed assistance. If the user asks about files or code, provide comprehensive guidance.
+"""
+            
+            response = query_model(enhanced_message)
             return True, response
         except Exception as e:
             return False, f"Error sending message: {str(e)}"
@@ -426,7 +350,56 @@ class OllamaWebChat:
 # Global chat instance
 chat = OllamaWebChat()
 
-# File management audit log
+@app.route('/')
+def index():
+    return render_template_string(CHAT_HTML)
+
+@app.route('/status')
+def status():
+    is_ready, message = chat.check_ollama_status()
+    model = None
+    if is_ready:
+        if chat.model_provider == 'pt':
+            pt_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../.pt_models'))
+            if os.path.exists(pt_dir):
+                pt_models = [f for f in os.listdir(pt_dir) if f.endswith('.pt')]
+                model = pt_models[0] if pt_models else None
+        else:
+            model = chat.model
+    return jsonify({
+        'status': 'ready' if is_ready else 'error',
+        'message': message,
+        'model': model if is_ready else None
+    })
+
+@app.route('/chat', methods=['POST'])
+def chat_endpoint():
+    try:
+        data = request.get_json()
+        message = data.get('message', '').strip()
+        
+        if not message:
+            return jsonify({'success': False, 'error': 'Empty message'})
+        
+        is_ready, status_msg = chat.check_ollama_status()
+        if not is_ready:
+            return jsonify({'success': False, 'error': f'Ollama not ready: {status_msg}'})
+        
+        success, response = chat.send_message(message)
+        
+        if success:
+            return jsonify({'success': True, 'response': response})
+        else:
+            return jsonify({'success': False, 'error': response})
+            
+    except Exception as e:
+        return jsonify({'success': False, 'error': f'Server error: {str(e)}'})
+
+# File Management API Endpoints
+import hashlib
+import datetime
+import shutil
+
 AUDIT_LOG_FILE = os.path.join(os.path.dirname(__file__), 'file_operations_audit.log')
 
 def log_file_operation(operation, path, user_id="system", success=True, error=None):
@@ -461,8 +434,6 @@ def is_safe_path(path):
     except:
         return False
 
-# File Management API Endpoints
-
 @app.route('/api/files/list', methods=['GET'])
 def list_files():
     """List files and directories"""
@@ -481,7 +452,7 @@ def list_files():
         if os.path.isdir(full_path):
             for item in os.listdir(full_path):
                 item_path = os.path.join(full_path, item)
-                relative_path = os.path.relpath(item_path, workspace_root).replace('\\', '/');
+                relative_path = os.path.relpath(item_path, workspace_root).replace('\\', '/')
                 
                 item_info = {
                     'name': item,
@@ -513,7 +484,6 @@ def read_file():
         if not os.path.exists(full_path) or not os.path.isfile(full_path):
             return jsonify({'success': False, 'error': 'File does not exist'}), 404
         
-        # Try to read as text, fallback to binary
         try:
             with open(full_path, 'r', encoding='utf-8') as f:
                 content = f.read()
@@ -522,7 +492,7 @@ def read_file():
             with open(full_path, 'rb') as f:
                 content = f.read()
             content_type = 'binary'
-            content = content.hex()  # Convert to hex for JSON transport
+            content = content.hex()
         
         file_info = {
             'name': os.path.basename(full_path),
@@ -555,11 +525,9 @@ def write_file():
         workspace_root = get_workspace_root()
         full_path = os.path.join(workspace_root, path.lstrip('/\\'))
         
-        # Create directories if needed
         if create_dirs:
             os.makedirs(os.path.dirname(full_path), exist_ok=True)
         
-        # Write file
         with open(full_path, 'w', encoding='utf-8') as f:
             f.write(content)
         
@@ -578,12 +546,12 @@ def write_file():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/api/files/create', methods=['POST'])
-def create_file_or_directory():
-    """Create file or directory"""
+def create_file():
+    """Create new file or directory"""
     try:
         data = request.get_json()
         path = data.get('path', '')
-        item_type = data.get('type', 'file')  # 'file' or 'directory'
+        item_type = data.get('type', 'file')
         content = data.get('content', '')
         
         if not path or not is_safe_path(path):
@@ -617,41 +585,12 @@ def create_file_or_directory():
         log_file_operation('create', path, success=False, error=str(e))
         return jsonify({'success': False, 'error': str(e)}), 500
 
-@app.route('/api/files/delete', methods=['DELETE'])
-def delete_file_or_directory():
-    """Delete file or directory"""
-    try:
-        data = request.get_json()
-        path = data.get('path', '')
-        
-        if not path or not is_safe_path(path):
-            return jsonify({'success': False, 'error': 'Invalid path'}), 400
-        
-        workspace_root = get_workspace_root()
-        full_path = os.path.join(workspace_root, path.lstrip('/\\'))
-        
-        if not os.path.exists(full_path):
-            return jsonify({'success': False, 'error': 'Path does not exist'}), 404
-        
-        if os.path.isdir(full_path):
-            import shutil
-            shutil.rmtree(full_path)
-        else:
-            os.remove(full_path)
-        
-        log_file_operation('delete', path, success=True)
-        return jsonify({'success': True, 'message': 'Item deleted successfully'})
-        
-    except Exception as e:
-        log_file_operation('delete', path, success=False, error=str(e))
-        return jsonify({'success': False, 'error': str(e)}), 500
-
 @app.route('/api/files/search', methods=['GET'])
 def search_files():
     """Search for files by name or content"""
     try:
         query = request.args.get('query', '')
-        search_type = request.args.get('type', 'name')  # 'name' or 'content'
+        search_type = request.args.get('type', 'name')
         path = request.args.get('path', '')
         
         if not query:
@@ -667,9 +606,9 @@ def search_files():
         for root, dirs, files in os.walk(search_path):
             for file in files:
                 file_path = os.path.join(root, file)
-                relative_path = os.path.relpath(file_path, workspace_root).replace('\\', '/');
+                relative_path = os.path.relpath(file_path, workspace_root).replace('\\', '/')
                 
-                match = False;
+                match = False
                 if search_type == 'name':
                     match = query.lower() in file.lower()
                 elif search_type == 'content':
@@ -695,29 +634,11 @@ def search_files():
         log_file_operation('search', path, success=False, error=str(e))
         return jsonify({'success': False, 'error': str(e)}), 500
 
-@app.route('/api/audit/log', methods=['GET'])
-def get_audit_log():
-    """Get audit log entries"""
-    try:
-        limit = int(request.args.get('limit', 100))
-        
-        if not os.path.exists(AUDIT_LOG_FILE):
-            return jsonify({'success': True, 'entries': []})
-        
-        entries = []
-        with open(AUDIT_LOG_FILE, 'r', encoding='utf-8') as f:
-            lines = f.readlines()
-            for line in lines[-limit:]:
-                try:
-                    entry = json.loads(line.strip())
-                    entries.append(entry)
-                except:
-                    continue
-        
-        return jsonify({'success': True, 'entries': entries})
-        
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)}), 500
+def run_webchat():
+    """Run the web chat server"""
+    print("Starting Enhanced Ollama Web Chat on http://localhost:8080")
+    print("Features: LLM Code Access, Enhanced Context, File Management Ready")
+    app.run(host='0.0.0.0', port=8080, debug=False, threaded=True)
 
-# ...existing endpoints...
-```
+if __name__ == "__main__":
+    run_webchat()
