@@ -124,6 +124,13 @@
             color: #f44747;
             padding: 16px;
         }
+        .file-subtree {
+            margin-left: 18px;
+        }
+        .expand-arrow {
+            font-size: 12px;
+            margin-left: 4px;
+        }
     </style>
 </head>
 <body>
@@ -219,16 +226,25 @@
             }
         }
 
-        function renderFileTree(items) {
+        function renderFileTree(items, parentPath = '') {
             const tree = document.getElementById('fileTree');
-            tree.innerHTML = '';
-
+            if (!tree) return;
             if (!items || items.length === 0) {
-                tree.innerHTML = '<div class="loading">No files found</div>';
+                if (parentPath === '') {
+                    tree.innerHTML = '<div class="loading">No files found</div>';
+                }
                 return;
             }
 
-            // Sort: directories first, then files
+            // Helper to create a sub-tree container
+            function createSubTree(id) {
+                const subTree = document.createElement('div');
+                subTree.className = 'file-subtree';
+                subTree.style.marginLeft = '18px';
+                subTree.id = id;
+                return subTree;
+            }
+
             items.sort((a, b) => {
                 if (a.type === 'directory' && b.type === 'file') return -1;
                 if (a.type === 'file' && b.type === 'directory') return 1;
@@ -238,17 +254,54 @@
             items.forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'file-item';
-                
+                const fullPath = parentPath ? parentPath + '/' + item.name : item.name;
                 if (item.type === 'directory') {
                     div.className += ' folder';
-                    div.innerHTML = `<span class="file-icon">📁</span>${item.name}`;
-                    // TODO: Add folder expansion functionality
+                    div.innerHTML = `<span class="file-icon">📁</span><span class="file-label">${item.name}</span> <span class="expand-arrow">▶</span>`;
+                    div.style.userSelect = 'none';
+                    div.onclick = async (e) => {
+                        e.stopPropagation();
+                        const arrow = div.querySelector('.expand-arrow');
+                        const expanded = div.getAttribute('data-expanded') === 'true';
+                        if (expanded) {
+                            // Collapse
+                            div.setAttribute('data-expanded', 'false');
+                            arrow.textContent = '▶';
+                            const subTree = document.getElementById('subtree-' + btoa(fullPath));
+                            if (subTree) subTree.remove();
+                        } else {
+                            // Expand
+                            div.setAttribute('data-expanded', 'true');
+                            arrow.textContent = '▼';
+                            // Fetch directory contents
+                            const subTree = createSubTree('subtree-' + btoa(fullPath));
+                            div.after(subTree);
+                            subTree.innerHTML = '<div class="loading">Loading...</div>';
+                            try {
+                                const resp = await fetch(`/api/files/list?path=${encodeURIComponent(fullPath + '/')}`);
+                                const data = await resp.json();
+                                if (data.success) {
+                                    subTree.innerHTML = '';
+                                    renderFileTree(data.items, fullPath);
+                                } else {
+                                    subTree.innerHTML = '<div class="error">Failed to load</div>';
+                                }
+                            } catch {
+                                subTree.innerHTML = '<div class="error">Error loading</div>';
+                            }
+                        }
+                    };
                 } else {
                     div.innerHTML = `<span class="file-icon">📄</span>${item.name}`;
-                    div.onclick = () => openFile(item.name);
+                    div.onclick = () => openFile(fullPath);
                 }
-                
-                tree.appendChild(div);
+                if (parentPath === '') {
+                    tree.appendChild(div);
+                } else {
+                    // For subdirectories, append to the correct subtree
+                    const subTree = document.getElementById('subtree-' + btoa(parentPath));
+                    if (subTree) subTree.appendChild(div);
+                }
             });
         }
 

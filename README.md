@@ -1,18 +1,18 @@
 # ARTIFACT VIRTUAL LABORATORY
 
-> Advanced AI-powered development environment with Monaco Editor-based file management and intelligent code assistance.
+> Advanced AI-powered development environment with Monaco Editor-based file management, intelligent code assistance, and next-generation Studio interface.
 
-A comprehensive development toolkit featuring real-time codebase analysis, professional file management, and AI-powered assistance. Combines Monaco Editor's full IDE capabilities with Ollama LLM integration for intelligent code analysis and generation.  
-Built for extensibility, privacy, and high-performance development workflows—ideal for teams and solo developers seeking professional coding tools with AI assistance.
+A comprehensive development toolkit featuring real-time codebase analysis, professional file management, and AI-powered assistance. Combines Monaco Editor's full IDE capabilities with Ollama LLM integration for intelligent code analysis and generation. Built for extensibility, privacy, and high-performance development workflows—ideal for teams and solo developers seeking professional coding tools with AI assistance.
 
 ## Features
 
 ### **Core Development Environment**
 - **AVA File Manager**: Monaco Editor-based professional file editing with VS Code experience
+- **AVA Studio**: Next-generation Monaco+AI+search interface (multi-tab, chat, search, git, context menus)
 - **AI-Powered Chat**: Intelligent code assistance with file context and direct modifications
 - **File Management API**: Comprehensive file operations (create, read, write, delete)
 - **Real-time Monitoring**: Live file watching and workspace indexing
-- **Multi-Language Support**: 25+ programming languages with syntax highlighting
+- **Multi-Language Support**: 180+ programming languages with syntax highlighting
 
 ### **Professional Interface**
 - **Monaco Editor Integration**: Full VS Code editing experience in browser
@@ -20,6 +20,8 @@ Built for extensibility, privacy, and high-performance development workflows—i
 - **File Tree Navigation**: Interactive explorer with file type icons
 - **Status Bar**: Real-time feedback and operation status
 - **Keyboard Shortcuts**: Industry-standard shortcuts (Ctrl+S, Ctrl+R, etc.)
+- **Multi-file Tabs**: Work with multiple files simultaneously
+- **Context Menus**: Right-click actions for files/folders
 
 ### **AI Intelligence**
 - **Ollama Integration**: Multiple model support (CodeLlama, Qwen2.5-Coder, etc.)
@@ -27,6 +29,7 @@ Built for extensibility, privacy, and high-performance development workflows—i
 - **Code Analysis**: Intelligent suggestions and error detection
 - **Natural Language Commands**: Convert descriptions to code
 - **Audit Logging**: Track all AI operations and file changes
+- **Chat Panel**: AI chat with file/project context and direct file operations
 
 ### **Analytics & Visualization**
 - **Enhanced Visualizer**: Advanced code analytics and system monitoring
@@ -41,6 +44,9 @@ Built for extensibility, privacy, and high-performance development workflows—i
 - **IntelliSense**: Auto-completion and code suggestions
 - **Find & Replace**: Powerful search capabilities
 - **Multiple Cursors**: Edit multiple locations simultaneously
+- **Advanced Search**: Fuzzy, symbol, and content search (planned)
+- **Git Integration**: Source control panel (planned)
+- **Airtable/Windmill Integration**: Workflow/data management (planned)
 
 ## Directory Structure
 
@@ -246,3 +252,19 @@ python -m workspace_manager.main              # Main orchestrator (no Ollama aut
 ## License
 
 See [license.txt](license.txt) for details (MIT License).
+
+## Roadmap
+
+- ✅ Monaco-first file manager and studio interface
+- ✅ All documentation and SOPs updated
+- ✅ Enhanced visualizer is now the only analytics/visualization option
+- 🚧 Studio interface with Monaco+AI+search (in progress)
+- 🚧 Airtable/Windmill integration (planned)
+- 🚧 Advanced chat/file context for AI (planned)
+- 🚧 Multi-file/project operations, search, git, and collaboration (planned)
+
+## See Also
+- `FILE_MANAGER.md` for file manager help and supported languages
+- `STUDIO_FEATURES.md` for full studio features and API
+- `workspace_manager/WORKSPACE_MANAGER.md` for system architecture
+- `_thoughtprocess/notes/n220625.sop` for operational procedures and changelog

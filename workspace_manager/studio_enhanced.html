@@ -1,0 +1,1616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AVA Development Studio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+        .sidebar {
+            width: 280px;
+            background: #252526;
+            border-right: 1px solid #3e3e42;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .sidebar-resizer {
+            width: 4px;
+            background: transparent;
+            cursor: col-resize;
+            position: absolute;
+            right: -2px;
+            top: 0;
+            bottom: 0;
+            z-index: 10;
+        }
+        .sidebar-resizer:hover {
+            background: #007acc;
+        }
+        .tab-bar {
+            display: flex;
+            background: #2d2d30;
+            border-bottom: 1px solid #3e3e42;
+        }
+        .tab {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-right: 1px solid #3e3e42;
+            font-size: 11px;
+            background: #37373d;
+            color: #cccccc;
+            min-width: 60px;
+            text-align: center;
+        }
+        .tab.active {
+            background: #252526;
+            color: #ffffff;
+        }
+        .tab:hover {
+            background: #2a2d2e;
+        }
+        .panel {
+            flex: 1;
+            overflow-y: auto;
+            display: none;
+        }
+        .panel.active {
+            display: block;
+        }
+        .panel-header {
+            padding: 10px 16px;
+            background: #2d2d30;
+            border-bottom: 1px solid #3e3e42;
+            font-weight: 600;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .panel-actions {
+            display: flex;
+            gap: 4px;
+        }
+        .panel-action {
+            padding: 2px 6px;
+            background: #007acc;
+            color: white;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 10px;
+        }
+        .panel-action:hover {
+            background: #1177bb;
+        }
+        .file-tree {
+            padding: 8px 0;
+        }
+        .file-item {
+            padding: 4px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            border-radius: 0;
+            position: relative;
+        }
+        .file-item:hover {
+            background: #2a2d2e;
+        }
+        .file-item.selected {
+            background: #094771;
+            color: #ffffff;
+        }
+        .file-item.folder {
+            font-weight: 500;
+        }
+        .file-item.folder::before {
+            content: "📁";
+            margin-right: 6px;
+        }
+        .file-item.file::before {
+            content: "📄";
+            margin-right: 6px;
+        }
+        .file-item.expanded::before {
+            content: "📂";
+        }
+        .file-item-name {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .file-item-actions {
+            display: none;
+            gap: 2px;
+        }
+        .file-item:hover .file-item-actions {
+            display: flex;
+        }
+        .file-action {
+            padding: 1px 4px;
+            background: #007acc;
+            color: white;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 10px;
+        }
+        .file-action:hover {
+            background: #1177bb;
+        }
+        .search-container {
+            padding: 8px 16px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 6px 10px;
+            background: #3c3c3c;
+            border: 1px solid #3e3e42;
+            color: #cccccc;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: #007acc;
+        }
+        .search-results {
+            padding: 8px 0;
+        }
+        .search-result {
+            padding: 4px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+        }
+        .search-result:hover {
+            background: #2a2d2e;
+        }
+        .search-result-path {
+            color: #858585;
+            font-size: 10px;
+            margin-left: auto;
+        }
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .editor-tabs {
+            height: 35px;
+            background: #2d2d30;
+            border-bottom: 1px solid #3e3e42;
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: thin;
+        }
+        .editor-tabs::-webkit-scrollbar {
+            height: 4px;
+        }
+        .editor-tabs::-webkit-scrollbar-track {
+            background: #2d2d30;
+        }
+        .editor-tabs::-webkit-scrollbar-thumb {
+            background: #007acc;
+            border-radius: 2px;
+        }
+        .editor-tab {
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            background: #37373d;
+            color: #cccccc;
+            border-right: 1px solid #3e3e42;
+            cursor: pointer;
+            font-size: 12px;
+            min-width: 120px;
+            max-width: 200px;
+            position: relative;
+        }
+        .editor-tab.active {
+            background: #1e1e1e;
+            color: #ffffff;
+        }
+        .editor-tab:hover {
+            background: #2a2d2e;
+        }
+        .editor-tab.modified::after {
+            content: "●";
+            margin-left: 6px;
+            color: #007acc;
+        }
+        .tab-close {
+            margin-left: auto;
+            padding: 2px 4px;
+            border-radius: 2px;
+            color: #858585;
+            font-size: 14px;
+            line-height: 1;
+        }
+        .tab-close:hover {
+            background: #e81123;
+            color: white;
+        }
+        .tab-label {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .toolbar {
+            height: 35px;
+            background: #2d2d30;
+            border-bottom: 1px solid #3e3e42;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            gap: 8px;
+        }
+        .toolbar-button {
+            padding: 4px 8px;
+            background: #007acc;
+            color: white;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .toolbar-button:hover {
+            background: #1177bb;
+        }
+        .toolbar-button:disabled {
+            background: #3e3e42;
+            color: #858585;
+            cursor: not-allowed;
+        }
+        .toolbar-separator {
+            width: 1px;
+            height: 20px;
+            background: #3e3e42;
+            margin: 0 4px;
+        }
+        .editor-container {
+            flex: 1;
+            position: relative;
+            display: flex;
+        }
+        .editor-main {
+            flex: 1;
+            position: relative;
+        }
+        .editor-sidebar {
+            width: 250px;
+            background: #1e1e1e;
+            border-left: 1px solid #3e3e42;
+            display: none;
+        }
+        .editor-sidebar.active {
+            display: block;
+        }
+        .minimap-container {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 120px;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 1px solid #3e3e42;
+            display: none;
+        }
+        .minimap-container.active {
+            display: block;
+        }
+        .status-bar {
+            height: 22px;
+            background: #007acc;
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            font-size: 11px;
+            border-top: 1px solid #3e3e42;
+        }
+        .status-bar div {
+            margin-right: 16px;
+        }
+        .status-bar .status-right {
+            margin-left: auto;
+            margin-right: 0;
+        }
+        .chat-panel {
+            width: 350px;
+            background: #252526;
+            border-left: 1px solid #3e3e42;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .chat-panel-resizer {
+            width: 4px;
+            background: transparent;
+            cursor: col-resize;
+            position: absolute;
+            left: -2px;
+            top: 0;
+            bottom: 0;
+            z-index: 10;
+        }
+        .chat-panel-resizer:hover {
+            background: #007acc;
+        }
+        .chat-header {
+            padding: 12px 16px;
+            background: #2d2d30;
+            border-bottom: 1px solid #3e3e42;
+            font-weight: 600;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chat-actions {
+            display: flex;
+            gap: 4px;
+        }
+        .chat-action {
+            padding: 2px 6px;
+            background: #007acc;
+            color: white;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 10px;
+        }
+        .chat-action:hover {
+            background: #1177bb;
+        }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .message {
+            padding: 8px 12px;
+            border-radius: 6px;
+            max-width: 90%;
+            line-height: 1.4;
+            font-size: 12px;
+        }
+        .user-message {
+            background: rgba(0, 123, 255, 0.2);
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+        .ai-message {
+            background: rgba(255, 255, 255, 0.05);
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+        .message-time {
+            font-size: 10px;
+            color: #858585;
+            margin-top: 4px;
+        }
+        .message-actions {
+            display: flex;
+            gap: 4px;
+            margin-top: 6px;
+        }
+        .message-action {
+            padding: 2px 6px;
+            background: rgba(0, 122, 204, 0.3);
+            color: #007acc;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 10px;
+        }
+        .message-action:hover {
+            background: rgba(0, 122, 204, 0.5);
+        }
+        .chat-input-container {
+            padding: 12px;
+            border-top: 1px solid #3e3e42;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .chat-input {
+            width: 100%;
+            padding: 8px 12px;
+            background: #3c3c3c;
+            border: 1px solid #3e3e42;
+            color: #cccccc;
+            border-radius: 4px;
+            font-size: 12px;
+            resize: vertical;
+            min-height: 60px;
+            max-height: 120px;
+        }
+        .chat-input:focus {
+            outline: none;
+            border-color: #007acc;
+        }
+        .chat-input-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chat-send {
+            padding: 6px 12px;
+            background: #007acc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .chat-send:hover {
+            background: #1177bb;
+        }
+        .chat-send:disabled {
+            background: #3e3e42;
+            color: #858585;
+            cursor: not-allowed;
+        }
+        .chat-options {
+            display: flex;
+            gap: 8px;
+            font-size: 10px;
+        }
+        .chat-option {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .chat-option input {
+            margin: 0;
+        }
+        .context-menu {
+            position: fixed;
+            background: #2d2d30;
+            border: 1px solid #3e3e42;
+            border-radius: 4px;
+            padding: 4px 0;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        .context-menu-item {
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .context-menu-item:hover {
+            background: #094771;
+        }
+        .context-menu-separator {
+            height: 1px;
+            background: #3e3e42;
+            margin: 4px 0;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #858585;
+            font-size: 12px;
+        }
+        .error {
+            color: #f48771;
+            padding: 8px 16px;
+            background: rgba(244, 135, 113, 0.1);
+            border: 1px solid rgba(244, 135, 113, 0.3);
+            border-radius: 4px;
+            margin: 8px 16px;
+            font-size: 12px;
+        }
+        .welcome-content {
+            padding: 20px;
+            text-align: center;
+            color: #cccccc;
+        }
+        .welcome-content h1 {
+            color: #007acc;
+            margin-bottom: 20px;
+        }
+        .welcome-content h2 {
+            color: #cccccc;
+            margin: 20px 0 10px 0;
+        }
+        .welcome-content ul {
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .welcome-content li {
+            margin: 8px 0;
+        }
+        .highlight {
+            background: rgba(255, 255, 0, 0.2);
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+        .git-status {
+            padding: 8px 16px;
+            border-bottom: 1px solid #3e3e42;
+        }
+        .git-status-item {
+            display: flex;
+            align-items: center;
+            padding: 2px 0;
+            font-size: 11px;
+        }
+        .git-status-modified {
+            color: #f9c74f;
+        }
+        .git-status-added {
+            color: #90e0ef;
+        }
+        .git-status-deleted {
+            color: #f48771;
+        }
+        .breadcrumb {
+            padding: 8px 16px;
+            background: #2d2d30;
+            border-bottom: 1px solid #3e3e42;
+            font-size: 11px;
+            color: #858585;
+        }
+        .breadcrumb-item {
+            display: inline;
+        }
+        .breadcrumb-item:not(:last-child)::after {
+            content: " > ";
+            margin: 0 4px;
+        }
+        .breadcrumb-item:hover {
+            color: #007acc;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-resizer"></div>
+            <div class="tab-bar">
+                <div class="tab active" onclick="switchTab('files')">Files</div>
+                <div class="tab" onclick="switchTab('search')">Search</div>
+                <div class="tab" onclick="switchTab('git')">Git</div>
+            </div>
+            
+            <!-- Files Panel -->
+            <div id="filesPanel" class="panel active">
+                <div class="panel-header">
+                    <span>EXPLORER</span>
+                    <div class="panel-actions">
+                        <button class="panel-action" onclick="createNewFile()" title="New File">+</button>
+                        <button class="panel-action" onclick="createNewFolder()" title="New Folder">📁</button>
+                        <button class="panel-action" onclick="refreshFiles()" title="Refresh">⟳</button>
+                    </div>
+                </div>
+                <div class="breadcrumb" id="breadcrumb">
+                    <span class="breadcrumb-item" onclick="navigateTo('/')">workspace</span>
+                </div>
+                <div class="file-tree" id="fileTree">
+                    <div class="loading">Loading files...</div>
+                </div>
+            </div>
+            
+            <!-- Search Panel -->
+            <div id="searchPanel" class="panel">
+                <div class="panel-header">
+                    <span>SEARCH</span>
+                    <div class="panel-actions">
+                        <button class="panel-action" onclick="clearSearch()" title="Clear">✕</button>
+                    </div>
+                </div>
+                <div class="search-container">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search files..." />
+                </div>
+                <div class="search-results" id="searchResults"></div>
+            </div>
+            
+            <!-- Git Panel -->
+            <div id="gitPanel" class="panel">
+                <div class="panel-header">
+                    <span>SOURCE CONTROL</span>
+                    <div class="panel-actions">
+                        <button class="panel-action" onclick="refreshGitStatus()" title="Refresh">⟳</button>
+                    </div>
+                </div>
+                <div class="git-status" id="gitStatus">
+                    <div class="loading">Loading git status...</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Editor Tabs -->
+            <div class="editor-tabs" id="editorTabs">
+                <div class="editor-tab active" data-file="welcome">
+                    <span class="tab-label">Welcome</span>
+                </div>
+            </div>
+            
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <button class="toolbar-button" id="saveBtn" onclick="saveFile()" disabled>Save</button>
+                <button class="toolbar-button" id="saveAllBtn" onclick="saveAllFiles()">Save All</button>
+                <div class="toolbar-separator"></div>
+                <button class="toolbar-button" onclick="toggleMinimap()">Minimap</button>
+                <button class="toolbar-button" onclick="toggleWordWrap()">Word Wrap</button>
+                <button class="toolbar-button" onclick="formatCode()">Format</button>
+                <div class="toolbar-separator"></div>
+                <button class="toolbar-button" onclick="findInFile()">Find</button>
+                <button class="toolbar-button" onclick="findAndReplace()">Replace</button>
+                <div class="toolbar-separator"></div>
+                <button class="toolbar-button" onclick="toggleTheme()">Theme</button>
+            </div>
+            
+            <!-- Editor Container -->
+            <div class="editor-container">
+                <div class="editor-main">
+                    <div id="monaco-editor" style="height: 100%; width: 100%;"></div>
+                    <div class="minimap-container" id="minimapContainer"></div>
+                </div>
+                <div class="editor-sidebar" id="editorSidebar">
+                    <!-- Outline, Problems, etc. -->
+                </div>
+            </div>
+            
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <div id="statusLeft">Ready</div>
+                <div id="statusLanguage"></div>
+                <div id="statusPosition">Line 1, Column 1</div>
+                <div id="statusSelection"></div>
+                <div class="status-right" id="statusRight">AVA Development Studio</div>
+            </div>
+        </div>
+        
+        <!-- AI Chat Panel -->
+        <div class="chat-panel" id="chatPanel">
+            <div class="chat-panel-resizer"></div>
+            <div class="chat-header">
+                <div>
+                    <strong>AVA Assistant</strong>
+                    <div style="font-size: 10px; font-weight: normal; color: #858585;">AI Code Assistant</div>
+                </div>
+                <div class="chat-actions">
+                    <button class="chat-action" onclick="clearChat()" title="Clear Chat">✕</button>
+                    <button class="chat-action" onclick="toggleChat()" title="Toggle Chat">⟲</button>
+                </div>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <div class="ai-message">
+                    <div>Hello! I'm AVA, your AI development assistant. I can help you with:</div>
+                    <div style="margin-top: 8px;">
+                        • Code analysis and suggestions<br>
+                        • File operations and management<br>
+                        • Debugging and optimization<br>
+                        • Project structure guidance<br>
+                        • Documentation and refactoring
+                    </div>
+                    <div style="margin-top: 8px; font-size: 11px; color: #858585;">
+                        I can see your current file and make direct modifications. Just ask!
+                    </div>
+                    <div class="message-time">Just now</div>
+                </div>
+            </div>
+            
+            <div class="chat-input-container">
+                <textarea class="chat-input" id="chatInput" placeholder="Ask me anything about your code..." disabled></textarea>
+                <div class="chat-input-actions">
+                    <div class="chat-options">
+                        <label class="chat-option">
+                            <input type="checkbox" id="includeFileContext" checked>
+                            <span>Include file context</span>
+                        </label>
+                        <label class="chat-option">
+                            <input type="checkbox" id="autoApplyChanges">
+                            <span>Auto-apply changes</span>
+                        </label>
+                    </div>
+                    <button class="chat-send" id="chatSend" onclick="sendMessage()" disabled>Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Context Menu -->
+    <div class="context-menu" id="contextMenu">
+        <div class="context-menu-item" onclick="contextAction('copy')">Copy</div>
+        <div class="context-menu-item" onclick="contextAction('cut')">Cut</div>
+        <div class="context-menu-item" onclick="contextAction('paste')">Paste</div>
+        <div class="context-menu-separator"></div>
+        <div class="context-menu-item" onclick="contextAction('rename')">Rename</div>
+        <div class="context-menu-item" onclick="contextAction('delete')">Delete</div>
+        <div class="context-menu-separator"></div>
+        <div class="context-menu-item" onclick="contextAction('openInTab')">Open in New Tab</div>
+        <div class="context-menu-item" onclick="contextAction('revealInExplorer')">Reveal in Explorer</div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+    <script>
+        // Global variables
+        let editor = null;
+        let currentFile = 'welcome';
+        let files = [];
+        let openFiles = new Map();
+        let isConnected = false;
+        let currentTheme = 'vs-dark';
+        let minimapEnabled = false;
+        let wordWrapEnabled = false;
+        let currentPath = '/';
+        
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeMonaco();
+            loadFiles();
+            checkAIStatus();
+            setupEventListeners();
+            setupResizers();
+            
+            // Add welcome tab
+            openFiles.set('welcome', {
+                content: getWelcomeContent(),
+                language: 'html',
+                modified: false
+            });
+        });
+
+        // Monaco Editor initialization
+        function initializeMonaco() {
+            require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
+            require(['vs/editor/editor.main'], function() {
+                editor = monaco.editor.create(document.getElementById('monaco-editor'), {
+                    value: getWelcomeContent(),
+                    language: 'html',
+                    theme: currentTheme,
+                    automaticLayout: true,
+                    minimap: { enabled: minimapEnabled },
+                    wordWrap: wordWrapEnabled ? 'on' : 'off',
+                    fontSize: 14,
+                    lineNumbers: 'on',
+                    roundedSelection: false,
+                    scrollBeyondLastLine: false,
+                    readOnly: false,
+                    cursorStyle: 'line',
+                    glyphMargin: true,
+                    folding: true,
+                    foldingHighlight: true,
+                    showFoldingControls: 'always',
+                    unfoldOnClickAfterEndOfLine: false,
+                    smoothScrolling: true,
+                    mouseWheelScrollSensitivity: 1,
+                    fastScrollSensitivity: 5,
+                    multiCursorModifier: 'ctrlCmd',
+                    selectionHighlight: true,
+                    occurrencesHighlight: true,
+                    codeLens: true,
+                    colorDecorators: true,
+                    contextmenu: true,
+                    links: true,
+                    mouseWheelZoom: true,
+                    dragAndDrop: true,
+                    suggestOnTriggerCharacters: true,
+                    acceptSuggestionOnEnter: 'on',
+                    acceptSuggestionOnCommitCharacter: true,
+                    snippetSuggestions: 'top',
+                    emptySelectionClipboard: false,
+                    copyWithSyntaxHighlighting: true,
+                    formatOnPaste: true,
+                    formatOnType: true,
+                    autoIndent: 'advanced',
+                    bracketPairColorization: { enabled: true },
+                    guides: {
+                        bracketPairs: true,
+                        bracketPairsHorizontal: true,
+                        highlightActiveBracketPair: true,
+                        indentation: true,
+                        highlightActiveIndentation: true
+                    }
+                });
+
+                // Add editor event listeners
+                editor.onDidChangeModelContent(() => {
+                    if (currentFile !== 'welcome') {
+                        const file = openFiles.get(currentFile);
+                        if (file) {
+                            file.content = editor.getValue();
+                            file.modified = true;
+                            updateTabModifiedState(currentFile, true);
+                            updateSaveButton();
+                        }
+                    }
+                });
+
+                editor.onDidChangeCursorPosition((e) => {
+                    updateStatusPosition(e.position);
+                });
+
+                editor.onDidChangeCursorSelection((e) => {
+                    updateStatusSelection(e.selection);
+                });
+
+                // Add key bindings
+                editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
+                    saveFile();
+                });
+
+                editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyS, () => {
+                    saveAllFiles();
+                });
+
+                editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyF, () => {
+                    findInFile();
+                });
+
+                editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyH, () => {
+                    findAndReplace();
+                });
+
+                // Configure language features
+                configureLanguageFeatures();
+            });
+        }
+
+        function configureLanguageFeatures() {
+            // Configure completion providers
+            monaco.languages.registerCompletionItemProvider('javascript', {
+                provideCompletionItems: function(model, position) {
+                    const suggestions = [
+                        {
+                            label: 'console.log',
+                            kind: monaco.languages.CompletionItemKind.Function,
+                            insertText: 'console.log($1);',
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            documentation: 'Log to console'
+                        },
+                        {
+                            label: 'function',
+                            kind: monaco.languages.CompletionItemKind.Keyword,
+                            insertText: 'function ${1:name}(${2:params}) {\n\t$0\n}',
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            documentation: 'Function declaration'
+                        }
+                    ];
+                    return { suggestions: suggestions };
+                }
+            });
+
+            // Configure hover providers
+            monaco.languages.registerHoverProvider('javascript', {
+                provideHover: function(model, position) {
+                    return {
+                        range: new monaco.Range(position.lineNumber, position.column, position.lineNumber, position.column),
+                        contents: [
+                            { value: '**AI Suggestion**' },
+                            { value: 'This is an AI-powered hover hint. Ask AVA for more details!' }
+                        ]
+                    };
+                }
+            });
+        }
+
+        // File operations
+        async function loadFiles() {
+            updateStatus('Loading files...');
+            try {
+                const response = await fetch(`/api/files/list?path=${encodeURIComponent(currentPath)}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    files = data.items;
+                    renderFileTree(files);
+                    updateBreadcrumb();
+                    updateStatus('Ready');
+                } else {
+                    showError('Failed to load files: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                showError('Error loading files: ' + error.message);
+            }
+        }
+
+        function renderFileTree(items) {
+            const tree = document.getElementById('fileTree');
+            tree.innerHTML = '';
+
+            if (!items || items.length === 0) {
+                tree.innerHTML = '<div class="loading">No files found</div>';
+                return;
+            }
+
+            items.forEach(item => {
+                const fileItem = document.createElement('div');
+                fileItem.className = `file-item ${item.type}`;
+                fileItem.innerHTML = `
+                    <span class="file-item-name">${item.name}</span>
+                    <div class="file-item-actions">
+                        ${item.type === 'file' ? 
+                            '<button class="file-action" onclick="openFile(\'' + item.name + '\')">Open</button>' : 
+                            '<button class="file-action" onclick="navigateToFolder(\'' + item.name + '\')">Open</button>'
+                        }
+                        <button class="file-action" onclick="showContextMenu(event, \'' + item.name + '\', \'' + item.type + '\')">⋮</button>
+                    </div>
+                `;
+                
+                if (item.type === 'file') {
+                    fileItem.onclick = () => openFile(item.name);
+                } else {
+                    fileItem.onclick = () => navigateToFolder(item.name);
+                }
+                
+                tree.appendChild(fileItem);
+            });
+        }
+
+        async function openFile(fileName) {
+            if (openFiles.has(fileName)) {
+                switchToFile(fileName);
+                return;
+            }
+
+            updateStatus('Loading ' + fileName + '...');
+            try {
+                const response = await fetch(`/api/files/read?path=${encodeURIComponent(currentPath + fileName)}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const extension = fileName.split('.').pop().toLowerCase();
+                    const language = getLanguageFromExtension(extension);
+                    
+                    openFiles.set(fileName, {
+                        content: data.content,
+                        language: language,
+                        modified: false
+                    });
+                    createTab(fileName);
+                    switchToFile(fileName);
+                    updateStatus('Loaded ' + fileName);
+                } else {
+                    showError('Failed to load file: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                showError('Error loading file: ' + error.message);
+            }
+        }
+
+        function switchToFile(fileName) {
+            currentFile = fileName;
+            const file = openFiles.get(fileName);
+            if (file) {
+                editor.setValue(file.content);
+                monaco.editor.setModelLanguage(editor.getModel(), file.language);
+                updateActiveTab(fileName);
+                updateSaveButton();
+                updateStatusLanguage(file.language);
+            }
+        }
+
+        function createTab(fileName) {
+            const tabsContainer = document.getElementById('editorTabs');
+            const tab = document.createElement('div');
+            tab.className = 'editor-tab';
+            tab.setAttribute('data-file', fileName);
+            tab.innerHTML = `
+                <span class="tab-label">${fileName}</span>
+                <span class="tab-close" onclick="closeTab('${fileName}')">&times;</span>
+            `;
+            tab.onclick = (e) => {
+                if (e.target.classList.contains('tab-close')) return;
+                switchToFile(fileName);
+            };
+            tabsContainer.appendChild(tab);
+        }
+
+        function closeTab(fileName) {
+            if (fileName === 'welcome') return;
+            
+            const file = openFiles.get(fileName);
+            if (file && file.modified) {
+                if (!confirm(`${fileName} has unsaved changes. Close anyway?`)) {
+                    return;
+                }
+            }
+            
+            openFiles.delete(fileName);
+            const tab = document.querySelector(`[data-file="${fileName}"]`);
+            if (tab) tab.remove();
+            
+            if (currentFile === fileName) {
+                const remainingTabs = document.querySelectorAll('.editor-tab');
+                if (remainingTabs.length > 0) {
+                    switchToFile(remainingTabs[0].getAttribute('data-file'));
+                }
+            }
+        }
+
+        function updateActiveTab(fileName) {
+            document.querySelectorAll('.editor-tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.getAttribute('data-file') === fileName) {
+                    tab.classList.add('active');
+                }
+            });
+        }
+
+        function updateTabModifiedState(fileName, modified) {
+            const tab = document.querySelector(`[data-file="${fileName}"]`);
+            if (tab) {
+                if (modified) {
+                    tab.classList.add('modified');
+                } else {
+                    tab.classList.remove('modified');
+                }
+            }
+        }
+
+        async function saveFile() {
+            if (currentFile === 'welcome' || !openFiles.has(currentFile)) return;
+            
+            const file = openFiles.get(currentFile);
+            if (!file.modified) return;
+            
+            updateStatus('Saving ' + currentFile + '...');
+            try {
+                const response = await fetch('/api/files/write', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        path: currentPath + currentFile,
+                        content: file.content
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    file.modified = false;
+                    updateTabModifiedState(currentFile, false);
+                    updateSaveButton();
+                    updateStatus('Saved ' + currentFile);
+                } else {
+                    showError('Failed to save file: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                showError('Error saving file: ' + error.message);
+            }
+        }
+
+        async function saveAllFiles() {
+            const modifiedFiles = Array.from(openFiles.entries())
+                .filter(([name, file]) => file.modified && name !== 'welcome');
+            
+            for (const [fileName, file] of modifiedFiles) {
+                const oldFile = currentFile;
+                currentFile = fileName;
+                await saveFile();
+                currentFile = oldFile;
+            }
+        }
+
+        function createNewFile() {
+            const fileName = prompt('Enter new file name:');
+            if (fileName && fileName.trim()) {
+                const trimmedName = fileName.trim();
+                const extension = trimmedName.split('.').pop().toLowerCase();
+                const language = getLanguageFromExtension(extension);
+                
+                openFileInTab(trimmedName, '', language);
+                updateStatus('Created new file: ' + trimmedName);
+            }
+        }
+
+        function createNewFolder() {
+            const folderName = prompt('Enter new folder name:');
+            if (folderName && folderName.trim()) {
+                // This would need backend implementation
+                updateStatus('Creating folder: ' + folderName);
+            }
+        }
+
+        function openFileInTab(fileName, content, language) {
+            if (!openFiles.has(fileName)) {
+                openFiles.set(fileName, {
+                    content: content,
+                    language: language,
+                    modified: false
+                });
+                createTab(fileName);
+            }
+            switchToFile(fileName);
+        }
+
+        // Navigation functions
+        function navigateToFolder(folderName) {
+            currentPath = currentPath.endsWith('/') ? currentPath + folderName + '/' : currentPath + '/' + folderName + '/';
+            loadFiles();
+        }
+
+        function navigateTo(path) {
+            currentPath = path;
+            loadFiles();
+        }
+
+        function updateBreadcrumb() {
+            const breadcrumb = document.getElementById('breadcrumb');
+            const parts = currentPath.split('/').filter(part => part.length > 0);
+            
+            let html = '<span class="breadcrumb-item" onclick="navigateTo(\'/\')">workspace</span>';
+            let currentBreadcrumbPath = '';
+            
+            parts.forEach(part => {
+                currentBreadcrumbPath += '/' + part;
+                html += `<span class="breadcrumb-item" onclick="navigateTo('${currentBreadcrumbPath}/')">${part}</span>`;
+            });
+            
+            breadcrumb.innerHTML = html;
+        }
+
+        // Sidebar tab switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName + 'Panel').classList.add('active');
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase();
+            const results = document.getElementById('searchResults');
+            
+            if (query.length < 2) {
+                results.innerHTML = '';
+                return;
+            }
+            
+            performSearch(query);
+        });
+
+        async function performSearch(query) {
+            const results = document.getElementById('searchResults');
+            results.innerHTML = '<div class="loading">Searching...</div>';
+            
+            try {
+                // This would be enhanced with backend search
+                const matchingFiles = files.filter(file => 
+                    file.type === 'file' && file.name.toLowerCase().includes(query)
+                );
+                
+                if (matchingFiles.length === 0) {
+                    results.innerHTML = '<div class="loading">No results found</div>';
+                    return;
+                }
+                
+                results.innerHTML = matchingFiles.map(file => 
+                    `<div class="search-result" onclick="openFile('${file.name}')">
+                        <span>${file.name}</span>
+                        <span class="search-result-path">${currentPath}</span>
+                    </div>`
+                ).join('');
+            } catch (error) {
+                results.innerHTML = '<div class="error">Search error: ' + error.message + '</div>';
+            }
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchResults').innerHTML = '';
+        }
+
+        // Git functionality
+        async function refreshGitStatus() {
+            const gitStatus = document.getElementById('gitStatus');
+            gitStatus.innerHTML = '<div class="loading">Loading git status...</div>';
+            
+            // This would be enhanced with actual git integration
+            setTimeout(() => {
+                gitStatus.innerHTML = `
+                    <div class="git-status-item git-status-modified">M modified_file.js</div>
+                    <div class="git-status-item git-status-added">A new_file.js</div>
+                    <div class="git-status-item git-status-deleted">D deleted_file.js</div>
+                `;
+            }, 1000);
+        }
+
+        // AI Chat functionality
+        async function checkAIStatus() {
+            try {
+                const response = await fetch('/status');
+                const data = await response.json();
+                
+                const chatInput = document.getElementById('chatInput');
+                const chatSend = document.getElementById('chatSend');
+                
+                if (data.status === 'ready') {
+                    chatInput.disabled = false;
+                    chatSend.disabled = false;
+                    isConnected = true;
+                    updateStatus('AI Assistant Ready');
+                } else {
+                    updateStatus('AI Assistant Offline');
+                }
+            } catch (error) {
+                updateStatus('AI Assistant Offline');
+            }
+        }
+
+        async function sendMessage() {
+            if (!isConnected) return;
+            
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            // Add user message
+            addChatMessage(message, true);
+            input.value = '';
+            
+            // Prepare context
+            const includeContext = document.getElementById('includeFileContext').checked;
+            const context = includeContext ? {
+                currentFile: currentFile !== 'welcome' ? currentFile : null,
+                fileContent: currentFile !== 'welcome' ? openFiles.get(currentFile)?.content : null,
+                openFiles: Array.from(openFiles.keys()).filter(name => name !== 'welcome'),
+                currentPath: currentPath
+            } : {};
+            
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: message,
+                        context: context
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    addChatMessage(data.response, false);
+                    
+                    // Auto-apply changes if enabled
+                    if (document.getElementById('autoApplyChanges').checked && data.fileChanges) {
+                        applyFileChanges(data.fileChanges);
+                    }
+                } else {
+                    addChatMessage('Error: ' + (data.error || 'Unknown error'), false, true);
+                }
+            } catch (error) {
+                addChatMessage('Error: ' + error.message, false, true);
+            }
+        }
+
+        function addChatMessage(message, isUser, isError = false) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
+            
+            if (isError) {
+                messageDiv.style.color = '#f48771';
+                messageDiv.style.background = 'rgba(244, 135, 113, 0.1)';
+            }
+            
+            messageDiv.innerHTML = `
+                <div>${message}</div>
+                <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                ${!isUser && !isError ? `
+                    <div class="message-actions">
+                        <button class="message-action" onclick="copyMessage(this)">Copy</button>
+                        <button class="message-action" onclick="applyCodeSuggestion(this)">Apply</button>
+                    </div>
+                ` : ''}
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function clearChat() {
+            const messagesContainer = document.getElementById('chatMessages');
+            messagesContainer.innerHTML = `
+                <div class="ai-message">
+                    <div>Chat cleared. How can I help you?</div>
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        function toggleChat() {
+            const chatPanel = document.getElementById('chatPanel');
+            chatPanel.style.display = chatPanel.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        // Editor functionality
+        function toggleMinimap() {
+            minimapEnabled = !minimapEnabled;
+            editor.updateOptions({ minimap: { enabled: minimapEnabled } });
+        }
+
+        function toggleWordWrap() {
+            wordWrapEnabled = !wordWrapEnabled;
+            editor.updateOptions({ wordWrap: wordWrapEnabled ? 'on' : 'off' });
+        }
+
+        function formatCode() {
+            editor.getAction('editor.action.formatDocument').run();
+        }
+
+        function findInFile() {
+            editor.getAction('actions.find').run();
+        }
+
+        function findAndReplace() {
+            editor.getAction('editor.action.startFindReplaceAction').run();
+        }
+
+        function toggleTheme() {
+            currentTheme = currentTheme === 'vs-dark' ? 'vs-light' : 'vs-dark';
+            monaco.editor.setTheme(currentTheme);
+        }
+
+        // Context menu functionality
+        function showContextMenu(event, fileName, fileType) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            const contextMenu = document.getElementById('contextMenu');
+            contextMenu.style.display = 'block';
+            contextMenu.style.left = event.pageX + 'px';
+            contextMenu.style.top = event.pageY + 'px';
+            
+            // Store current context
+            contextMenu.dataset.fileName = fileName;
+            contextMenu.dataset.fileType = fileType;
+        }
+
+        function contextAction(action) {
+            const contextMenu = document.getElementById('contextMenu');
+            const fileName = contextMenu.dataset.fileName;
+            const fileType = contextMenu.dataset.fileType;
+            
+            switch (action) {
+                case 'copy':
+                    // Copy file path to clipboard
+                    navigator.clipboard.writeText(currentPath + fileName);
+                    break;
+                case 'cut':
+                    // Cut functionality
+                    break;
+                case 'paste':
+                    // Paste functionality
+                    break;
+                case 'rename':
+                    const newName = prompt('Enter new name:', fileName);
+                    if (newName && newName !== fileName) {
+                        // Rename file
+                        updateStatus('Renaming ' + fileName + ' to ' + newName);
+                    }
+                    break;
+                case 'delete':
+                    if (confirm('Delete ' + fileName + '?')) {
+                        // Delete file
+                        updateStatus('Deleting ' + fileName);
+                    }
+                    break;
+                case 'openInTab':
+                    if (fileType === 'file') {
+                        openFile(fileName);
+                    }
+                    break;
+                case 'revealInExplorer':
+                    // Reveal in file explorer
+                    break;
+            }
+            
+            contextMenu.style.display = 'none';
+        }
+
+        // Utility functions
+        function getLanguageFromExtension(extension) {
+            const languageMap = {
+                'js': 'javascript',
+                'jsx': 'javascript',
+                'ts': 'typescript',
+                'tsx': 'typescript',
+                'py': 'python',
+                'html': 'html',
+                'htm': 'html',
+                'css': 'css',
+                'scss': 'scss',
+                'sass': 'sass',
+                'less': 'less',
+                'json': 'json',
+                'xml': 'xml',
+                'md': 'markdown',
+                'markdown': 'markdown',
+                'sql': 'sql',
+                'php': 'php',
+                'java': 'java',
+                'c': 'c',
+                'cpp': 'cpp',
+                'cs': 'csharp',
+                'go': 'go',
+                'rs': 'rust',
+                'rb': 'ruby',
+                'sh': 'shell',
+                'bash': 'shell',
+                'yml': 'yaml',
+                'yaml': 'yaml',
+                'dockerfile': 'dockerfile',
+                'makefile': 'makefile'
+            };
+            return languageMap[extension] || 'plaintext';
+        }
+
+        function getWelcomeContent() {
+            return `<div class="welcome-content">
+                <h1>Welcome to AVA Development Studio</h1>
+                <p>Your AI-powered development workspace</p>
+                
+                <h2>Features</h2>
+                <ul>
+                    <li><strong>Monaco Editor</strong> - Full VS Code editing experience</li>
+                    <li><strong>AI Assistant</strong> - Intelligent code help and suggestions</li>
+                    <li><strong>File Management</strong> - Complete file and folder operations</li>
+                    <li><strong>Multi-tab Editing</strong> - Work with multiple files simultaneously</li>
+                    <li><strong>Advanced Search</strong> - Find files and content quickly</li>
+                    <li><strong>Git Integration</strong> - Source control at your fingertips</li>
+                </ul>
+                
+                <h2>Getting Started</h2>
+                <ul>
+                    <li>Browse files in the <span class="highlight">Explorer</span> panel</li>
+                    <li>Use <span class="highlight">Ctrl+S</span> to save files</li>
+                    <li>Ask the <span class="highlight">AI Assistant</span> for help</li>
+                    <li>Use <span class="highlight">Ctrl+F</span> to find in files</li>
+                    <li>Right-click for context menus</li>
+                </ul>
+                
+                <h2>Keyboard Shortcuts</h2>
+                <ul>
+                    <li><strong>Ctrl+S</strong> - Save file</li>
+                    <li><strong>Ctrl+Shift+S</strong> - Save all files</li>
+                    <li><strong>Ctrl+F</strong> - Find in file</li>
+                    <li><strong>Ctrl+H</strong> - Find and replace</li>
+                    <li><strong>Ctrl+/</strong> - Toggle comment</li>
+                    <li><strong>Alt+Shift+F</strong> - Format document</li>
+                </ul>
+            </div>`;
+        }
+
+        function updateStatus(message) {
+            document.getElementById('statusLeft').textContent = message;
+        }
+
+        function updateStatusLanguage(language) {
+            document.getElementById('statusLanguage').textContent = language;
+        }
+
+        function updateStatusPosition(position) {
+            document.getElementById('statusPosition').textContent = `Line ${position.lineNumber}, Column ${position.column}`;
+        }
+
+        function updateStatusSelection(selection) {
+            if (selection.isEmpty()) {
+                document.getElementById('statusSelection').textContent = '';
+            } else {
+                const lines = selection.endLineNumber - selection.startLineNumber + 1;
+                const chars = selection.endColumn - selection.startColumn;
+                document.getElementById('statusSelection').textContent = `(${lines} lines, ${chars} chars selected)`;
+            }
+        }
+
+        function updateSaveButton() {
+            const saveBtn = document.getElementById('saveBtn');
+            const hasModified = currentFile !== 'welcome' && openFiles.get(currentFile)?.modified;
+            saveBtn.disabled = !hasModified;
+        }
+
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error';
+            errorDiv.textContent = message;
+            document.body.appendChild(errorDiv);
+            
+            setTimeout(() => {
+                errorDiv.remove();
+            }, 5000);
+        }
+
+        // Event listeners
+        function setupEventListeners() {
+            // Hide context menu on click
+            document.addEventListener('click', function() {
+                document.getElementById('contextMenu').style.display = 'none';
+            });
+
+            // Chat input keyboard shortcuts
+            document.getElementById('chatInput').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && e.ctrlKey) {
+                    sendMessage();
+                }
+            });
+
+            // Refresh files periodically
+            setInterval(async () => {
+                if (document.visibilityState === 'visible') {
+                    await loadFiles();
+                }
+            }, 30000);
+        }
+
+        // Resizer functionality
+        function setupResizers() {
+            const sidebarResizer = document.querySelector('.sidebar-resizer');
+            const chatResizer = document.querySelector('.chat-panel-resizer');
+            const sidebar = document.querySelector('.sidebar');
+            const chatPanel = document.querySelector('.chat-panel');
+            
+            let isResizing = false;
+            let currentResizer = null;
+            
+            [sidebarResizer, chatResizer].forEach(resizer => {
+                resizer.addEventListener('mousedown', function(e) {
+                    isResizing = true;
+                    currentResizer = resizer;
+                    e.preventDefault();
+                });
+            });
+            
+            document.addEventListener('mousemove', function(e) {
+                if (!isResizing) return;
+                
+                if (currentResizer === sidebarResizer) {
+                    const newWidth = e.clientX;
+                    if (newWidth > 200 && newWidth < 500) {
+                        sidebar.style.width = newWidth + 'px';
+                    }
+                } else if (currentResizer === chatResizer) {
+                    const newWidth = window.innerWidth - e.clientX;
+                    if (newWidth > 250 && newWidth < 600) {
+                        chatPanel.style.width = newWidth + 'px';
+                    }
+                }
+            });
+            
+            document.addEventListener('mouseup', function() {
+                isResizing = false;
+                currentResizer = null;
+            });
+        }
+
+        // Initialize git status
+        setTimeout(refreshGitStatus, 2000);
+    </script>
+</body>
+</html>

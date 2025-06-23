@@ -907,7 +907,8 @@ def test_page():
 @app.route('/file-manager')
 def file_manager():
     """Dedicated file manager interface"""
-    with open('file_manager.html', 'r', encoding='utf-8') as f:
+    file_path = os.path.join(os.path.dirname(__file__), 'file_manager.html')
+    with open(file_path, 'r', encoding='utf-8') as f:
         return f.read()
 
 if __name__ == "__main__":

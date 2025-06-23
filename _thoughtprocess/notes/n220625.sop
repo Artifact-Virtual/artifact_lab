@@ -6,27 +6,29 @@
     2. ▶ Use `python workspace_manager/webchat.py` to start the AVA system.
     3. ▶ Access file manager at http://localhost:8080/file-manager for development.
     4. ▶ Access AI chat interface at http://localhost:8080 for assistance.
-    5. ▶ Follow PEP8 guidelines for Python code.
-    6. ▶ Always update this file. ALWAYS. No exceptions.
-    7. ▶ Perform a full codebase review periodically to ensure no errors exist.
+    5. ▶ Use the new Studio interface (`studio.html`/`studio_enhanced.html`) for advanced Monaco+AI+search workflows (coming soon).
+    6. ▶ Follow PEP8 guidelines for Python code.
+    7. ▶ Always update this file. ALWAYS. No exceptions.
+    8. ▶ Perform a full codebase review periodically to ensure no errors exist.
                 ▸ Fix all issues, big or small, without workarounds or cutting corners.
-    8. ▶ Always validate and fix JSON config files for strict compliance
+    9. ▶ Always validate and fix JSON config files for strict compliance
                 ▸ (no trailing commas, valid syntax).
-    9. ▶ Ensure all model/provider logic is routed through a single config file (`config.json`).
-   10. ▶ Standardize import paths and config resolution for all entry-point scripts.
-   11. ▶ ALWAYS UPDATE workspace_manager\config.json with latest updated SOPs (this file).
-   12. ▶ LLM must have secure, auditable read/write access to the codebase via backend API.
-   13. ▶ LLM should be able to both suggest and directly make codebase changes (with audit trail).
-   14. ▶ Backend API must support advanced file/code management (list, read, write, create, search).
-   15. ▶ Monaco Editor is primary development interface; ensure all file operations work seamlessly.
-   16. ▶ If using vector DB or code store, ensure LLM can utilize for semantic code search.
-   17. ▶ All LLM-driven changes must be user-controllable (approve, undo) and meticulously logged.
-   18. ▶ AVA File Manager must maintain VS Code-like experience with professional interface.
-   19. ▶ Monitor server status regularly; restart if connections fail.
-   20. ▶ Ensure Ollama service is running before starting any AVA components.
-   21. ▶ Use Monaco Editor as primary development environment with AI chat integration.
-   22. ▶ Integrate Airtable and Windmill for enhanced workflow automation.
-   23. ▶ Maintain comprehensive documentation for all file manager capabilities.
+   10. ▶ Ensure all model/provider logic is routed through a single config file (`config.json`).
+   11. ▶ Standardize import paths and config resolution for all entry-point scripts.
+   12. ▶ ALWAYS UPDATE workspace_manager\config.json with latest updated SOPs (this file).
+   13. ▶ LLM must have secure, auditable read/write access to the codebase via backend API.
+   14. ▶ LLM should be able to both suggest and directly make codebase changes (with audit trail).
+   15. ▶ Backend API must support advanced file/code management (list, read, write, create, search).
+   16. ▶ Monaco Editor is primary development interface; ensure all file operations work seamlessly.
+   17. ▶ If using vector DB or code store, ensure LLM can utilize for semantic code search.
+   18. ▶ All LLM-driven changes must be user-controllable (approve, undo) and meticulously logged.
+   19. ▶ AVA File Manager and Studio must maintain VS Code-like experience with professional interface.
+   20. ▶ Monitor server status regularly; restart if connections fail.
+   21. ▶ Ensure Ollama service is running before starting any AVA components.
+   22. ▶ Use Monaco Editor as primary development environment with AI chat integration.
+   23. ▶ Integrate Airtable and Windmill for enhanced workflow automation (planned, see roadmap).
+   24. ▶ Maintain comprehensive documentation for all file manager and studio capabilities.
+   25. ▶ Use the chat panel in Studio for AI-driven file operations and code assistance (planned).
 
 ╠════════════════════════════════════════════════════════════════════════════╣
 ║                                CHANGELOG                                   ║
@@ -43,37 +45,17 @@
  ✅ PHASE 3 COMPLETE: System operational with troubleshooting procedures
  ✅ AVA system fully functional with comprehensive monitoring and restart capabilities
  ✅ PHASE 4 COMPLETE: Monaco-First File Manager Implementation
- ✅ Professional VS Code-like interface with 25+ language support
+ ✅ Professional VS Code-like interface with 180+ language support
  ✅ Dedicated file manager at /file-manager endpoint
- ✅ Comprehensive documentation created (FILE_MANAGER.md)
+ ✅ Comprehensive documentation created (FILE_MANAGER.md, STUDIO_FEATURES.md)
  ✅ Enhanced visualizer streamlined (3D visualizer removed)
  ✅ Updated all project documentation (README.md, WORKSPACE_MANAGER.md)
- 🔄 PHASE 5 PENDING: Advanced integrations (Airtable, Windmill)
- 🔄 PHASE 6 PENDING: Chat integration with file context
- • LATEST UPDATE (June 23, 2025 - 2:50 PM): Monaco-First File Manager Complete
- • Created dedicated file manager interface with professional VS Code experience
- • Support for 25+ programming languages with syntax highlighting
- • Real-time auto-save detection and change tracking
- • Professional dark theme matching VS Code interface
- • Keyboard shortcuts (Ctrl+S, Ctrl+R, Ctrl+N) implemented
- • File tree navigation with type-specific icons
- • Status bar with real-time operation feedback
- • Monaco Editor 0.44.0 integration with IntelliSense
- • Comprehensive file management API integration
- • Error highlighting and validation for multiple languages
- • Find & replace, multiple cursors, code folding support
- • Enhanced visualizer is now the only visualization option
- • All documentation updated to reflect new architecture
- • FILE_MANAGER.md created with comprehensive feature documentation
- • WORKSPACE_MANAGER.md updated with new file management capabilities
- • README.md completely rewritten to highlight Monaco-first approach
- • SOP updated to reflect new development workflow
- • System architecture simplified and streamlined
- • Ready for Airtable and Windmill integration phase
- • Prepared for AI chat integration with file context awareness
+ ✅ Studio interface (Monaco+AI+search) in progress
+ 🔄 PHASE 5 PENDING: Advanced integrations (Airtable, Windmill, workflow automation)
+ 🔄 PHASE 6 PENDING: Chat integration with file context, multi-file/project operations, advanced search, git, and collaboration
 
 ╠════════════════════════════════════════════════════════════════════════════╣
-║                  AVA FILE MANAGER OPERATIONAL PROCEDURES (2025-06-23)      ║
+║                  AVA FILE MANAGER & STUDIO OPERATIONAL PROCEDURES (2025-06-23)      ║
 ╠════════════════════════════════════════════════════════════════════════════╣
 
  ▶ DAILY STARTUP CHECKLIST:
@@ -81,15 +63,19 @@
    2. Start AVA server: `cd workspace_manager && python webchat.py`
    3. Test file manager: http://localhost:8080/file-manager
    4. Test chat interface: http://localhost:8080
-   5. Verify file operations: open, edit, save functionality
+   5. Test Studio interface: http://localhost:8080/studio (when available)
+   6. Verify file operations: open, edit, save functionality
 
- ▶ FILE MANAGER OPERATIONS:
+ ▶ FILE MANAGER & STUDIO OPERATIONS:
    • Primary Interface: http://localhost:8080/file-manager
-   • Supported Languages: 25+ with full syntax highlighting
+   • Studio Interface: http://localhost:8080/studio (coming soon)
+   • Supported Languages: 180+ with full syntax highlighting
    • Key Shortcuts: Ctrl+S (save), Ctrl+R (refresh), Ctrl+N (new file)
-   • Features: IntelliSense, error detection, find/replace, multiple cursors
+   • Features: IntelliSense, error detection, find/replace, multiple cursors, multi-tab
    • File Tree: Click files to open, automatic language detection
    • Status Bar: Real-time feedback on operations and modifications
+   • Chat Panel: AI can reference and modify open files (planned)
+   • Airtable/Windmill: Workflow/data management integration (planned)
 
  ▶ TROUBLESHOOTING PROCEDURES:
    • Monaco Editor not loading:
@@ -98,27 +84,16 @@
    • File operations failing:
      → Check API endpoints: /api/files/list, /api/files/read, /api/files/write
      → Verify file permissions and path validity
-   • Language detection issues:
-     → Ensure file has proper extension
-     → Check language map in file_manager.html
-     → Restart server: `python webchat.py`
-     → Test API: `curl http://localhost:8080/api/files/list`
-   
-   • Chat stuck "Connecting...":
-     → Check Ollama: `curl http://localhost:11434/api/version`
-     → Verify model: `ollama list | findstr codellama`
-     → Restart if needed: `ollama serve`
+   • AI chat not responding:
+     → Check Ollama status and model availability
+     → Restart backend if needed
 
- ▶ MONITORING & MAINTENANCE:
-   • Server logs: Monitor console output for errors
-   • Audit logs: Check workspace_manager/audit_log.json
-   • LLM logs: Check workspace_manager/llm_audit_log.json
-   • Performance: Monitor memory usage of Python processes
-
- ▶ EMERGENCY RECOVERY:
-   1. `taskkill /f /im python.exe` (kill all Python)
-   2. `ollama serve` (ensure Ollama running)
-   3. `cd workspace_manager && python webchat.py` (restart AVA)
-   4. Verify all functions via browser test
+ ▶ ROADMAP & FUTURE PLANS:
+   • Studio interface with Monaco+AI+search (multi-tab, chat, search, git, context menus)
+   • Airtable and Windmill integration for advanced workflow/data management
+   • Chat panel with file/project context and direct file operations
+   • Multi-file/project operations, advanced search, git/source control, real-time collaboration
+   • Semantic search and vector DB integration
+   • All changes and new features must be reflected in documentation and SOP
 
 ╚════════════════════════════════════════════════════════════════════════════╝
