@@ -1,8 +1,10 @@
-# ARTIFACT LAB (Virtual Lab)
+# ARTIFACT VIRTUAL LABORATORY
 
-A modular, real-time codebase analysis and visualization toolkit with Ollama LLM integration, featuring multiple visualization modes, advanced analytics, and an integrated web chat interface.
+> Quantum-simulated backend. Fully private, robustly secure, and dark by design—an advanced laboratory for accelerated research and development.
 
----
+A modular, real-time codebase analysis and visualization toolkit powered by Ollama LLM integration. Offers multi-mode visualization, deep analytics, and an integrated AMOLED-styled web chat interface.  
+Built for extensibility, privacy, and high-performance insight into evolving codebases—ideal for teams and solo developers seeking actionable intelligence and seamless workflow integration.
+
 
 ## Features
   
@@ -20,7 +22,6 @@ A modular, real-time codebase analysis and visualization toolkit with Ollama LLM
 - **Dotfile Support**: Analytics and visualization include dotfiles (e.g., `.gitignore`).
 - **Live indexing and visualization** system that maintains an evolving context as your codebase grows. This enables up-to-date analytics and visual feedback, ensuring that changes and dependencies are always reflected in real time.
 
----
 
 ## Directory Structure
 
@@ -56,8 +57,6 @@ A modular, real-time codebase analysis and visualization toolkit with Ollama LLM
 ├── run.sh
 ├── test_system.bat
 ```
-
----
 
 ## Quick Start
 
@@ -106,7 +105,6 @@ A modular, real-time codebase analysis and visualization toolkit with Ollama LLM
     .\run.ps1
     ```
 
----
 
 ## What Happens When You Run
 
@@ -118,7 +116,6 @@ A modular, real-time codebase analysis and visualization toolkit with Ollama LLM
 6. **AI Summarizer** analyzes code using Ollama
 7. **Visualizer Selection** prompts you to choose from multiple visualization modes
 
----
 
 ## Visualization Modes
 
@@ -134,7 +131,6 @@ A modular, real-time codebase analysis and visualization toolkit with Ollama LLM
 - 3D circular node display
 - System performance graphs
 
----
 
 ## Controls
 
@@ -147,7 +143,7 @@ A modular, real-time codebase analysis and visualization toolkit with Ollama LLM
 - **R**: Reload data
 - **ESC**: Exit visualizer
 
-### Starmap Visualizer
+### Starmap Visualizer [optional]
 
 - **Mouse Drag**: Rotate starmap
 - **Scroll Wheel**: Zoom
@@ -160,7 +156,6 @@ A modular, real-time codebase analysis and visualization toolkit with Ollama LLM
 - **R**: Reload codebase data
 - **ESC**: Exit starmap
 
----
 
 ## Components
 
@@ -171,13 +166,11 @@ A modular, real-time codebase analysis and visualization toolkit with Ollama LLM
 - **AI Summarizer** (`workspace_manager/summarizer.py`): Summarizes codebase using Ollama.
 - **Enhanced Visualizer** (`workspace_manager/enhanced_visualizer.py`): Advanced analytics dashboard.
 
----
 
 ## Configuration
 
 Edit `workspace_manager/config.json` to customize Ollama and webchat settings.
 
----
 
 ## Troubleshooting
 
@@ -192,7 +185,6 @@ Edit `workspace_manager/config.json` to customize Ollama and webchat settings.
 - **Visualization Issues**:  
   - Ensure display/graphics drivers are properly configured
 
----
 
 ## Development
 
@@ -204,7 +196,6 @@ python workspace_manager/webchat.py           # Just the web chat
 python -m workspace_manager.main              # Main orchestrator (no Ollama auto-start)
 ```
 
----
 
 ## Commands & Modules
 
@@ -219,7 +210,6 @@ python -m workspace_manager.main              # Main orchestrator (no Ollama aut
 - `workspace_manager/dependency_index.json` — Directory-wise dependency index
 - `workspace_manager/system_summary.json` — Maintained codebase summary
 
----
 
 ## Requirements
 
@@ -227,7 +217,6 @@ python -m workspace_manager.main              # Main orchestrator (no Ollama aut
 - [Ollama](https://ollama.com/) running locally or remote
 - Pygame, Watchdog, Flask
 
----
 
 ## Notes
 
@@ -235,7 +224,6 @@ python -m workspace_manager.main              # Main orchestrator (no Ollama aut
 - Designed for extensibility and can be adapted for larger codebases or additional LLMs.
 - For best results, ensure Ollama is installed and the desired model is pulled.
 
----
 
 ## License
 

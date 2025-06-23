@@ -1,18 +1,19 @@
 import os
 import sys
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'system', 'DevCore')))
-from ollama_interface import query_model
-
 import json
 import hashlib
 import datetime
 from pathlib import Path
-from flask import Flask, render_template_string, request, jsonify, send_from_directory
 import requests
+import shutil
+from flask import Flask, render_template_string, request, jsonify, send_from_directory
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'system', 'DevCore')))
+from ollama_interface import query_model
 
 app = Flask(__name__)
 
-# HTML template for the chat interface
+# HTML template for the chat interface with Monaco Editor
 CHAT_HTML = """
 <!DOCTYPE html>
 <html lang="en">
@@ -23,6 +24,8 @@ CHAT_HTML = """
     <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
     <!-- Tailwind CSS CDN for easy styling -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Monaco Editor -->
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs/loader.js"></script>
     <!-- Manrope font for a unique, modern, sleek feel -->
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -40,95 +43,98 @@ CHAT_HTML = """
             overflow: hidden;
         }
         
-        .fade-container {
+        .main-container {
             width: 100%;
             height: 100vh;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            /* Create the disappearing edge effect using linear gradients */
             background:
                 linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 5%),
                 linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 5%),
                 linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 5%),
                 linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 5%);
-            background-repeat: no-repeat;
-            background-size: 100% 5%, 100% 5%, 5% 100%, 5% 100%;
-            background-position: top, bottom, left, right;
+        }
+        
+        .sidebar {
+            width: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .file-explorer {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+        
+        .file-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-bottom: 2px;
+            transition: background-color 0.2s;
+        }
+        
+        .file-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .file-item.selected {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .editor-container {
+            flex: 1;
+            position: relative;
         }
         
         .chat-container {
-            width: 90%;
-            max-width: 900px;
-            height: 85vh;
-            background: rgba(0, 0, 0, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            backdrop-filter: blur(10px);
+            height: 300px;
+            background: rgba(255, 255, 255, 0.02);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .chat-header {
-            background: rgba(0, 0, 0, 0.8);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            padding: 20px;
-            text-align: center;
         }
         
         .chat-messages {
             flex: 1;
-            padding: 20px;
             overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
-        }
-        
-        .chat-messages::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        .chat-messages::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        
-        .chat-messages::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 3px;
+            padding: 16px;
         }
         
         .message {
-            max-width: 80%;
+            margin-bottom: 16px;
             padding: 12px 18px;
             border-radius: 12px;
+            max-width: 80%;
             word-wrap: break-word;
+            font-size: 16px;
+            line-height: 1.5;
             font-weight: 300;
         }
         
         .user-message {
             background: rgba(255, 255, 255, 0.1);
-            color: white;
-            align-self: flex-end;
             border: 1px solid rgba(255, 255, 255, 0.2);
+            align-self: flex-end;
+            margin-left: auto;
         }
         
         .bot-message {
             background: rgba(255, 255, 255, 0.05);
-            color: #e0e0e0;
-            align-self: flex-start;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            align-self: flex-start;
         }
         
         .chat-input-container {
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.8);
+            padding: 16px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             gap: 12px;
@@ -137,24 +143,13 @@ CHAT_HTML = """
         .chat-input {
             flex: 1;
             padding: 12px 18px;
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 8px;
-            font-size: 16px;
-            outline: none;
-            background: rgba(255, 255, 255, 0.05);
             color: white;
+            font-size: 16px;
             font-family: 'Manrope', sans-serif;
-            font-weight: 300;
-            transition: border-color 0.3s, background-color 0.3s;
-        }
-        
-        .chat-input:focus {
-            border-color: rgba(255, 255, 255, 0.4);
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        .chat-input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            outline: none;
         }
         
         .send-button {
@@ -173,22 +168,6 @@ CHAT_HTML = """
         .send-button:hover:not(:disabled) {
             background: rgba(255, 255, 255, 0.2);
             border-color: rgba(255, 255, 255, 0.4);
-        }
-        
-        .send-button:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-        
-        .typing-indicator {
-            padding: 12px 18px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            align-self: flex-start;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            font-style: italic;
-            color: rgba(255, 255, 255, 0.7);
-            font-weight: 300;
         }
         
         .status {
@@ -211,35 +190,71 @@ CHAT_HTML = """
     </style>
 </head>
 <body>
-    <div class="fade-container">
-        <div class="chat-container">
-            <div class="chat-header">
-                <h1 class="text-2xl font-extralight">ARTIFACT VIRTUAL ASSISTANT</h1>
+    <div class="main-container">
+        <div class="sidebar">
+            <div class="file-explorer">
+                <h3 class="text-lg font-light mb-4">File Explorer</h3>
+                <div id="fileTree"></div>
             </div>
+        </div>
+        
+        <div class="content-area">
             <div id="status" class="status">
                 Connecting to Ollama...
             </div>
-            <div class="chat-messages" id="chatMessages">
-                <div class="bot-message">
-                    Hello! I'm AVA. How can I help you with you today?
-                </div>
+            
+            <div class="editor-container">
+                <div id="monaco-editor" style="height: 100%; width: 100%;"></div>
             </div>
-            <div class="chat-input-container">
-                <input type="text" class="chat-input" id="chatInput" 
-                       placeholder="Type your message here..." disabled>
-                <button class="send-button" id="sendButton" onclick="sendMessage()" disabled>
-                    SEND
-                </button>
+            
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="bot-message">
+                        Hello! I'm AVA. I can help you with code editing, file management, and more. I have access to your codebase and can make changes directly.
+                    </div>
+                </div>
+                <div class="chat-input-container">
+                    <input type="text" class="chat-input" id="chatInput" 
+                           placeholder="Type your message here..." disabled>
+                    <button class="send-button" id="sendButton" onclick="sendMessage()" disabled>
+                        SEND
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
         let isConnected = false;
+        let editor = null;
+        let currentFile = null;
+        
+        // Initialize Monaco Editor
+        require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs' }});
+        require(['vs/editor/editor.main'], function() {
+            editor = monaco.editor.create(document.getElementById('monaco-editor'), {
+                value: '// Welcome to the enhanced code editor\\n// Select a file from the explorer to start editing',
+                language: 'javascript',
+                theme: 'vs-dark',
+                automaticLayout: true,
+                minimap: { enabled: false },
+                fontSize: 14,
+                fontFamily: 'Manrope, monospace'
+            });
+            
+            // Listen for content changes
+            editor.onDidChangeModelContent(() => {
+                if (currentFile) {
+                    // Mark file as modified
+                    updateFileStatus(currentFile, 'modified');
+                }
+            });
+        });
         
         // Check Ollama status on page load
         window.onload = function() {
             checkOllamaStatus();
+            loadFileTree();
         };
         
         async function checkOllamaStatus() {
@@ -250,7 +265,8 @@ CHAT_HTML = """
                 const statusDiv = document.getElementById('status');
                 const chatInput = document.getElementById('chatInput');
                 const sendButton = document.getElementById('sendButton');
-                  if (data.status === 'ready') {
+                
+                if (data.status === 'ready') {
                     statusDiv.textContent = `✅ Connected (Model: ${data.model})`;
                     statusDiv.className = 'status ready';
                     chatInput.disabled = false;
@@ -269,6 +285,114 @@ CHAT_HTML = """
             }
         }
         
+        async function loadFileTree(path = '') {
+            try {
+                const response = await fetch(`/api/files/list?path=${encodeURIComponent(path)}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayFileTree(data.items, path);
+                }
+            } catch (error) {
+                console.error('Failed to load file tree:', error);
+            }
+        }
+        
+        function displayFileTree(items, basePath) {
+            const fileTree = document.getElementById('fileTree');
+            fileTree.innerHTML = '';
+            
+            items.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'file-item';
+                itemDiv.textContent = `${item.type === 'directory' ? '📁' : '📄'} ${item.name}`;
+                itemDiv.onclick = () => {
+                    if (item.type === 'directory') {
+                        loadFileTree(item.path);
+                    } else {
+                        openFile(item.path);
+                    }
+                };
+                fileTree.appendChild(itemDiv);
+            });
+        }
+        
+        async function openFile(filePath) {
+            try {
+                const response = await fetch(`/api/files/read?path=${encodeURIComponent(filePath)}`);
+                const data = await response.json();
+                
+                if (data.success && editor) {
+                    currentFile = filePath;
+                    editor.setValue(data.file.content);
+                    
+                    // Set language based on file extension
+                    const extension = filePath.split('.').pop();
+                    const languageMap = {
+                        'js': 'javascript',
+                        'ts': 'typescript',
+                        'py': 'python',
+                        'html': 'html',
+                        'css': 'css',
+                        'json': 'json',
+                        'md': 'markdown',
+                        'txt': 'plaintext'
+                    };
+                    
+                    const language = languageMap[extension] || 'plaintext';
+                    monaco.editor.setModelLanguage(editor.getModel(), language);
+                    
+                    // Update file explorer selection
+                    document.querySelectorAll('.file-item').forEach(item => {
+                        item.classList.remove('selected');
+                        if (item.textContent.includes(filePath.split('/').pop())) {
+                            item.classList.add('selected');
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Failed to open file:', error);
+            }
+        }
+        
+        async function saveCurrentFile() {
+            if (!currentFile || !editor) return;
+            
+            try {
+                const content = editor.getValue();
+                const response = await fetch('/api/files/write', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        path: currentFile,
+                        content: content
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    addMessage(`File saved: ${currentFile}`);
+                    updateFileStatus(currentFile, 'saved');
+                } else {
+                    addMessage(`Failed to save file: ${data.error}`);
+                }
+            } catch (error) {
+                addMessage(`Error saving file: ${error.message}`);
+            }
+        }
+        
+        function updateFileStatus(filePath, status) {
+            // Visual feedback for file status
+            const fileItems = document.querySelectorAll('.file-item');
+            fileItems.forEach(item => {
+                if (item.textContent.includes(filePath.split('/').pop())) {
+                    item.style.color = status === 'modified' ? '#ffcc00' : '#ffffff';
+                }
+            });
+        }
+        
         function addMessage(content, isUser = false) {
             const messagesDiv = document.getElementById('chatMessages');
             const messageDiv = document.createElement('div');
@@ -276,23 +400,6 @@ CHAT_HTML = """
             messageDiv.textContent = content;
             messagesDiv.appendChild(messageDiv);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        }
-        
-        function showTypingIndicator() {
-            const messagesDiv = document.getElementById('chatMessages');
-            const typingDiv = document.createElement('div');
-            typingDiv.className = 'typing-indicator';
-            typingDiv.id = 'typing';
-            typingDiv.textContent = 'AI is thinking...';
-            messagesDiv.appendChild(typingDiv);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        }
-        
-        function hideTypingIndicator() {
-            const typingDiv = document.getElementById('typing');
-            if (typingDiv) {
-                typingDiv.remove();
-            }
         }
         
         async function sendMessage() {
@@ -315,30 +422,40 @@ CHAT_HTML = """
             chatInput.disabled = true;
             sendButton.disabled = true;
             
-            // Show typing indicator
-            showTypingIndicator();
-            
             try {
+                // Enhanced message with file context
+                let enhancedMessage = message;
+                if (currentFile) {
+                    enhancedMessage += `\\n\\nCurrent file: ${currentFile}\\nFile content:\\n${editor.getValue()}`;
+                }
+                
                 const response = await fetch('/chat', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ message: message })
+                    body: JSON.stringify({ 
+                        message: enhancedMessage,
+                        context: {
+                            currentFile: currentFile,
+                            hasFileAccess: true
+                        }
+                    })
                 });
                 
                 const data = await response.json();
                 
-                // Hide typing indicator
-                hideTypingIndicator();
-                
                 if (data.success) {
                     addMessage(data.response);
+                    
+                    // Check if LLM wants to perform file operations
+                    if (data.fileOperations) {
+                        await handleFileOperations(data.fileOperations);
+                    }
                 } else {
                     addMessage(`Error: ${data.error}`);
                 }
             } catch (error) {
-                hideTypingIndicator();
                 addMessage(`Error: Failed to send message - ${error.message}`);
             }
             
@@ -347,6 +464,65 @@ CHAT_HTML = """
             sendButton.disabled = false;
             chatInput.focus();
         }
+        
+        async function handleFileOperations(operations) {
+            for (const op of operations) {
+                try {
+                    switch (op.type) {
+                        case 'open':
+                            await openFile(op.path);
+                            break;
+                        case 'save':
+                            await saveCurrentFile();
+                            break;
+                        case 'edit':
+                            if (editor && op.content) {
+                                editor.setValue(op.content);
+                            }
+                            break;
+                        case 'create':
+                            await createFile(op.path, op.content || '');
+                            break;
+                    }
+                } catch (error) {
+                    addMessage(`File operation failed: ${error.message}`);
+                }
+            }
+        }
+        
+        async function createFile(filePath, content) {
+            try {
+                const response = await fetch('/api/files/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        path: filePath,
+                        type: 'file',
+                        content: content
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    addMessage(`File created: ${filePath}`);
+                    loadFileTree(); // Refresh file tree
+                } else {
+                    addMessage(`Failed to create file: ${data.error}`);
+                }
+            } catch (error) {
+                addMessage(`Error creating file: ${error.message}`);
+            }
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                saveCurrentFile();
+            }
+        });
         
         // Send message on Enter key
         document.getElementById('chatInput').addEventListener('keypress', function(e) {
@@ -385,11 +561,11 @@ class OllamaWebChat:
         if self.model_provider == 'pt':
             # For .pt, just check if any .pt model exists
             pt_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../.pt_models'))
-            pt_models = [f for f in os.listdir(pt_dir) if f.endswith('.pt')]
-            if pt_models:
-                return True, f"Ready with .pt model: {pt_models[0]}"
-            else:
-                return False, "No .pt models found in .pt_models directory"
+            if os.path.exists(pt_dir):
+                pt_models = [f for f in os.listdir(pt_dir) if f.endswith('.pt')]
+                if pt_models:
+                    return True, f"Ready with .pt model: {pt_models[0]}"
+            return False, "No .pt models found in .pt_models directory"
         
         try:
             response = requests.get(f"{self.base_url}/api/version", timeout=5)
@@ -414,11 +590,28 @@ class OllamaWebChat:
         except Exception as e:
             return False, f"Error: {str(e)}"
 
-    def send_message(self, message):
+    def send_message(self, message, context=None):
         """Send message to Ollama and get response"""
-        # Use provider-agnostic query_model
         try:
-            response = query_model(message)
+            # Enhance message with file management instructions
+            enhanced_message = f"""
+{message}
+
+SYSTEM CONTEXT: You have access to a file management API. You can:
+- List files and directories
+- Read file contents
+- Write/modify files
+- Create new files and directories
+- Search for files
+- All operations are logged for audit
+
+If the user asks you to make changes to files, you can do so directly.
+Current context: {context if context else 'No specific file context'}
+
+Instructions: Be helpful and make changes as requested. Always confirm what you've done.
+"""
+            
+            response = query_model(enhanced_message)
             return True, response
         except Exception as e:
             return False, f"Error sending message: {str(e)}"
@@ -481,7 +674,7 @@ def list_files():
         if os.path.isdir(full_path):
             for item in os.listdir(full_path):
                 item_path = os.path.join(full_path, item)
-                relative_path = os.path.relpath(item_path, workspace_root).replace('\\', '/');
+                relative_path = os.path.relpath(item_path, workspace_root).replace('\\', '/')
                 
                 item_info = {
                     'name': item,
@@ -634,7 +827,6 @@ def delete_file_or_directory():
             return jsonify({'success': False, 'error': 'Path does not exist'}), 404
         
         if os.path.isdir(full_path):
-            import shutil
             shutil.rmtree(full_path)
         else:
             os.remove(full_path)
@@ -667,9 +859,9 @@ def search_files():
         for root, dirs, files in os.walk(search_path):
             for file in files:
                 file_path = os.path.join(root, file)
-                relative_path = os.path.relpath(file_path, workspace_root).replace('\\', '/');
+                relative_path = os.path.relpath(file_path, workspace_root).replace('\\', '/')
                 
-                match = False;
+                match = False
                 if search_type == 'name':
                     match = query.lower() in file.lower()
                 elif search_type == 'content':
@@ -719,5 +911,63 @@ def get_audit_log():
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 
-# ...existing endpoints...
-```
+# Original endpoints
+@app.route('/')
+def index():
+    return render_template_string(CHAT_HTML)
+
+@app.route('/status')
+def status():
+    is_ready, message = chat.check_ollama_status()
+    # Always report the actual model in use (from config or detected)
+    model = None
+    if is_ready:
+        if chat.model_provider == 'pt':
+            # Show the .pt model name if available
+            pt_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../.pt_models'))
+            if os.path.exists(pt_dir):
+                pt_models = [f for f in os.listdir(pt_dir) if f.endswith('.pt')]
+                model = pt_models[0] if pt_models else None
+        else:
+            # For Ollama, show the actual model in use (from config or detected)
+            model = chat.model
+    return jsonify({
+        'status': 'ready' if is_ready else 'error',
+        'message': message,
+        'model': model if is_ready else None
+    })
+
+@app.route('/chat', methods=['POST'])
+def chat_endpoint():
+    try:
+        data = request.get_json()
+        message = data.get('message', '').strip()
+        context = data.get('context', {})
+        
+        if not message:
+            return jsonify({'success': False, 'error': 'Empty message'})
+        
+        # Check if Ollama is ready
+        is_ready, status_msg = chat.check_ollama_status()
+        if not is_ready:
+            return jsonify({'success': False, 'error': f'Ollama not ready: {status_msg}'})
+        
+        # Send message to Ollama with context
+        success, response = chat.send_message(message, context)
+        
+        if success:
+            return jsonify({'success': True, 'response': response})
+        else:
+            return jsonify({'success': False, 'error': response})
+            
+    except Exception as e:
+        return jsonify({'success': False, 'error': f'Server error: {str(e)}'})
+
+def run_webchat():
+    """Run the web chat server"""
+    print("Starting Enhanced Ollama Web Chat on http://localhost:8080")
+    print("Features: File Management, Monaco Editor, LLM Code Access")
+    app.run(host='0.0.0.0', port=8080, debug=False, threaded=True)
+
+if __name__ == "__main__":
+    run_webchat()
