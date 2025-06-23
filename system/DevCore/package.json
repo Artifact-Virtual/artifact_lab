@@ -1,0 +1,48 @@
+{
+  "name": "development-core",
+  "version": "1.0.0",
+  "description": "A core development framework for managing and visualizing codebases.",
+  "main": "src/core/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "start": "node dist/core/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/development-core.git"
+  },
+  "keywords": [
+    "development",
+    "visualization",
+    "monitoring",
+    "typescript"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "typescript": "^4.5.0",
+    "jest": "^27.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.0.0"
+  },
+  "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2020,
+      "sourceType": "module"
+    },
+    "rules": {
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": ["error"]
+    }
+  }
+}

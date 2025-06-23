@@ -1,0 +1,34 @@
+node:
+  id: "node-1"
+  role: "relay"  # Options: relay, mix, exit, snapp_host
+  listen_address: "0.0.0.0:8080"
+  max_connections: 100
+  reputation:
+    uptime: 99.9
+    latency: 50  # in ms
+    bandwidth: 1000  # in Mbps
+  encryption:
+    enabled: true
+    protocol: "Noise"  # Options: Noise, TLS
+  logging:
+    level: "info"  # Options: debug, info, warn, error
+    file: "logs/node.log"
+  peers:
+    - id: "peer-1"
+      address: "192.168.1.2:8080"
+    - id: "peer-2"
+      address: "192.168.1.3:8080"
+  configuration:
+    dynamic_role_switching: true
+    service_registration:
+      enabled: true
+      dht: "enabled"  # Options: enabled, disabled
+  exit_policy:
+    allow_clearnet: true
+    allowed_ports:
+      - 80
+      - 443
+      - 53
+  health_check:
+    interval: 60  # in seconds
+    timeout: 5  # in seconds

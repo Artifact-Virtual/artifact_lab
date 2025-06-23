@@ -1,0 +1,36 @@
+## Standard Operating Procedures (SOP)
+
+1. Always run `run.sh` in the workspace.
+
+2. Ensure all dependencies are installed using `npm install`.
+
+3. Use `npm start` to launch the application.
+
+4. Run tests with `npm test` before committing changes.
+
+5. Follow PEP8 guidelines for Python code.
+
+6. Always update this file. ALWAYS. no exceptions.
+
+7. Perform a full codebase review periodically to ensure no errors exist. Fix all issues, big or small, without workarounds or cutting corners.w
+
+
+## Changelog
+
+- Webchat now has ARTIFACT VIRTUAL styling (black AMOLED + fade edges).
+- Enhanced visualizer has tree/heatmap/analysis/metrics views with modern UI, real-time charts, and dotfile support.
+- Main launcher gives choice: Enhanced Analytics Visualizer / 3D Node Visualizer (starmap removed and cleaned up).
+- Dependency indexer now includes dotfiles and richer file metadata.
+- System cleaned up: no more starmap references, overconfiguration removed, only essential visualizers remain.
+
+# DevCore/Workspace Automation Updates (2025-06)
+- DevCore CLI now supports robust, root-level execution with all imports using the `DevCore.` prefix.
+- Scaffolder enhanced to parse tree structures with icons and create all directories/files in `DevCore/workspace`.
+- All generated file and directory names are sanitized for Windows compatibility.
+- CodeGenAgent writes generated code to the correct workspace directory, matching the scaffolded structure.
+- Spinner added for CLI feedback during pipeline phases.
+- Circular import issues resolved by modularizing Spinner and using correct import patterns.
+- CLI now prints the full visual plan and creates a real, matching directory/file structure.
+- Improved error handling for invalid file/directory names and non-path lines in Ollama output.
+- README updated with clear Python CLI usage and available commands.
+- SOP and changelog maintenance enforced as part of workflow.

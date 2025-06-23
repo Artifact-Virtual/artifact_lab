@@ -1,0 +1,23 @@
+client:
+  id: "client_id"  # Unique identifier for the client
+  version: "1.0.0"  # Version of the client
+  server:
+    address: "127.0.0.1"  # Server address
+    port: 8080  # Server port
+  routing:
+    split: true  # Enable split routing
+    rules:
+      - type: "snapp"  # Routing rule type
+        destination: "snapp://example_service"  # Destination for SNApp
+      - type: "clearnet"  # Routing rule type
+        destination: "http://example.com"  # Destination for clearnet
+  wallet:
+    enabled: true  # Enable wallet functionality
+    provider: "local"  # Wallet provider type
+    key_path: "/path/to/wallet/key"  # Path to wallet key file
+  logging:
+    level: "info"  # Logging level
+    file: "/var/log/blacknet_client.log"  # Log file path
+  security:
+    encryption: "AES-256"  # Encryption method
+    token_expiry: 3600  # Token expiry time in seconds

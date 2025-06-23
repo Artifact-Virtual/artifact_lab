@@ -1,0 +1,48 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Install required packages
+      apt:
+        name:
+          - build-essential
+          - rustc
+          - cargo
+          - git
+        state: present
+
+    - name: Clone the Blacknet repository
+      git:
+        repo: 'https://github.com/yourusername/blacknet.git'
+        dest: '/opt/blacknet'
+        version: 'main'
+
+    - name: Build the Blacknet node
+      command: cargo build --release
+      args:
+        chdir: '/opt/blacknet/node'
+
+    - name: Create systemd service file for Blacknet node
+      copy:
+        dest: /etc/systemd/system/blacknet-node.service
+        content: |
+          [Unit]
+          Description=Blacknet Node
+          After=network.target
+
+          [Service]
+          ExecStart=/opt/blacknet/node/target/release/node
+          WorkingDirectory=/opt/blacknet/node
+          Restart=always
+          User=nobody
+          Environment=RUST_LOG=info
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Enable and start Blacknet node service
+      systemd:
+        name: blacknet-node
+        enabled: yes
+        state: started
+---

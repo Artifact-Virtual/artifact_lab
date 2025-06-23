@@ -1,0 +1,12 @@
+[package]
+name = "blacknet_crypto"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+libsnow = "0.1"  # Noise Protocol Framework
+bellman = "0.8"   # zk-SNARKs library
+zexe = "0.1"      # zk-SNARKs library for zero-knowledge proofs
+
+[lib]
+crate-type = ["cdylib", "rlib"]

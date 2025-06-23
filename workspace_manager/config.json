@@ -1,0 +1,8 @@
+{
+  "ollama_endpoint": "http://localhost:11434/api/generate",
+  "ollama_model": "codellama:7b",
+  "ollama_host": "localhost",
+  "ollama_port": 11434,
+  "webchat_port": 8080,
+  "model_provider": "ollama"
+}

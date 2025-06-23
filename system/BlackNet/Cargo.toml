@@ -1,0 +1,15 @@
+[package]
+name = "blacknet"
+version = "0.1.0"
+edition = "2021"
+
+[workspace]
+members = [
+    "client",
+    "node",
+    "crypto",
+    "snappkit",
+]
+
+[dependencies]
+# Add your dependencies here

@@ -1,0 +1,22 @@
+{
+  "paths": {
+    "src": "./src",
+    "tests": "./tests",
+    "docs": "./docs"
+  },
+  "modelSettings": {
+    "defaultModel": "qwen2.5-coder:latest",
+    "modelEndpoint": "http://localhost:11434/api/generate"
+  },
+  "logging": {
+    "level": "info",
+    "output": "console"
+  },
+  "visualization": {
+    "enable3D": true,
+    "defaultView": "tree"
+  },
+  "fileWatcher": {
+    "debounceTime": 300
+  }
+}

@@ -1,0 +1,17 @@
+[package]
+name = "snappkit"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Add your dependencies here
+# Example:
+# serde = { version = "1.0", features = ["derive"] }
+# tokio = { version = "1", features = ["full"] }
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[[bin]]
+name = "snappkit"
+path = "src/main.rs"

@@ -1,0 +1,10 @@
+module blacknet
+
+go 1.18
+
+use (
+    ./client
+    ./node
+    ./crypto
+    ./snappkit
+)

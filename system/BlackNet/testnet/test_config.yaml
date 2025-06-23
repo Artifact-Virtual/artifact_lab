@@ -1,0 +1,32 @@
+testnet:
+  network:
+    name: "blacknet-testnet"
+    type: "local"
+    nodes:
+      - id: "node1"
+        role: "relay"
+        address: "127.0.0.1:9001"
+      - id: "node2"
+        role: "mix"
+        address: "127.0.0.1:9002"
+      - id: "node3"
+        role: "exit"
+        address: "127.0.0.1:9003"
+  configuration:
+    logging:
+      level: "info"
+      file: "testnet.log"
+    metrics:
+      enabled: true
+      endpoint: "http://localhost:9090/metrics"
+    timeout:
+      connection: 30s
+      request: 10s
+  testing:
+    scenarios:
+      - name: "basic_connectivity"
+        description: "Test basic connectivity between nodes"
+        expected_outcome: "All nodes should be able to communicate"
+      - name: "load_test"
+        description: "Simulate load on the network"
+        expected_outcome: "Network should handle the load without errors"
