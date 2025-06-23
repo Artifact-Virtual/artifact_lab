@@ -30,9 +30,9 @@
         "is_dotfile": false
       },
       "README.md": {
-        "hash": "f0702c23fc77c85602cfe53176e64c0e339b10d44f54f87d075ec43f620c1a45",
-        "size": 10336,
-        "modified": 1750630829.6327097,
+        "hash": "2d5970355a9468e0719e9bb2c3b4663e2182637b77691709cbca6a44b36305a6",
+        "size": 7770,
+        "modified": 1750680818.830733,
         "type": ".md",
         "is_dotfile": false
       },
@@ -81,15 +81,15 @@
     },
     "stats": {
       "total_files": 11,
-      "total_size": 45435,
+      "total_size": 42869,
       "file_types": [
+        ".ps1",
+        "no_extension",
+        ".txt",
+        ".json",
         ".md",
         ".sh",
-        ".bat",
-        ".ps1",
-        ".json",
-        ".txt",
-        "no_extension"
+        ".bat"
       ],
       "dotfiles_count": 1,
       "largest_file": "requirements.lock.txt"
@@ -510,10 +510,10 @@
       "total_files": 7,
       "total_size": 17533,
       "file_types": [
-        ".yml",
         ".txt",
         ".md",
-        "no_extension"
+        "no_extension",
+        ".yml"
       ],
       "dotfiles_count": 2,
       "largest_file": "docker-compose.yml"
@@ -1136,10 +1136,10 @@
       "total_files": 7,
       "total_size": 17533,
       "file_types": [
-        ".yml",
         ".txt",
         ".md",
-        "no_extension"
+        "no_extension",
+        ".yml"
       ],
       "dotfiles_count": 2,
       "largest_file": "docker-compose.yml"
@@ -2448,13 +2448,13 @@
       "total_files": 19,
       "total_size": 269409,
       "file_types": [
-        ".md",
-        ".toml",
-        ".yml",
-        ".py",
-        ".json",
         "no_extension",
-        ".yaml"
+        ".json",
+        ".yml",
+        ".toml",
+        ".yaml",
+        ".md",
+        ".py"
       ],
       "dotfiles_count": 4,
       "largest_file": "CHANGELOG.md"
@@ -2856,10 +2856,10 @@
       "total_files": 5,
       "total_size": 7128,
       "file_types": [
-        ".bat",
-        ".py",
+        ".txt",
         ".md",
-        ".txt"
+        ".py",
+        ".bat"
       ],
       "dotfiles_count": 0,
       "largest_file": "conf.py"
@@ -2969,9 +2969,9 @@
       "total_files": 3,
       "total_size": 9156,
       "file_types": [
-        ".toml",
         ".md",
-        ".json"
+        ".json",
+        ".toml"
       ],
       "dotfiles_count": 0,
       "largest_file": "python_api.md"
@@ -4099,10 +4099,10 @@
       "total_files": 4,
       "total_size": 8511,
       "file_types": [
-        ".bat",
         ".xml",
+        ".sh",
         ".py",
-        ".sh"
+        ".bat"
       ],
       "dotfiles_count": 0,
       "largest_file": "packmanconf.py"
@@ -4150,9 +4150,9 @@
       "total_files": 5,
       "total_size": 35364,
       "file_types": [
-        ".bat",
+        ".ps1",
         ".py",
-        ".ps1"
+        ".bat"
       ],
       "dotfiles_count": 0,
       "largest_file": "generate_temp_folder.ps1"
@@ -4531,9 +4531,9 @@
       "total_files": 18,
       "total_size": 82509,
       "file_types": [
-        ".bat",
+        ".sh",
         ".py",
-        ".sh"
+        ".bat"
       ],
       "dotfiles_count": 0,
       "largest_file": "benchmark_api.py"
@@ -4658,8 +4658,8 @@
       "total_files": 16,
       "total_size": 108518,
       "file_types": [
-        ".py",
-        "no_extension"
+        "no_extension",
+        ".py"
       ],
       "dotfiles_count": 1,
       "largest_file": "example_sph.py"
@@ -4825,8 +4825,8 @@
       "total_files": 19,
       "total_size": 195797,
       "file_types": [
-        ".py",
-        "no_extension"
+        "no_extension",
+        ".py"
       ],
       "dotfiles_count": 1,
       "largest_file": "utils.py"
@@ -4950,8 +4950,8 @@
       "total_files": 11,
       "total_size": 129794,
       "file_types": [
-        ".py",
-        "no_extension"
+        "no_extension",
+        ".py"
       ],
       "dotfiles_count": 1,
       "largest_file": "example_drone.py"
@@ -5069,8 +5069,8 @@
       "total_files": 15,
       "total_size": 89249,
       "file_types": [
-        ".py",
-        "no_extension"
+        "no_extension",
+        ".py"
       ],
       "dotfiles_count": 1,
       "largest_file": "example_cloth_self_contact.py"
@@ -7364,6 +7364,70 @@
       "largest_file": "ultractl.py"
     }
   },
+  ".git": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\hooks": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\info": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\logs": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\logs\\refs": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\logs\\refs\\heads": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\logs\\refs\\remotes": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\logs\\refs\\remotes\\origin": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\info": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\pack": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\refs": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\refs\\heads": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\refs\\remotes": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\refs\\remotes\\origin": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\refs\\tags": {
+    "files": {},
+    "stats": {}
+  },
   ".ollama_models": {
     "files": {},
     "stats": {}
@@ -7404,8 +7468,8 @@
       "total_files": 3,
       "total_size": 12606,
       "file_types": [
-        ".toml",
-        ".md"
+        ".md",
+        ".toml"
       ],
       "dotfiles_count": 0,
       "largest_file": "blueprint.md"
@@ -7700,8 +7764,8 @@
       "total_files": 2,
       "total_size": 1380,
       "file_types": [
-        ".sh",
-        ".yaml"
+        ".yaml",
+        ".sh"
       ],
       "dotfiles_count": 0,
       "largest_file": "test_config.yaml"
@@ -7729,9 +7793,9 @@
         "is_dotfile": false
       },
       "ollama_interface.py": {
-        "hash": "e92c17960897b3499bf932645e7c799e74bf8fb1bfdce6d42ab8cad5735ed27e",
-        "size": 1478,
-        "modified": 1750678026.5362844,
+        "hash": "936f9b7251e2680e53e3bfe6b6d2fbe31cef02ffa78bce76e0f0707898ae28ab",
+        "size": 1549,
+        "modified": 1750680283.417836,
         "type": ".py",
         "is_dotfile": false
       },
@@ -7787,12 +7851,12 @@
     },
     "stats": {
       "total_files": 9,
-      "total_size": 208702,
+      "total_size": 208773,
       "file_types": [
         ".js",
-        ".py",
         ".md",
-        ".json"
+        ".json",
+        ".py"
       ],
       "dotfiles_count": 0,
       "largest_file": "package-lock.json"
@@ -7993,11 +8057,11 @@
       "total_files": 20,
       "total_size": 18046,
       "file_types": [
-        ".html",
-        ".js",
-        ".md",
         ".json",
-        ".css"
+        ".js",
+        ".html",
+        ".css",
+        ".md"
       ],
       "dotfiles_count": 0,
       "largest_file": "API.js"
@@ -8084,8 +8148,8 @@
       "total_files": 2,
       "total_size": 477,
       "file_types": [
-        ".json",
-        ".yaml"
+        ".yaml",
+        ".json"
       ],
       "dotfiles_count": 0,
       "largest_file": "default.json"
@@ -8475,16 +8539,16 @@
   "workspace_manager": {
     "files": {
       "config.json": {
-        "hash": "24f579b07e7fb34924c360c45297810c296fc7cf9eb8f9ba0e6e020cf2c5154f",
-        "size": 221,
-        "modified": 1750678015.61395,
+        "hash": "8fc8583789875aaa9e87a5d2eb005ca378548a1e52ba60acfc398f0416a43fe7",
+        "size": 213,
+        "modified": 1750680309.2448745,
         "type": ".json",
         "is_dotfile": false
       },
       "dependency_index.json": {
-        "hash": "972461297b7a83ae4fb67811f3d65377c9037f9dbee5d598c938c2c74ae46d61",
-        "size": 259333,
-        "modified": 1750679196.6069217,
+        "hash": "a0019ab486e2a4b7b11349e3d7f93af6fcb90bc2c972fba9d4b2e3b5bc11c2a5",
+        "size": 259118,
+        "modified": 1750680209.0570111,
         "type": ".json",
         "is_dotfile": false
       },
@@ -8568,11 +8632,11 @@
     },
     "stats": {
       "total_files": 13,
-      "total_size": 332909,
+      "total_size": 332686,
       "file_types": [
-        ".py",
         ".md",
-        ".json"
+        ".json",
+        ".py"
       ],
       "dotfiles_count": 0,
       "largest_file": "dependency_index.json"
@@ -8596,8 +8660,8 @@
   },
   "_metadata": {
     "total_files": 825,
-    "total_directories": 283,
-    "generated_at": 1750680209.0350459,
+    "total_directories": 299,
+    "generated_at": 1750680839.9117362,
     "root_path": "W:\\worxpace\\artifact_lab"
   }
 }

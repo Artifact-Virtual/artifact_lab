@@ -1,6 +1,6 @@
 ## Standard Operating Procedures (SOP)
 
-1. Always run `run.sh` in the workspace.
+1. Always run `./run.sh` from root when you login to the workspace,
 
 2. Ensure all dependencies are installed using `npm install`.
 
