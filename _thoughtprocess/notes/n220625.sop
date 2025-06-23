@@ -1,7 +1,6 @@
 ╔════════════════════════════════════════════════════════════════════════════╗
 ║                  STANDARD OPERATING PROCEDURES (SOP)                       ║
 ╠════════════════════════════════════════════════════════════════════════════╣
-
     1. ▶ Always run `./run.sh` from root when you login to the workspace.
     2. ▶ Use `python workspace_manager/webchat.py` to start the AVA system.
     3. ▶ Access file manager at http://localhost:8080/file-manager for development.

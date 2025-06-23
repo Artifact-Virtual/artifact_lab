@@ -270,5 +270,229 @@
     "success": true,
     "error": null,
     "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:26:50.238470",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:29:35.708121",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:30:14.577631",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:30:21.478783",
+    "operation": "list",
+    "path": "_thoughtprocess/",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:32:18.530171",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:35:49.990072",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:37:25.973901",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:37:29.039989",
+    "operation": "list",
+    "path": "_thoughtprocess/",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:37:31.401720",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:37:55.249341",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:38:16.968588",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:38:57.762338",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:38:58.480320",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:39:54.048707",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:40:13.340662",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:40:16.344398",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:42:45.338148",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:42:49.694472",
+    "operation": "read",
+    "path": "license.txt",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:42:55.567498",
+    "operation": "list",
+    "path": "workspace_manager/",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:42:57.632045",
+    "operation": "list",
+    "path": "workspace_manager/",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:43:03.024537",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:43:36.440234",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:43:41.508063",
+    "operation": "list",
+    "path": "_thoughtprocess/",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:43:42.207797",
+    "operation": "list",
+    "path": "_thoughtprocess/drafts/",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:43:45.486343",
+    "operation": "list",
+    "path": "_thoughtprocess/notes/",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:43:46.643879",
+    "operation": "read",
+    "path": "_thoughtprocess/notes/n220625.sop",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:43:52.991905",
+    "operation": "write",
+    "path": "_thoughtprocess/notes/n220625.sop",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:44:39.384671",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
   }
 ]

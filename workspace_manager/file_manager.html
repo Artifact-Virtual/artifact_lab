@@ -4,59 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AVA File Manager</title>
-    <style>
-        * {
+    <style>        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #1e1e1e;
-            color: #d4d4d4;
+        }        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: #000000;
+            color: #ffffff;
             height: 100vh;
             overflow: hidden;
+            font-weight: 400;
+            letter-spacing: -0.01em;
         }
         .container {
             display: flex;
             height: 100vh;
-        }
-        .sidebar {
+        }        .sidebar {
             width: 250px;
-            background: #252526;
-            border-right: 1px solid #3e3e42;
+            background: #000000;
+            border-right: 1px solid #4f46e5;
             display: flex;
             flex-direction: column;
-        }
-        .sidebar-header {
+        }        .sidebar-header {
             padding: 12px 16px;
-            background: #2d2d30;
-            border-bottom: 1px solid #3e3e42;
-            font-weight: 600;
-            font-size: 14px;
+            background: #000000;
+            border-bottom: 1px solid #4f46e5;
+            font-weight: 500;
+            font-size: 13px;
+            color: #ffffff;
+            letter-spacing: 0.02em;
         }
         .file-tree {
             flex: 1;
             overflow-y: auto;
             padding: 8px 0;
-        }
-        .file-item {
+            background: #000000;
+        }        .file-item {
             padding: 4px 16px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            font-size: 13px;
+            font-size: 12px;
             border-radius: 0;
+            color: #ffffff;
+            font-weight: 400;
+            letter-spacing: 0.01em;
         }
         .file-item:hover {
-            background: #2a2d2e;
-        }
-        .file-item.selected {
-            background: #094771;
+            background: #111111;
+        }        .file-item.selected {
+            background: #222222;
             color: #ffffff;
-        }
-        .file-item.folder {
+            border-left: 3px solid #4f46e5;
+        }.file-item.folder {
             font-weight: 500;
+            color: #ffffff;
+            letter-spacing: 0.01em;
         }
         .file-icon {
             margin-right: 6px;
@@ -67,69 +71,110 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-        }
-        .toolbar {
+            background: #000000;
+        }        .toolbar {
             height: 35px;
-            background: #2d2d30;
-            border-bottom: 1px solid #3e3e42;
+            background: #000000;
+            border-bottom: 1px solid #4f46e5;
             display: flex;
             align-items: center;
             padding: 0 12px;
             gap: 8px;
-        }
-        .file-path {
+        }.file-path {
             flex: 1;
-            font-size: 12px;
-            color: #cccccc;
-        }
-        .toolbar-button {
-            padding: 4px 8px;
-            background: #0e639c;
-            color: white;
-            border: none;
-            border-radius: 2px;
+            font-size: 11px;
+            color: #ffffff;
+            font-weight: 400;
+            letter-spacing: 0.01em;
+        }        .toolbar-button {
+            padding: 6px 12px;
+            background: #333333;
+            color: #ffffff;
+            border: 1px solid #4f46e5;
+            border-radius: 3px;
             cursor: pointer;
             font-size: 11px;
-        }
-        .toolbar-button:hover {
-            background: #1177bb;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            transition: all 0.15s ease;
+        }        .toolbar-button:hover {
+            background: #444444;
+            border-color: #6366f1;
         }
         .toolbar-button:disabled {
-            background: #3e3e42;
-            color: #858585;
+            background: #222222;
+            color: #888888;
+            border-color: #666666;
             cursor: not-allowed;
-        }
-        .editor-container {
+        }        .editor-container {
             flex: 1;
             position: relative;
-        }
-        .status-bar {
+            border-top: 1px solid #4f46e5;
+        }.status-bar {
             height: 22px;
-            background: #007acc;
-            color: white;
+            background: #000000;
+            color: #ffffff;
             display: flex;
             align-items: center;
             padding: 0 12px;
-            font-size: 11px;
+            font-size: 10px;
             justify-content: space-between;
+            border-top: 1px solid #4f46e5;
+            font-weight: 400;
+            letter-spacing: 0.01em;
         }
         .loading {
             display: flex;
             align-items: center;
             justify-content: center;
             height: 100%;
-            color: #858585;
-        }
-        .error {
-            color: #f44747;
+            color: #ffffff;
+        }        .error {
+            color: #4f46e5;
             padding: 16px;
         }
         .file-subtree {
             margin-left: 18px;
-        }
-        .expand-arrow {
+        }        .expand-arrow {
             font-size: 12px;
             margin-left: 4px;
+            color: #ffffff;
+        }        #monaco-editor {
+            height: 100%;
+            width: 100%;
+        }
+        
+        /* Custom Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #000000;
+            border-radius: 0;
+        }
+          ::-webkit-scrollbar-thumb {
+            background: #312e81;
+            border-radius: 6px;
+            border: 1px solid #000000;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4f46e5;
+        }
+        
+        ::-webkit-scrollbar-thumb:active {
+            background: #1e1b4b;
+        }
+        
+        ::-webkit-scrollbar-corner {
+            background: #000000;
+        }
+          /* Firefox scrollbar */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #312e81 #000000;
         }
     </style>
 </head>
@@ -153,7 +198,7 @@
             </div>
             
             <div class="editor-container">
-                <div id="monaco-editor" style="height: 100%; width: 100%;"></div>
+                <div id="monaco-editor"></div>
             </div>
             
             <div class="status-bar">
@@ -175,22 +220,111 @@
             paths: { 
                 vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' 
             } 
-        });
-
-        require(['vs/editor/editor.main'], function () {
-            editor = monaco.editor.create(document.getElementById('monaco-editor'), {
+        });        require(['vs/editor/editor.main'], function () {
+            // Define custom AMOLED theme
+            monaco.editor.defineTheme('amoled-black', {
+                base: 'vs-dark',
+                inherit: true,
+                rules: [
+                    { token: '', foreground: 'ffffff', background: '000000' },
+                    { token: 'comment', foreground: '6A9955', fontStyle: 'italic' },
+                    { token: 'keyword', foreground: '569CD6' },
+                    { token: 'string', foreground: 'CE9178' },
+                    { token: 'number', foreground: 'B5CEA8' },
+                    { token: 'regexp', foreground: 'D16969' },
+                    { token: 'operator', foreground: 'D4D4D4' },
+                    { token: 'namespace', foreground: '4EC9B0' },
+                    { token: 'type', foreground: '4EC9B0' },
+                    { token: 'struct', foreground: '4EC9B0' },
+                    { token: 'class', foreground: '4EC9B0' },
+                    { token: 'interface', foreground: '4EC9B0' },
+                    { token: 'enum', foreground: '4EC9B0' },
+                    { token: 'typeParameter', foreground: '4EC9B0' },
+                    { token: 'function', foreground: 'DCDCAA' },
+                    { token: 'member', foreground: 'DCDCAA' },
+                    { token: 'macro', foreground: '569CD6' },
+                    { token: 'variable', foreground: '9CDCFE' },
+                    { token: 'parameter', foreground: '9CDCFE' },
+                    { token: 'property', foreground: '9CDCFE' },
+                    { token: 'label', foreground: 'C586C0' }
+                ],
+                colors: {
+                    'editor.background': '#000000',
+                    'editor.foreground': '#ffffff',
+                    'editorLineNumber.foreground': '#858585',
+                    'editorLineNumber.activeForeground': '#ffffff',
+                    'editor.selectionBackground': '#264f78',
+                    'editor.selectionHighlightBackground': '#ADD6FF26',
+                    'editor.inactiveSelectionBackground': '#3A3D41',
+                    'editorIndentGuide.background': '#404040',
+                    'editorIndentGuide.activeBackground': '#707070',
+                    'editor.wordHighlightBackground': '#575757B8',
+                    'editor.wordHighlightStrongBackground': '#004972B8',
+                    'editorCursor.foreground': '#ffffff',
+                    'editorWhitespace.foreground': '#404040',
+                    'editorBracketMatch.background': '#0064001a',
+                    'editorBracketMatch.border': '#888888',
+                    'editorGutter.background': '#000000',
+                    'editorGutter.modifiedBackground': '#4f46e5',
+                    'editorGutter.addedBackground': '#587c0c',
+                    'editorGutter.deletedBackground': '#94151b',
+                    'diffEditor.insertedTextBackground': '#9bb95533',
+                    'diffEditor.removedTextBackground': '#ff000033',                    'scrollbar.shadow': '#000000',                    'scrollbarSlider.background': '#312e81',
+                    'scrollbarSlider.hoverBackground': '#4f46e5',
+                    'scrollbarSlider.activeBackground': '#1e1b4b',
+                    'editorOverviewRuler.border': '#7f7f7f4d',
+                    'panel.background': '#000000',
+                    'panelTitle.activeBorder': '#4f46e5',
+                    'panelTitle.activeForeground': '#ffffff',
+                    'panelTitle.inactiveForeground': '#ffffff60',
+                    'panel.border': '#4f46e5',
+                    'terminal.background': '#000000',
+                    'terminal.foreground': '#ffffff',
+                    'terminalCursor.background': '#000000',
+                    'terminalCursor.foreground': '#ffffff',
+                    'terminal.ansiBlack': '#000000',
+                    'terminal.ansiRed': '#cd3131',
+                    'terminal.ansiGreen': '#0dbc79',
+                    'terminal.ansiYellow': '#e5e510',
+                    'terminal.ansiBlue': '#2472c8',
+                    'terminal.ansiMagenta': '#bc3fbc',
+                    'terminal.ansiCyan': '#11a8cd',
+                    'terminal.ansiWhite': '#ffffff',
+                    'terminal.ansiBrightBlack': '#666666',
+                    'terminal.ansiBrightRed': '#f14c4c',
+                    'terminal.ansiBrightGreen': '#23d18b',
+                    'terminal.ansiBrightYellow': '#f5f543',
+                    'terminal.ansiBrightBlue': '#3b8eea',
+                    'terminal.ansiBrightMagenta': '#d670d6',
+                    'terminal.ansiBrightCyan': '#29b8db',
+                    'terminal.ansiBrightWhite': '#ffffff',                    'gitDecoration.modifiedResourceForeground': '#4f46e5',
+                    'gitDecoration.deletedResourceForeground': '#4f46e5',
+                    'gitDecoration.untrackedResourceForeground': '#73c991',
+                    'gitDecoration.ignoredResourceForeground': '#8c8c8c',
+                    'gitDecoration.conflictingResourceForeground': '#e4676b',                    'notebook.cellBorderColor': '#4f46e5',
+                    'notebook.focusedEditorBorder': '#4f46e5',
+                    'notebookStatusSuccessIcon.foreground': '#89d185',
+                    'notebookStatusErrorIcon.foreground': '#4f46e5',
+                    'notebookStatusRunningIcon.foreground': '#cccccc',
+                    'notebook.outputContainerBackgroundColor': '#000000'
+                }
+            });            editor = monaco.editor.create(document.getElementById('monaco-editor'), {
                 value: '// Welcome to AVA File Manager\n// Select a file from the explorer to start editing\n// Features:\n// - Monaco Editor with syntax highlighting\n// - File tree navigation\n// - Save/load files\n// - Create new files',
                 language: 'javascript',
-                theme: 'vs-dark',
+                theme: 'amoled-black',
                 automaticLayout: true,
                 minimap: { enabled: true },
-                fontSize: 14,
+                fontSize: 13,
+                fontFamily: 'JetBrains Mono, SF Mono, Monaco, Inconsolata, Consolas, "Courier New", monospace',
+                fontLigatures: true,
                 lineNumbers: 'on',
                 wordWrap: 'on',
                 scrollBeyondLastLine: false,
                 smoothScrolling: true,
                 cursorBlinking: 'blink',
-                renderWhitespace: 'selection'
+                renderWhitespace: 'selection',
+                fontWeight: '400',
+                letterSpacing: 0.5
             });
 
             // Listen for content changes
@@ -206,10 +340,11 @@
 
             // Load initial file tree
             loadFiles();
-        });
-
-        async function loadFiles() {
+        });        async function loadFiles() {
             updateStatus('Loading files...');
+            const tree = document.getElementById('fileTree');
+            tree.innerHTML = '<div class="loading">Loading files...</div>';
+            
             try {
                 const response = await fetch('/api/files/list');
                 const data = await response.json();
@@ -219,16 +354,22 @@
                     renderFileTree(files);
                     updateStatus('Ready');
                 } else {
+                    tree.innerHTML = '<div class="error">Failed to load files: ' + (data.error || 'Unknown error') + '</div>';
                     showError('Failed to load files: ' + (data.error || 'Unknown error'));
                 }
             } catch (error) {
+                tree.innerHTML = '<div class="error">Error loading files: ' + error.message + '</div>';
                 showError('Error loading files: ' + error.message);
             }
-        }
-
-        function renderFileTree(items, parentPath = '') {
+        }function renderFileTree(items, parentPath = '') {
             const tree = document.getElementById('fileTree');
             if (!tree) return;
+            
+            // Clear the tree only if we're rendering the root level
+            if (parentPath === '') {
+                tree.innerHTML = '';
+            }
+            
             if (!items || items.length === 0) {
                 if (parentPath === '') {
                     tree.innerHTML = '<div class="loading">No files found</div>';
@@ -419,11 +560,9 @@
 
         function updateStatus(message) {
             document.getElementById('statusLeft').textContent = message;
-        }
-
-        function showError(message) {
+        }        function showError(message) {
             document.getElementById('statusLeft').textContent = message;
-            document.getElementById('statusLeft').style.color = '#f44747';
+            document.getElementById('statusLeft').style.color = '#4f46e5';
             setTimeout(() => {
                 document.getElementById('statusLeft').style.color = '';
             }, 5000);
