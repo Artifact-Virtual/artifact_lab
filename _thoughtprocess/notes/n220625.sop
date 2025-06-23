@@ -17,15 +17,17 @@
    11. ▶ ALWAYS UPDATE workspace_manager\config.json with latest updated SOPs (this file).
    12. ▶ LLM must have secure, auditable read/write access to the codebase via backend API.
    13. ▶ LLM should be able to both suggest and directly make codebase changes (with audit trail).
-   14. ▶ Backend API must support advanced file/code management (list, read, write, create, delete, search).
-   15. ▶ Integrate Monaco Editor in webchat; ensure LLM can trigger Monaco actions (open, edit, diff, save).
+   14. ▶ Backend API must support advanced file/code management (list, read, write, create, delete, search).   15. ▶ Integrate Monaco Editor in webchat; ensure LLM can trigger Monaco actions (open, edit, diff, save).
    16. ▶ If using vector DB or code store, ensure LLM can utilize for semantic code search and advanced queries.
    17. ▶ All LLM-driven changes must be user-controllable (approve, undo) and meticulously logged.
+   18. ▶ AVA system must be operational with proper server restart procedures documented.
+   19. ▶ Monitor server status regularly; restart if "Loading files..." or "Connecting..." persists.
+   20. ▶ Ensure Ollama service is running before starting webchat server.
+   21. ▶ Use troubleshooting guide in AVA.md for systematic issue resolution.
 
 ╠════════════════════════════════════════════════════════════════════════════╣
 ║                                CHANGELOG                                   ║
-╠════════════════════════════════════════════════════════════════════════════╣
- ✅ PHASE 1 COMPLETE: Backend API for file management implemented and operational
+╠════════════════════════════════════════════════════════════════════════════╣ ✅ PHASE 1 COMPLETE: Backend API for file management implemented and operational
  ✅ Enhanced webchat running on http://localhost:8080 with file operations API
  ✅ File operations audit logging system implemented with secure path validation
  ✅ API endpoints for list, read, write, create, search operations functional
@@ -34,8 +36,15 @@
  ✅ Full-featured code editor with syntax highlighting, file explorer, and save functionality
  ✅ LLM interaction logging and audit trail system implemented
  ✅ Enhanced chat interface with file context and code modification capabilities
- 🔄 PHASE 3 IN PROGRESS: Advanced LLM code analysis and automated refactoring
+ ✅ PHASE 3 COMPLETE: System operational with troubleshooting procedures
+ ✅ AVA system fully functional with comprehensive monitoring and restart capabilities
  🔄 PHASE 4 PENDING: Vector DB integration for semantic code search (optional)
+ 🔄 PHASE 5 PENDING: Advanced code analysis and automated refactoring features
+ • LATEST UPDATE (June 23, 2025 - 7:15 AM): System restored to full operation
+ • Server restart procedures tested and documented in AVA.md
+ • File loading and LLM connection issues resolved via proper server restart
+ • All API endpoints confirmed functional: status, file management, chat, audit
+ • Troubleshooting guide created with diagnostic commands and solutions
  • Enhanced webchat now features Monaco Editor with multi-language support
  • File explorer integrated with real-time file operations
  • LLM context enhanced with current file and editor state information
@@ -71,8 +80,41 @@
  • Circular import issues resolved by modularizing Spinner and using correct
      import patterns.
  • CLI now prints the full visual plan and creates a real, matching directory/file structure.
- • Improved error handling for invalid file/directory names and non-path lines in Ollama output.
- • README updated with clear Python CLI usage and available commands.
+ • Improved error handling for invalid file/directory names and non-path lines in Ollama output. • README updated with clear Python CLI usage and available commands.
  • SOP and changelog maintenance enforced as part of workflow.
+
+╠════════════════════════════════════════════════════════════════════════════╣
+║                  AVA SYSTEM OPERATIONAL PROCEDURES (2025-06-23)            ║
+╠════════════════════════════════════════════════════════════════════════════╣
+
+ ▶ DAILY STARTUP CHECKLIST:
+   1. Verify Ollama service: `ollama list` (confirm codellama:7b available)
+   2. Start AVA server: `cd workspace_manager && python webchat.py`
+   3. Test endpoints: `curl http://localhost:8080/status`
+   4. Verify browser access: http://localhost:8080
+   5. Check file explorer loads and chat connects
+
+ ▶ TROUBLESHOOTING PROCEDURES:
+   • File Explorer stuck "Loading files...":
+     → Kill Python: `taskkill /f /im python.exe`
+     → Restart server: `python webchat.py`
+     → Test API: `curl http://localhost:8080/api/files/list`
+   
+   • Chat stuck "Connecting...":
+     → Check Ollama: `curl http://localhost:11434/api/version`
+     → Verify model: `ollama list | findstr codellama`
+     → Restart if needed: `ollama serve`
+
+ ▶ MONITORING & MAINTENANCE:
+   • Server logs: Monitor console output for errors
+   • Audit logs: Check workspace_manager/audit_log.json
+   • LLM logs: Check workspace_manager/llm_audit_log.json
+   • Performance: Monitor memory usage of Python processes
+
+ ▶ EMERGENCY RECOVERY:
+   1. `taskkill /f /im python.exe` (kill all Python)
+   2. `ollama serve` (ensure Ollama running)
+   3. `cd workspace_manager && python webchat.py` (restart AVA)
+   4. Verify all functions via browser test
 
 ╚════════════════════════════════════════════════════════════════════════════╝

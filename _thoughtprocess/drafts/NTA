@@ -102,6 +102,12 @@
             stroke-width: 3px;
         }
 
+        .node.highlighted-neighbor circle {
+            fill: #87CEEB; /* Lighter blue for neighbors */
+            stroke: #87CEEB;
+        }
+
+
         .link {
             stroke: #FFFFFF;
             stroke-opacity: 0.6;
@@ -128,8 +134,8 @@
             dominant-baseline: central;
             pointer-events: none;
         }
-        .node.highlighted text {
-            fill: #000000; /* Black text on gold node for contrast */
+        .node.highlighted text, .node.highlighted-neighbor text {
+            fill: #000000; /* Black text on highlighted/neighbor nodes for contrast */
         }
 
 
@@ -353,6 +359,7 @@
             <p>Total Edges: <span id="totalEdges">0</span></p>
             <p>Average Degree: <span id="avgDegree">0.00</span></p>
             <p>Network Density: <span id="networkDensity">0.00</span></p>
+            <p>Connected Components: <span id="connectedComponents">0</span></p>
         </div>
 
         <div id="current-step-status" class="mt-4"></div>
@@ -382,12 +389,20 @@
                 .attr("width", "100%")
                 .attr("height", "100%");
 
-            // Group for all graph elements to enable zoom/pan
+            // Global transform state for pan, zoom, and rotate
+            // 'x', 'y', 'k' for zoom/pan (translate, scale) from d3.zoomTransform
+            // 'r' for rotation in degrees
+            let transformState = { x: 0, y: 0, k: 1, r: 0 };
+
+            // Group for all graph elements (nodes, links, text)
+            // This group will be transformed for pan, zoom, and rotate
             const graphContentGroup = svg.append("g");
 
+            // Initial dimensions of the canvas
             let width = document.getElementById('network-canvas').clientWidth;
             let height = document.getElementById('network-canvas').clientHeight;
 
+            // Force simulation setup
             let simulation = d3.forceSimulation()
                 .force("link", d3.forceLink().id(d => d.id).distance(100))
                 .force("charge", d3.forceManyBody().strength(-300))
@@ -424,15 +439,58 @@
             const totalEdgesDisplay = document.getElementById('totalEdges');
             const avgDegreeDisplay = document.getElementById('avgDegree');
             const networkDensityDisplay = document.getElementById('networkDensity');
+            const connectedComponentsDisplay = document.getElementById('connectedComponents'); // New display element
+
 
             // --- Zoom and Pan functionality ---
             const zoom = d3.zoom()
                 .scaleExtent([0.1, 10]) // Allow zooming from 10% to 1000%
                 .on("zoom", (event) => {
-                    graphContentGroup.attr("transform", event.transform);
+                    // Update transformState with zoom values
+                    transformState.x = event.transform.x;
+                    transformState.y = event.transform.y;
+                    transformState.k = event.transform.k;
+                    applyGraphTransform(); // Apply the combined transform
                 });
 
-            svg.call(zoom); // Apply zoom behavior to the SVG
+            // --- Rotation functionality (drag behavior) ---
+            const rotateDrag = d3.drag()
+                // Only allow drag if not actively dragging a node and not already zoomed
+                .filter(event => event.button === 0 && d3.zoomTransform(svg.node()).k === 1) // Only primary button and no zoom
+                .on("start", function(event) {
+                    const [cx, cy] = [width / 2, height / 2]; // Center of canvas for rotation pivot
+                    // Calculate initial angle of mouse from center
+                    event.subject.startAngle = Math.atan2(event.y - cy, event.x - cx) * 180 / Math.PI;
+                    // Store current rotation to add deltas to it
+                    event.subject.initialRotation = transformState.r;
+                })
+                .on("drag", function(event) {
+                    const [cx, cy] = [width / 2, height / 2]; // Center of canvas for rotation pivot
+                    // Calculate current angle of mouse from center
+                    const currentAngle = Math.atan2(event.y - cy, event.x - cx) * 180 / Math.PI;
+                    // Update rotation angle
+                    transformState.r = event.subject.initialRotation + (currentAngle - event.subject.startAngle);
+                    applyGraphTransform(); // Apply the combined transform
+                });
+
+            // Apply zoom and rotation drag behaviors to the main SVG
+            svg.call(zoom).call(rotateDrag);
+
+            // --- Function to apply all combined transforms to graphContentGroup ---
+            function applyGraphTransform() {
+                // Construct the transform string with rotation around the center of the canvas
+                // Order of operations is important: translate to center, rotate, translate back, then zoom's pan and scale.
+                // Note: The translate/scale from d3.zoom is stored in transformState.x/y/k.
+                // We want rotation around (width/2, height/2) in the *current* scaled view.
+                // This formula translates the center of the canvas to the origin, rotates, translates back, then applies pan/zoom.
+                graphContentGroup.attr("transform",
+                    `translate(${transformState.x}, ${transformState.y}) ` +
+                    `scale(${transformState.k}) ` +
+                    `translate(${width / (2 * transformState.k)}, ${height / (2 * transformState.k)}) ` +
+                    `rotate(${transformState.r}) ` +
+                    `translate(${-width / (2 * transformState.k)}, ${-height / (2 * transformState.k)})`
+                );
+            }
 
             // --- Event Listeners for Parameters ---
             connProbInput.addEventListener('input', () => {
@@ -445,8 +503,10 @@
                 height = document.getElementById('network-canvas').clientHeight;
                 simulation.force("center", d3.forceCenter(width / 2, height / 2));
                 simulation.alpha(1).restart();
-                // Reset zoom/pan on resize to fit new dimensions
-                svg.call(zoom.transform, d3.zoomIdentity);
+                // Reset zoom/pan/rotate on resize to fit new dimensions
+                svg.call(zoom.transform, d3.zoomIdentity); // Resets d3.zoom's internal transform
+                transformState = { x: 0, y: 0, k: 1, r: 0 }; // Reset our custom transform state
+                applyGraphTransform(); // Apply the reset transform
             });
 
             // --- Visualization Update Function ---
@@ -473,7 +533,7 @@
                     .attr("r", 8)
                     .attr("fill", "skyblue")
                     .on("click", (event, d) => { // Node Click Event for testing/details
-                        event.stopPropagation(); // Prevent background click from clearing
+                        event.stopPropagation(); // Prevent background click from clearing highlights
                         displayNodeDetails(d);
                     })
                     .call(d3.drag()
@@ -519,21 +579,21 @@
                 });
             }
 
-            // --- Dragging Functions for D3.js ---
+            // --- Dragging Functions for D3.js Nodes ---
             function dragstarted(event, d) {
                 if (!event.active) simulation.alphaTarget(0.3).restart();
-                d.fx = d.x;
-                d.fy = d.y;
+                d.fx = event.x; // Fix node position on drag start
+                d.fy = event.y;
             }
 
             function dragged(event, d) {
-                d.fx = event.x;
+                d.fx = event.x; // Update fixed position during drag
                 d.fy = event.y;
             }
 
             function dragended(event, d) {
-                if (!event.active) simulation.alphaTarget(0);
-                d.fx = null;
+                if (!event.active) simulation.alphaTarget(0); // Lower alpha target when drag ends
+                d.fx = null; // Release fixed position
                 d.fy = null;
             }
 
@@ -551,6 +611,7 @@
                 const connectedLinks = links.filter(l => l.source.id === nodeData.id || l.target.id === nodeData.id);
                 const neighborNodes = new Set();
                 connectedLinks.forEach(l => {
+                    // Make sure to use d.source.id and d.target.id as they are the node IDs after D3's processing
                     if (l.source.id === nodeData.id) neighborNodes.add(l.target.id);
                     if (l.target.id === nodeData.id) neighborNodes.add(l.source.id);
                 });
@@ -562,43 +623,47 @@
                 clearHighlightButton.disabled = false;
 
                 // Clear previous highlights
-                clearHighlights();
+                clearHighlights(false); // Do not reset UI text yet
 
                 // Highlight clicked node
                 nodeGroup.selectAll("circle")
                     .filter(d => d.id === nodeData.id)
-                    .attr("class", "node highlighted");
+                    .attr("class", "node highlighted"); // Apply highlight class
 
                 textGroup.selectAll("text")
                     .filter(d => d.id === nodeData.id)
-                    .attr("class", "node-label highlighted");
+                    .attr("class", "node-label highlighted"); // Apply highlight class
 
                 // Highlight connected links
                 linkGroup.selectAll("line")
-                    .filter(l => connectedLinks.includes(l))
-                    .attr("class", "link highlighted");
+                    .filter(l => (l.source.id === nodeData.id || l.target.id === nodeData.id)) // Filter based on actual link objects
+                    .attr("class", "link highlighted"); // Apply highlight class
 
                 // Highlight neighbor nodes
                 nodeGroup.selectAll("circle")
                     .filter(d => neighborNodes.has(d.id))
-                    .attr("class", "node highlighted-neighbor"); // Add a specific class for neighbors if different style is desired
+                    .attr("class", "node highlighted-neighbor"); // Apply distinct class for neighbors
 
                 textGroup.selectAll("text")
                     .filter(d => neighborNodes.has(d.id))
-                    .attr("class", "node-label highlighted-neighbor");
+                    .attr("class", "node-label highlighted-neighbor"); // Apply distinct class for neighbors
             }
 
-            function clearHighlights() {
+            function clearHighlights(resetUIDisplay = true) {
+                // Reset all node and link classes
                 nodeGroup.selectAll("circle").attr("class", "node");
                 textGroup.selectAll("text").attr("class", "node-label");
                 linkGroup.selectAll("line").attr("class", "link");
-                nodeIdDisplay.textContent = `ID: -`;
-                nodeDegreeDisplay.textContent = `Degree: -`;
-                nodeNeighborsDisplay.textContent = `Neighbors: -`;
-                clearHighlightButton.disabled = true;
+
+                if (resetUIDisplay) {
+                    nodeIdDisplay.textContent = `ID: -`;
+                    nodeDegreeDisplay.textContent = `Degree: -`;
+                    nodeNeighborsDisplay.textContent = `Neighbors: -`;
+                    clearHighlightButton.disabled = true;
+                }
             }
 
-            // Click background to clear highlights
+            // Click background to clear highlights and reset UI
             svg.on("click", () => {
                 clearHighlights();
             });
@@ -606,6 +671,40 @@
             clearHighlightButton.addEventListener('click', clearHighlights);
 
             // --- Network Analytics ---
+            function getConnectedComponents(nodes, links) {
+                if (nodes.length === 0) return 0;
+
+                const adjacencyList = new Map();
+                nodes.forEach(node => adjacencyList.set(node.id, []));
+                links.forEach(link => {
+                    adjacencyList.get(link.source.id).push(link.target.id);
+                    adjacencyList.get(link.target.id).push(link.source.id); // Undirected graph
+                });
+
+                const visited = new Set();
+                let componentCount = 0;
+
+                nodes.forEach(node => {
+                    if (!visited.has(node.id)) {
+                        componentCount++;
+                        const queue = [node.id];
+                        visited.add(node.id);
+
+                        while (queue.length > 0) {
+                            const currentId = queue.shift();
+                            adjacencyList.get(currentId).forEach(neighborId => {
+                                if (!visited.has(neighborId)) {
+                                    visited.add(neighborId);
+                                    queue.push(neighborId);
+                                }
+                            });
+                        }
+                    }
+                });
+                return componentCount;
+            }
+
+
             function updateNetworkMetrics() {
                 const numNodes = nodes.length;
                 const numEdges = links.length;
@@ -625,11 +724,16 @@
                 }
                 networkDensityDisplay.textContent = density;
 
+                // Update Connected Components
+                connectedComponentsDisplay.textContent = getConnectedComponents(nodes, links);
+
+
                 console.log("Network Metrics Updated:", {
                     nodes: numNodes,
                     edges: numEdges,
                     avgDegree: avgDegree,
-                    density: density
+                    density: density,
+                    connectedComponents: connectedComponentsDisplay.textContent // Log the new metric
                 });
             }
 
@@ -646,7 +750,7 @@
                 isGenerating = true;
                 startButton.disabled = true;
                 resetButton.disabled = false;
-                clearHighlightButton.disabled = true; // Disable clear button during generation
+                clearHighlightButton.disabled = true;
 
                 const totalNodesToGenerate = parseInt(numNodesInput.value);
                 const connectionProbability = parseFloat(connProbInput.value);
@@ -656,8 +760,8 @@
                 nodes = [];
                 links = [];
                 updateVisualization();
-                clearHighlights(); // Clear any existing highlights
-                updateNetworkMetrics(); // Reset metrics before generation
+                clearHighlights();
+                updateNetworkMetrics();
                 currentStepStatus.textContent = "Starting generation...";
                 console.log("Initial visualization cleared. Entering generation loop.");
 
@@ -671,7 +775,7 @@
 
                     nodes.push({ id: i });
                     updateVisualization();
-                    updateNetworkMetrics(); // Update metrics after adding node
+                    updateNetworkMetrics();
                     console.log(`Node ${i} added to data. Total nodes: ${nodes.length}. Visualization updated.`);
                     await new Promise(resolve => setTimeout(resolve, delay));
 
@@ -692,15 +796,14 @@
                             }
 
                             if (Math.random() < connectionProbability) {
-                                // Filter links to get the actual degree of the existingNode
                                 const existingNodeDegree = links.filter(l => l.source.id === existingNode.id || l.target.id === existingNode.id).length;
 
-                                if (existingNodeDegree < maxConnectionsPerNode + 2) { // Add some buffer for complexity
+                                if (existingNodeDegree < maxConnectionsPerNode + 2) {
                                     const newLink = { source: i, target: existingNode.id };
                                     links.push(newLink);
                                     console.log(`Link data added: ${i} - ${existingNode.id}. Total links: ${links.length}`);
                                     updateVisualization();
-                                    updateNetworkMetrics(); // Update metrics after adding link
+                                    updateNetworkMetrics();
 
                                     const addedLinkElement = linkGroup.selectAll("line")
                                         .filter(d => (d.source.id === i && d.target.id === existingNode.id) || (d.source.id === existingNode.id && d.target.id === i));
@@ -732,8 +835,8 @@
                 currentStepStatus.textContent = `Generation Complete: ${nodes.length} Nodes, ${links.length} Edges.`;
                 isGenerating = false;
                 startButton.disabled = false;
-                resetButton.disabled = false; // Enable reset button after completion
-                clearHighlightButton.disabled = false; // Enable clear button after generation
+                resetButton.disabled = false;
+                clearHighlightButton.disabled = false;
                 console.log("Sequential generation complete.");
             }
 
@@ -743,14 +846,16 @@
                 nodes = [];
                 links = [];
                 updateVisualization();
-                clearHighlights(); // Ensure highlights are cleared
-                updateNetworkMetrics(); // Reset metrics display
+                clearHighlights();
+                updateNetworkMetrics();
                 startButton.disabled = false;
                 resetButton.disabled = true;
-                clearHighlightButton.disabled = true; // Disable clear button initially
+                clearHighlightButton.disabled = true;
                 currentStepStatus.textContent = '';
-                simulation.alphaTarget(0);
-                svg.call(zoom.transform, d3.zoomIdentity); // Reset zoom/pan
+                simulation.alphaTarget(0); // Stop the D3 simulation entirely
+                svg.call(zoom.transform, d3.zoomIdentity); // Reset D3's internal zoom state
+                transformState = { x: 0, y: 0, k: 1, r: 0 }; // Reset our custom transform state
+                applyGraphTransform(); // Apply the reset transform
                 console.log("Visualization reset. Ready to generate.");
             }
 
