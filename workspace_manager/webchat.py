@@ -435,6 +435,7 @@ def is_safe_path(path):
         return False
 
 @app.route('/api/files/list', methods=['GET'])
+@app.route('/api/files/list', methods=['GET'])
 def list_files():
     """List files and directories"""
     try:
