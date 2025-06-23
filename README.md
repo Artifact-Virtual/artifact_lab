@@ -1,26 +1,46 @@
 # ARTIFACT VIRTUAL LABORATORY
 
-> Quantum-simulated backend. Fully private, robustly secure, and dark by design—an advanced laboratory for accelerated research and development.
+> Advanced AI-powered development environment with Monaco Editor-based file management and intelligent code assistance.
 
-A modular, real-time codebase analysis and visualization toolkit powered by Ollama LLM integration. Offers multi-mode visualization, deep analytics, and an integrated AMOLED-styled web chat interface.  
-Built for extensibility, privacy, and high-performance insight into evolving codebases—ideal for teams and solo developers seeking actionable intelligence and seamless workflow integration.
+A comprehensive development toolkit featuring real-time codebase analysis, professional file management, and AI-powered assistance. Combines Monaco Editor's full IDE capabilities with Ollama LLM integration for intelligent code analysis and generation.  
+Built for extensibility, privacy, and high-performance development workflows—ideal for teams and solo developers seeking professional coding tools with AI assistance.
 
 ## Features
-  
-- **File Watching**: Monitors workspace for file changes and logs events.
-- **Dependency Indexing**: Builds and updates a directory-wise dependency index.
-- **AI Summarization**: Summarizes codebase using Ollama LLM (configurable model).
-- **Enhanced Visualization**: Multiple visualization modes:
-  - **Tree View**: Interactive hierarchical file browser.
-  - **Complexity Heatmap**: Visual complexity analysis across directories.
-  - **File Analysis**: Detailed file-by-file breakdown.
-  - **Metrics Dashboard**: System performance and codebase statistics.
-- **Web Chat Interface**: AMOLED-styled browser chat with Ollama AI.
-- **Auto-Start**: Single entrypoint starts Ollama server and all components.
-- **All-in-One**: All data and config consolidated in `workspace_manager/`.
-- **Dotfile Support**: Analytics and visualization include dotfiles (e.g., `.gitignore`).
-- **Live indexing and visualization** system that maintains an evolving context as your codebase grows. This enables up-to-date analytics and visual feedback, ensuring that changes and dependencies are always reflected in real time.
-- **Amenzia VPN Integration**: Provides a fully invisible, encrypted network layer for all lab operations, guaranteeing robust privacy and security.
+
+### **Core Development Environment**
+- **AVA File Manager**: Monaco Editor-based professional file editing with VS Code experience
+- **AI-Powered Chat**: Intelligent code assistance with file context and direct modifications
+- **File Management API**: Comprehensive file operations (create, read, write, delete)
+- **Real-time Monitoring**: Live file watching and workspace indexing
+- **Multi-Language Support**: 25+ programming languages with syntax highlighting
+
+### **Professional Interface**
+- **Monaco Editor Integration**: Full VS Code editing experience in browser
+- **Dark Theme**: Professional AMOLED-styled interface
+- **File Tree Navigation**: Interactive explorer with file type icons
+- **Status Bar**: Real-time feedback and operation status
+- **Keyboard Shortcuts**: Industry-standard shortcuts (Ctrl+S, Ctrl+R, etc.)
+
+### **AI Intelligence**
+- **Ollama Integration**: Multiple model support (CodeLlama, Qwen2.5-Coder, etc.)
+- **File Context Awareness**: AI can reference and modify open files
+- **Code Analysis**: Intelligent suggestions and error detection
+- **Natural Language Commands**: Convert descriptions to code
+- **Audit Logging**: Track all AI operations and file changes
+
+### **Analytics & Visualization**
+- **Enhanced Visualizer**: Advanced code analytics and system monitoring
+- **Dependency Analysis**: Real-time codebase structure insights
+- **Performance Metrics**: System resource monitoring
+- **File Statistics**: Comprehensive project analytics
+- **Dotfile Support**: Include configuration files in analysis
+
+### **Development Tools**
+- **Auto-Save Detection**: Track file modifications in real-time
+- **Error Highlighting**: Syntax errors highlighted as you type
+- **IntelliSense**: Auto-completion and code suggestions
+- **Find & Replace**: Powerful search capabilities
+- **Multiple Cursors**: Edit multiple locations simultaneously
 
 ## Directory Structure
 

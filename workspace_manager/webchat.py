@@ -177,10 +177,10 @@ CHAT_HTML = """
 </head>
 <body>
     <div class="main-container">
-        <!-- File Explorer -->
-        <div class="sidebar">
+        <!-- File Explorer -->        <div class="sidebar">
             <div style="padding: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
                 <h3 style="margin: 0; font-size: 14px;">File Explorer</h3>
+                <div id="debugInfo" style="font-size: 10px; color: #888; margin-top: 5px;"></div>
             </div>
             <div class="file-explorer" id="fileExplorer">
                 Loading files...
@@ -228,47 +228,64 @@ CHAT_HTML = """
     <!-- Monaco Editor -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
     
-    <script>
-        let isConnected = false;
+    <script>        let isConnected = false;
         let editor = null;
         let currentFile = null;
         let fileContent = '';
         
-        // Initialize Monaco Editor
-        require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
-        require(['vs/editor/editor.main'], function () {
-            editor = monaco.editor.create(document.getElementById('monaco-editor'), {
-                value: '// Welcome to ARTIFACT VIRTUAL ASSISTANT\n// Select a file from the explorer to start editing\n// Ask AVA for help with your code!',
-                language: 'javascript',
-                theme: 'vs-dark',
-                automaticLayout: true,
-                fontSize: 14,
-                minimap: { enabled: true },
-                scrollBeyondLastLine: false,
-                wordWrap: 'on'
-            });
-            
-            // Auto-save on content change
-            editor.onDidChangeModelContent(function() {
-                if (currentFile && editor.getValue() !== fileContent) {
-                    // Mark file as modified (could add * to title)
-                }
-            });
-        });
+        function debugLog(message) {
+            console.log(message);
+            const debugDiv = document.getElementById('debugInfo');
+            if (debugDiv) {
+                debugDiv.innerHTML = message + '<br>' + debugDiv.innerHTML;
+            }
+        }
         
-        window.onload = function() {
+        // Initialize Monaco Editor
+        function initializeMonaco() {
+            console.log('Initializing Monaco Editor...');
+            require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
+            require(['vs/editor/editor.main'], function () {
+                console.log('Monaco loaded successfully');
+                editor = monaco.editor.create(document.getElementById('monaco-editor'), {
+                    value: '// Welcome to AVA Code Assistant\n// Select a file from the explorer to start editing',
+                    language: 'javascript',
+                    theme: 'vs-dark',
+                    automaticLayout: true,
+                    minimap: { enabled: false },
+                    fontSize: 14,
+                    lineNumbers: 'on',
+                    wordWrap: 'on'
+                });
+                
+                // Auto-save on content change
+                editor.onDidChangeModelContent(function() {
+                    if (currentFile && editor.getValue() !== fileContent) {
+                        // Mark file as modified (could add * to title)
+                    }
+                });
+            });
+        }
+          window.onload = function() {
+            debugLog('Page loaded, initializing...');
+            // Initialize without Monaco first
             checkOllamaStatus();
             loadFileExplorer();
-        };
-        
-        async function checkOllamaStatus() {
+            // Initialize Monaco Editor after other components
+            setTimeout(initializeMonaco, 1000);
+        };async function checkOllamaStatus() {
+            debugLog('Checking Ollama status...');
             try {
                 const response = await fetch('/status');
+                debugLog(`Status response: ${response.status}`);
                 const data = await response.json();
+                debugLog(`Status data: ${JSON.stringify(data)}`);
                 
                 const statusDiv = document.getElementById('status');
                 const chatInput = document.getElementById('chatInput');
                 const sendButton = document.getElementById('sendButton');
+                
+                debugLog(`Elements found: status=${!!statusDiv}, input=${!!chatInput}, button=${!!sendButton}`);
                 
                 if (data.status === 'ready') {
                     statusDiv.textContent = `✅ Connected (${data.model})`;
@@ -276,37 +293,47 @@ CHAT_HTML = """
                     chatInput.disabled = false;
                     sendButton.disabled = false;
                     isConnected = true;
+                    debugLog('Status set to ready');
                 } else {
                     statusDiv.textContent = `❌ ${data.message}`;
                     statusDiv.className = 'status error';
                     isConnected = false;
+                    debugLog('Status set to error');
                 }
             } catch (error) {
+                debugLog(`Error checking status: ${error.message}`);
                 const statusDiv = document.getElementById('status');
                 statusDiv.textContent = '❌ Failed to connect';
                 statusDiv.className = 'status error';
                 isConnected = false;
             }
-        }
-        
-        async function loadFileExplorer() {
+        }        async function loadFileExplorer() {
+            debugLog('Loading file explorer...');
             try {
                 const response = await fetch('/api/files/list');
+                debugLog(`File list response: ${response.status}`);
                 const data = await response.json();
+                debugLog(`File count: ${data.items ? data.items.length : 0}`);
                 
                 if (data.success) {
                     renderFileExplorer(data.items);
                 } else {
-                    document.getElementById('fileExplorer').innerHTML = 'Error loading files';
+                    document.getElementById('fileExplorer').innerHTML = `<div style="color: #ff6b6b; padding: 10px;">Error: ${data.error || 'Unknown error'}</div>`;
                 }
             } catch (error) {
-                document.getElementById('fileExplorer').innerHTML = 'Error loading files';
+                debugLog(`Error loading files: ${error.message}`);
+                document.getElementById('fileExplorer').innerHTML = `<div style="color: #ff6b6b; padding: 10px;">Failed to load files: ${error.message}</div>`;
             }
         }
-        
-        function renderFileExplorer(items) {
+          function renderFileExplorer(items) {
+            console.log('Rendering file explorer with items:', items);
             const explorer = document.getElementById('fileExplorer');
             explorer.innerHTML = '';
+            
+            if (!items || items.length === 0) {
+                explorer.innerHTML = '<div style="color: #888; padding: 10px;">No files found</div>';
+                return;
+            }
             
             // Sort: directories first, then files
             items.sort((a, b) => {
@@ -327,6 +354,8 @@ CHAT_HTML = """
                 }
                 explorer.appendChild(div);
             });
+            
+            console.log(`Rendered ${items.length} items in file explorer`);
         }
         
         async function openFile(fileName) {
@@ -409,9 +438,9 @@ CHAT_HTML = """
             }
         }
         
-        function refreshFiles() {
-            loadFileExplorer();
-            addMessage('File explorer refreshed', false, true);
+        async function refreshFiles() {
+            document.getElementById('fileExplorer').innerHTML = '<div style="color: #888; padding: 10px;">Loading files...</div>';
+            await loadFileExplorer();
         }
         
         function addMessage(content, isUser = false, isSystem = false) {
@@ -868,6 +897,18 @@ def run_webchat():
     print("Starting Enhanced Ollama Web Chat on http://localhost:8080")
     print("Features: LLM Code Access, File Management API")
     app.run(host='0.0.0.0', port=8080, debug=False, threaded=True)
+
+@app.route('/test')
+def test_page():
+    """Test page for debugging"""
+    with open('test.html', 'r', encoding='utf-8') as f:
+        return f.read()
+
+@app.route('/file-manager')
+def file_manager():
+    """Dedicated file manager interface"""
+    with open('file_manager.html', 'r', encoding='utf-8') as f:
+        return f.read()
 
 if __name__ == "__main__":
     run_webchat()

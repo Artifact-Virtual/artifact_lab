@@ -1,11 +1,41 @@
-# Workspace Manager - Enhanced Analytics System
+# Workspace Manager - Enhanced Analytics & File Management System
 
 ## Overview
-The workspace manager has been completely redesigned as a powerful code analytics system. All starmap functionality has been removed, and the enhanced visualizer has been upgraded with advanced charts, metrics, and graphics.
+The workspace manager is a comprehensive development environment featuring advanced code analytics, AI-powered assistance, and professional file management capabilities. The system combines real-time workspace monitoring with a Monaco Editor-based IDE and intelligent AI integration.
 
 ## Core Components
 
-### 1. Visualizers (2 total - streamlined and focused)
+### 1. File Management System
+
+#### AVA File Manager (`file_manager.html`)
+- **Purpose**: Monaco Editor-based professional file editing interface
+- **Features**: 
+  - Full VS Code editing experience with IntelliSense
+  - Support for 25+ programming languages and file types
+  - Real-time syntax highlighting and error detection
+  - Professional dark theme matching VS Code
+  - Keyboard shortcuts (Ctrl+S, Ctrl+R, Ctrl+N)
+  - Auto-save detection and change tracking
+  - File tree navigation with icons
+  - Status bar with real-time updates
+- **Dependencies**: Monaco Editor 0.44.0 (CDN)
+- **Status**: ✅ Production ready
+- **Access**: `/file-manager` endpoint
+
+#### AVA Web Chat Interface (`webchat.py`)
+- **Purpose**: AI-powered chat interface with file management integration
+- **Features**:
+  - LLM integration via Ollama
+  - File management API (list, read, write operations)
+  - Monaco Editor integration
+  - Real-time AI assistance
+  - Audit logging for all operations
+  - Multi-model support (CodeLlama, Qwen2.5-Coder, etc.)
+- **Dependencies**: Flask, Ollama, Monaco Editor
+- **Status**: ✅ Production ready
+- **Access**: `/` endpoint (main interface)
+
+### 2. Visualizers & Analytics
 
 #### Enhanced Metrics Visualizer (`enhanced_visualizer.py`)
 - **Purpose**: Advanced code analytics and system monitoring dashboard
@@ -19,30 +49,24 @@ The workspace manager has been completely redesigned as a powerful code analytic
   - Enhanced typography with multiple font sizes
   - Advanced chart rendering with gradients and animations
 - **Dependencies**: pygame, psutil, pathlib
-- **Status**: ✅ Completely redesigned with advanced graphics
+- **Status**: ✅ Primary visualizer (3D visualizer removed)
 
-#### 3D Node Visualizer (`visualizer.py`)
-- **Purpose**: Classic 3D circular node display
-- **Features**: 3D circular node layout, system performance graphs
-- **Dependencies**: pygame, psutil
-- **Status**: ✅ Production ready
-
-### 2. Enhanced Core System Files
+### 3. Enhanced Core System Files
 
 #### Dependency Indexer (`dependency_indexer.py`)
 - **Purpose**: Comprehensive file analysis and indexing
 - **Enhanced Features**:
   - Includes dotfiles (.gitignore, .env, .eslintrc, etc.)
-  - Supports 20+ file types (Python, JavaScript, CSS, HTML, JSON, etc.)
+  - Supports 25+ file types (Python, JavaScript, CSS, HTML, JSON, etc.)
   - Detailed file metadata (size, modification time, type)
   - Directory statistics and analysis
   - Global project statistics
 - **Status**: ✅ Completely upgraded to include dotfiles
 
 #### Main Controller (`main.py`)
-- **Purpose**: Entry point and visualizer selection
-- **Features**: Clean 2-option menu, no starmap references
-- **Status**: ✅ Updated with starmap completely removed
+- **Purpose**: Entry point for enhanced visualizer
+- **Features**: Direct launch of enhanced visualizer (streamlined)
+- **Status**: ✅ Updated to use only enhanced visualizer
 
 #### File Monitoring (`watcher.py`)
 - **Purpose**: Real-time file system monitoring

@@ -27,5 +27,13 @@
     "response": "You are AVA (Artifact Virtual Assistant), an advanced AI code assistant with direct access to the user's codebase. You can:\n\n1. Analyze and understand code in any programming language\n2. Suggest improvements, fixes, and optimizations\n3. Help with debugging and troubleshooting\n4. Explain complex code concepts\n5. Assist with code refactoring and restructuring\n6. Provide direct code modifications when requested\n\nYou have access to the complete project structure and can read/write files. When the us...",
     "context": {},
     "file_operations": []
+  },
+  {
+    "timestamp": "2025-06-23T14:38:32.244240",
+    "type": "llm_interaction",
+    "message": "test",
+    "response": "You can analyze, modify, and suggest optimizations to your code. You can also assist with debugging and troubleshooting if needed. Please specify the specific code you need help with or any questions you have about it.",
+    "context": {},
+    "file_operations": []
   }
 ]

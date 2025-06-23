@@ -27,20 +27,10 @@ if (-not $ollamaRunning) {
     Write-Host "Ollama server is already running" -ForegroundColor Green
 }
 
-# Start the web chat interface in background
-Write-Host "Starting web chat interface..." -ForegroundColor Yellow
-Start-Process -FilePath "python" -ArgumentList "workspace_manager\webchat.py" -WindowStyle Hidden
-
-# Give the web chat a moment to start
-Start-Sleep -Seconds 3
-
-# Open web chat in browser
-Write-Host "Opening web chat in browser..." -ForegroundColor Yellow
-Start-Process "http://localhost:8080"
-
-# Run the workspace manager
-Write-Host "Starting workspace manager..." -ForegroundColor Green
-python -m workspace_manager.main
+# Start the AVA web chat interface
+Write-Host "Starting AVA web chat interface..." -ForegroundColor Green
+cd workspace_manager
+python webchat.py
 
 Write-Host "Press any key to continue..." -ForegroundColor Gray
 $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")

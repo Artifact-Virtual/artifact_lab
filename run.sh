@@ -40,19 +40,28 @@ if ! command -v python &> /dev/null; then
     fi
 fi
 
-# Start the web chat interface in background
-echo "Starting web chat interface..."
-$PYTHON_CMD workspace_manager/webchat.py &
-WEBCHAT_PID=$!
-
-# Give the web chat a moment to start
-sleep 2
-
-# Open web chat in browser (optional - comment out if you don't want auto-open)
-$PYTHON_CMD -c "import webbrowser; webbrowser.open('http://localhost:8080')" 2>/dev/null &
-
-# Run the workspace manager
-echo "Starting workspace manager..."
+# Start all components
+echo "Starting workspace manager components..."
 cd workspace_manager
-$PYTHON_CMD main.py
+
+# Start main.py (watcher, summarizer, visualizer) in background
+echo "Starting background services (watcher, summarizer, visualizer)..."
+$PYTHON_CMD main.py &
+MAIN_PID=$!
+
+# Wait a moment for services to initialize
+sleep 3
+
+# Start the web chat interface (this will run in foreground)
+echo "Starting web chat interface..."
+$PYTHON_CMD webchat.py
+
+# If webchat exits, clean up background processes
+echo "Cleaning up background processes..."
+if [ ! -z "$MAIN_PID" ]; then
+    kill $MAIN_PID 2>/dev/null
+fi
+if [ ! -z "$OLLAMA_PID" ]; then
+    kill $OLLAMA_PID 2>/dev/null
+fi
 

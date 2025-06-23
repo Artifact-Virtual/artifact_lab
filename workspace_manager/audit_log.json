@@ -22,5 +22,125 @@
     "success": true,
     "error": null,
     "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T14:36:36.580328",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T14:41:27.067058",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T14:58:11.941695",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T14:58:23.823506",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T15:02:48.982052",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T15:02:51.281498",
+    "operation": "read",
+    "path": "test_api.txt",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T15:02:53.442098",
+    "operation": "read",
+    "path": "test_system.bat",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T15:02:53.698546",
+    "operation": "read",
+    "path": "test_llm_integration.md",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T15:02:54.874828",
+    "operation": "read",
+    "path": "test_system.bat",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T15:02:55.868262",
+    "operation": "read",
+    "path": "run.sh",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T15:02:57.706116",
+    "operation": "read",
+    "path": "test_api.txt",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T15:03:00.567992",
+    "operation": "read",
+    "path": "test_api.txt",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T15:03:02.050951",
+    "operation": "read",
+    "path": "test_api.txt",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T15:03:16.650714",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T15:03:24.010357",
+    "operation": "read",
+    "path": "license.txt",
+    "success": true,
+    "error": null,
+    "user_context": null
   }
 ]
