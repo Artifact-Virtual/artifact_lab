@@ -5,7 +5,6 @@
 A modular, real-time codebase analysis and visualization toolkit powered by Ollama LLM integration. Offers multi-mode visualization, deep analytics, and an integrated AMOLED-styled web chat interface.  
 Built for extensibility, privacy, and high-performance insight into evolving codebases—ideal for teams and solo developers seeking actionable intelligence and seamless workflow integration.
 
-
 ## Features
   
 - **File Watching**: Monitors workspace for file changes and logs events.
@@ -21,7 +20,7 @@ Built for extensibility, privacy, and high-performance insight into evolving cod
 - **All-in-One**: All data and config consolidated in `workspace_manager/`.
 - **Dotfile Support**: Analytics and visualization include dotfiles (e.g., `.gitignore`).
 - **Live indexing and visualization** system that maintains an evolving context as your codebase grows. This enables up-to-date analytics and visual feedback, ensuring that changes and dependencies are always reflected in real time.
-
+- **Amenzia VPN Integration**: Provides a fully invisible, encrypted network layer for all lab operations, guaranteeing robust privacy and security.
 
 ## Directory Structure
 
@@ -65,46 +64,48 @@ Built for extensibility, privacy, and high-performance insight into evolving cod
 - Python 3.9+
 - [Ollama](https://ollama.com/) installed and running locally or remote
 - Pygame, Watchdog, Flask, and other dependencies (see `requirements.txt`)
+- (Optional but recommended) [Amenzia VPN](https://amenzia.com/) for invisible, secure workflows
 
 ### Installation
 
 1. **Install Python dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
+  ```bash
+  pip install -r requirements.txt
+  ```
 
 2. **Pull the default Ollama model:**
-    ```bash
-    ollama pull qwen2.5-coder:latest
-    ```
+  ```bash
+  ollama pull qwen2.5-coder:latest
+  ```
 
 3. **(Optional) Configure settings** in `workspace_manager/config.json`:
-    ```json
-    {
-      "ollama_model": "qwen2.5-coder:latest",
-      "ollama_host": "localhost",
-      "ollama_port": 11434,
-      "webchat_port": 8080
-    }
-    ```
+  ```json
+  {
+    "ollama_model": "qwen2.5-coder:latest",
+    "ollama_host": "localhost",
+    "ollama_port": 11434,
+    "webchat_port": 8080
+  }
+  ```
+
+4. **(Optional) Start Amenzia VPN** for a fully invisible and secure workflow.
 
 ### Running the System
 
 **Choose your platform:**
 
 - **Linux/macOS (Bash):**
-    ```bash
-    ./run.sh
-    ```
+  ```bash
+  ./run.sh
+  ```
 - **Windows (Batch):**
-    ```cmd
-    run.bat
-    ```
+  ```cmd
+  run.bat
+  ```
 - **Windows (PowerShell):**
-    ```powershell
-    .\run.ps1
-    ```
-
+  ```powershell
+  .\run.ps1
+  ```
 
 ## What Happens When You Run
 
@@ -115,7 +116,7 @@ Built for extensibility, privacy, and high-performance insight into evolving cod
 5. **Dependency Indexer** scans and indexes the codebase
 6. **AI Summarizer** analyzes code using Ollama
 7. **Visualizer Selection** prompts you to choose from multiple visualization modes
-
+8. **Amenzia VPN** (if enabled) ensures all traffic is encrypted and invisible
 
 ## Visualization Modes
 
@@ -130,7 +131,6 @@ Built for extensibility, privacy, and high-performance insight into evolving cod
 ### 3. Classic 3D Visualizer
 - 3D circular node display
 - System performance graphs
-
 
 ## Controls
 
@@ -156,7 +156,6 @@ Built for extensibility, privacy, and high-performance insight into evolving cod
 - **R**: Reload codebase data
 - **ESC**: Exit starmap
 
-
 ## Components
 
 - **Web Chat Interface** (`workspace_manager/webchat.py`): Modern browser chat with Ollama AI.
@@ -165,12 +164,12 @@ Built for extensibility, privacy, and high-performance insight into evolving cod
 - **Dependency Indexer** (`workspace_manager/dependency_indexer.py`): Scans workspace and builds dependency index.
 - **AI Summarizer** (`workspace_manager/summarizer.py`): Summarizes codebase using Ollama.
 - **Enhanced Visualizer** (`workspace_manager/enhanced_visualizer.py`): Advanced analytics dashboard.
-
+- **Amenzia VPN Integration**: Provides a secure, invisible network layer for all lab operations.
 
 ## Configuration
 
-Edit `workspace_manager/config.json` to customize Ollama and webchat settings.
-
+Edit `workspace_manager/config.json` to customize Ollama and webchat settings.  
+Configure Amenzia VPN as per [Amenzia documentation](https://amenzia.com/docs) for maximum privacy.
 
 ## Troubleshooting
 
@@ -184,7 +183,8 @@ Edit `workspace_manager/config.json` to customize Ollama and webchat settings.
   - Install missing packages: `pip install flask requests pygame psutil watchdog`
 - **Visualization Issues**:  
   - Ensure display/graphics drivers are properly configured
-
+- **VPN Issues**:  
+  - Verify Amenzia VPN is running and properly configured for your environment
 
 ## Development
 
@@ -195,7 +195,6 @@ python workspace_manager/visualizer.py        # Just the visualizer
 python workspace_manager/webchat.py           # Just the web chat
 python -m workspace_manager.main              # Main orchestrator (no Ollama auto-start)
 ```
-
 
 ## Commands & Modules
 
@@ -210,20 +209,19 @@ python -m workspace_manager.main              # Main orchestrator (no Ollama aut
 - `workspace_manager/dependency_index.json` — Directory-wise dependency index
 - `workspace_manager/system_summary.json` — Maintained codebase summary
 
-
 ## Requirements
 
 - Python 3.9+
 - [Ollama](https://ollama.com/) running locally or remote
 - Pygame, Watchdog, Flask
-
+- (Recommended) [Amenzia VPN](https://amenzia.com/) for invisible, secure workflows
 
 ## Notes
 
 - All data, config, and outputs are in `workspace_manager/`.
 - Designed for extensibility and can be adapted for larger codebases or additional LLMs.
 - For best results, ensure Ollama is installed and the desired model is pulled.
-
+- For maximum privacy and invisibility, enable Amenzia VPN during all operations.
 
 ## License
 
