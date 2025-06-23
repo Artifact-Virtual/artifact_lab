@@ -801,6 +801,20 @@ def get_llm_audit_log():
 # Original chat endpoints
 @app.route('/')
 def index():
+    """Serve the Monaco-based file manager as the main interface"""
+    file_path = os.path.join(os.path.dirname(__file__), 'file_manager.html')
+    with open(file_path, 'r', encoding='utf-8') as f:
+        return f.read()
+
+@app.route('/file-manager')
+def file_manager_redirect():
+    """Redirect old file-manager URL to root for backwards compatibility"""
+    from flask import redirect
+    return redirect('/')
+
+@app.route('/chat-old')
+def old_chat():
+    """Old chat interface if needed for reference"""
     return render_template_string(CHAT_HTML)
 
 @app.route('/status')
@@ -902,13 +916,6 @@ def run_webchat():
 def test_page():
     """Test page for debugging"""
     with open('test.html', 'r', encoding='utf-8') as f:
-        return f.read()
-
-@app.route('/file-manager')
-def file_manager():
-    """Dedicated file manager interface"""
-    file_path = os.path.join(os.path.dirname(__file__), 'file_manager.html')
-    with open(file_path, 'r', encoding='utf-8') as f:
         return f.read()
 
 if __name__ == "__main__":
