@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Topology Analyzer</title>
+    <!-- Tailwind CSS CDN for basic styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- D3.js for graph visualization -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #000000; /* Pure Black */
+            color: #FFFFFF; /* Pure White */
+            font-family: 'Manrope', sans-serif;
+            display: flex; /* Use flexbox for main layout */
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Hide main body scrollbars */
+        }
+
+        .fade-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: -1;
+            background:
+                linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 5%),
+                linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 5%),
+                linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 5%),
+                linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 5%);
+            background-repeat: no-repeat;
+            background-size: 100% 10%, 100% 10%, 10% 100%, 10% 100%;
+            background-position: top, bottom, left, right;
+            background-blend-mode: normal;
+        }
+
+        /* Sidebar styling */
+        .sidebar {
+            width: 300px; /* Fixed width for sidebar */
+            min-width: 250px; /* Minimum width */
+            background-color: #0d0d0d; /* Slightly lighter black for sidebar */
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(255, 255, 255, 0.05); /* Subtle shadow */
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto; /* Allow sidebar content to scroll */
+            transition: transform 0.3s ease-in-out; /* Smooth transition for hide/show */
+            transform: translateX(0);
+            z-index: 20; /* Ensure sidebar is above main content */
+            border-radius: 0 12px 12px 0; /* Rounded right corners */
+        }
+
+        .sidebar.hidden {
+            transform: translateX(-100%); /* Hide sidebar off-screen */
+        }
+
+        /* Main content area */
+        .main-content-area {
+            flex-grow: 1; /* Takes remaining space */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Align content to top */
+            padding: 20px;
+            overflow-y: auto; /* Allow main content to scroll if needed */
+        }
+
+        /* SVG container for D3.js graph - adjusted for new layout */
+        #network-canvas {
+            width: 100%;
+            flex-grow: 1; /* Allow canvas to fill available vertical space */
+            min-height: 400px; /* Minimum height for graph */
+            border: 1px solid #333333;
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+            margin-bottom: 20px; /* Space below canvas */
+        }
+
+        .node circle {
+            stroke: #FFFFFF;
+            stroke-width: 2px;
+            cursor: grab;
+            transition: fill 0.2s ease, r 0.2s ease;
+        }
+
+        .node circle:hover {
+            fill: #4A90E2;
+            r: 10px;
+        }
+
+        .node.highlighted circle {
+            fill: #FFD700; /* Gold for highlighted node */
+            stroke: #FFD700;
+            stroke-width: 3px;
+        }
+
+        .link {
+            stroke: #FFFFFF;
+            stroke-opacity: 0.6;
+            stroke-width: 1.5px;
+            transition: stroke-opacity 0.2s ease, stroke-width 0.2s ease;
+        }
+
+        .link.new-edge {
+            stroke: #00FF00;
+            stroke-width: 3px;
+            opacity: 1;
+        }
+
+        .link.highlighted {
+            stroke: #FFD700; /* Gold for highlighted links */
+            stroke-width: 3px;
+            stroke-opacity: 1;
+        }
+
+        .node text {
+            fill: #FFFFFF;
+            font-size: 10px;
+            text-anchor: middle;
+            dominant-baseline: central;
+            pointer-events: none;
+        }
+        .node.highlighted text {
+            fill: #000000; /* Black text on gold node for contrast */
+        }
+
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #FFFFFF;
+            color: #000000;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+        }
+
+        button:hover {
+            background-color: #CCCCCC;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+        }
+
+        button:disabled {
+            background-color: #333333;
+            color: #666666;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .parameters, .node-info, .network-metrics {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            align-items: flex-start;
+            padding: 15px;
+            background-color: #1a1a1a; /* Darker background for sections */
+            border-radius: 10px;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.2); /* Inner shadow */
+        }
+        .node-info, .network-metrics {
+            margin-top: 20px; /* Space between sections */
+        }
+
+        .section-title {
+            color: #E0E0E0;
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #444444;
+            padding-bottom: 5px;
+            width: 100%;
+        }
+
+
+        .param-item {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            color: #DDDDDD;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+
+        .param-item label {
+            margin-bottom: 5px;
+            font-weight: 300;
+        }
+
+        .param-item input[type="number"] {
+            background-color: #0d0d0d; /* Match sidebar background */
+            border: 1px solid #444444;
+            color: #FFFFFF;
+            padding: 8px 12px;
+            border-radius: 6px;
+            width: 100px;
+            text-align: center;
+        }
+
+        .param-item input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: #444444;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+            border-radius: 4px;
+        }
+
+        .param-item input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        .param-item input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        #current-step-status {
+            font-size: 1rem;
+            color: #DDDDDD;
+            margin-top: 15px;
+            height: 20px;
+            flex-shrink: 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Toggle button for sidebar */
+        #toggleSidebarButton {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #FFFFFF;
+            color: #000000;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 30;
+            box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column; /* Stack sidebar and main content vertically */
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                max-height: 50vh;
+                position: static; /* No longer absolute */
+                transform: translateX(-100%);
+                opacity: 0;
+                transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            }
+            .sidebar.active { /* Use 'active' class for visible state on mobile */
+                transform: translateX(0);
+                opacity: 1;
+            }
+            .main-content-area {
+                width: 100%;
+                padding: 10px;
+                flex-grow: 1;
+            }
+            #network-canvas {
+                height: 40vh;
+            }
+            #toggleSidebarButton {
+                position: fixed; /* Keep fixed on scroll */
+                left: 10px;
+                top: 10px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-black text-white">
+    <div class="fade-container"></div>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <h2 class="text-xl font-semibold text-gray-300 mb-4">Topology Settings</h2>
+        <div class="parameters">
+            <div class="param-item">
+                <label for="numNodesInput">Nodes:</label>
+                <input type="number" id="numNodesInput" value="15" min="1" max="50">
+            </div>
+            <div class="param-item">
+                <label for="connProbInput">Conn. Prob.: <span id="connProbValue">0.30</span></label>
+                <input type="range" id="connProbInput" min="0" max="1" step="0.05" value="0.3">
+            </div>
+            <div class="param-item">
+                <label for="maxConnInput">Max Conn. Per Node:</label>
+                <input type="number" id="maxConnInput" value="3" min="1" max="10">
+            </div>
+            <div class="param-item">
+                <label for="delayInput">Delay (ms):</label>
+                <input type="number" id="delayInput" value="200" min="50" max="1000" step="50">
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button id="startButton">Generate Sequentially</button>
+            <button id="resetButton" disabled>Reset</button>
+        </div>
+
+        <!-- Node Information Section -->
+        <div class="node-info">
+            <h3 class="section-title">Node Details</h3>
+            <p id="nodeId">ID: -</p>
+            <p id="nodeDegree">Degree: -</p>
+            <p id="nodeNeighbors">Neighbors: -</p>
+            <button id="clearHighlightButton" class="w-full mt-2" disabled>Clear Highlight</button>
+        </div>
+
+        <!-- Network Metrics Section -->
+        <div class="network-metrics">
+            <h3 class="section-title">Network Analytics</h3>
+            <p>Total Nodes: <span id="totalNodes">0</span></p>
+            <p>Total Edges: <span id="totalEdges">0</span></p>
+            <p>Average Degree: <span id="avgDegree">0.00</span></p>
+            <p>Network Density: <span id="networkDensity">0.00</span></p>
+        </div>
+
+        <div id="current-step-status" class="mt-4"></div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content-area">
+        <header class="text-center mb-6">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extralight leading-tight">ARTIFACT VIRTUAL</h1>
+            <p class="text-lg text-gray-400 mt-2">Network Topology Analyzer</p>
+        </header>
+
+        <div id="network-canvas"></div>
+    </div>
+
+    <!-- Toggle Sidebar Button (positioned outside the main content flow) -->
+    <button id="toggleSidebarButton" class="absolute left-4 top-4">
+        Toggle Settings
+    </button>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- D3.js Setup ---
+            const svg = d3.select("#network-canvas")
+                .append("svg")
+                .attr("width", "100%")
+                .attr("height", "100%");
+
+            // Group for all graph elements to enable zoom/pan
+            const graphContentGroup = svg.append("g");
+
+            let width = document.getElementById('network-canvas').clientWidth;
+            let height = document.getElementById('network-canvas').clientHeight;
+
+            let simulation = d3.forceSimulation()
+                .force("link", d3.forceLink().id(d => d.id).distance(100))
+                .force("charge", d3.forceManyBody().strength(-300))
+                .force("center", d3.forceCenter(width / 2, height / 2))
+                .force("collide", d3.forceCollide(25));
+
+            let linkGroup = graphContentGroup.append("g").attr("class", "links");
+            let nodeGroup = graphContentGroup.append("g").attr("class", "nodes");
+            let textGroup = graphContentGroup.append("g").attr("class", "texts");
+
+            let nodes = [];
+            let links = [];
+
+            // --- UI Elements ---
+            const numNodesInput = document.getElementById('numNodesInput');
+            const connProbInput = document.getElementById('connProbInput');
+            const connProbValueSpan = document.getElementById('connProbValue');
+            const maxConnInput = document.getElementById('maxConnInput');
+            const delayInput = document.getElementById('delayInput');
+            const startButton = document.getElementById('startButton');
+            const resetButton = document.getElementById('resetButton');
+            const currentStepStatus = document.getElementById('current-step-status');
+            const sidebar = document.getElementById('sidebar');
+            const toggleSidebarButton = document.getElementById('toggleSidebarButton');
+            const clearHighlightButton = document.getElementById('clearHighlightButton');
+
+            // Node Info Elements
+            const nodeIdDisplay = document.getElementById('nodeId');
+            const nodeDegreeDisplay = document.getElementById('nodeDegree');
+            const nodeNeighborsDisplay = document.getElementById('nodeNeighbors');
+
+            // Network Metrics Elements
+            const totalNodesDisplay = document.getElementById('totalNodes');
+            const totalEdgesDisplay = document.getElementById('totalEdges');
+            const avgDegreeDisplay = document.getElementById('avgDegree');
+            const networkDensityDisplay = document.getElementById('networkDensity');
+
+            // --- Zoom and Pan functionality ---
+            const zoom = d3.zoom()
+                .scaleExtent([0.1, 10]) // Allow zooming from 10% to 1000%
+                .on("zoom", (event) => {
+                    graphContentGroup.attr("transform", event.transform);
+                });
+
+            svg.call(zoom); // Apply zoom behavior to the SVG
+
+            // --- Event Listeners for Parameters ---
+            connProbInput.addEventListener('input', () => {
+                connProbValueSpan.textContent = parseFloat(connProbInput.value).toFixed(2);
+            });
+
+            // --- Window Resize Listener to Update Canvas and Simulation ---
+            window.addEventListener('resize', () => {
+                width = document.getElementById('network-canvas').clientWidth;
+                height = document.getElementById('network-canvas').clientHeight;
+                simulation.force("center", d3.forceCenter(width / 2, height / 2));
+                simulation.alpha(1).restart();
+                // Reset zoom/pan on resize to fit new dimensions
+                svg.call(zoom.transform, d3.zoomIdentity);
+            });
+
+            // --- Visualization Update Function ---
+            function updateVisualization() {
+                // Update links
+                let link = linkGroup.selectAll("line")
+                    .data(links, d => d.source.id + "-" + d.target.id);
+
+                const newLinks = link.enter().append("line")
+                    .attr("class", "link")
+                    .attr("stroke", "#FFFFFF")
+                    .attr("stroke-opacity", 0.6)
+                    .attr("stroke-width", 1.5);
+
+                link = newLinks.merge(link);
+                link.exit().remove();
+
+                // Update nodes
+                let node = nodeGroup.selectAll("circle")
+                    .data(nodes, d => d.id);
+
+                const newNodes = node.enter().append("circle")
+                    .attr("class", "node")
+                    .attr("r", 8)
+                    .attr("fill", "skyblue")
+                    .on("click", (event, d) => { // Node Click Event for testing/details
+                        event.stopPropagation(); // Prevent background click from clearing
+                        displayNodeDetails(d);
+                    })
+                    .call(d3.drag()
+                        .on("start", dragstarted)
+                        .on("drag", dragged)
+                        .on("end", dragended));
+
+                node = newNodes.merge(node);
+                node.exit().remove();
+
+                // Update node labels
+                let text = textGroup.selectAll("text")
+                    .data(nodes, d => d.id);
+
+                const newTexts = text.enter().append("text")
+                    .attr("class", "node-label")
+                    .attr("dy", "0.35em")
+                    .text(d => d.id);
+
+                text = newTexts.merge(text);
+                text.exit().remove();
+
+                // Update simulation with new data
+                simulation.nodes(nodes);
+                simulation.force("link").links(links);
+
+                simulation.alpha(1).restart();
+
+                simulation.on("tick", () => {
+                    link
+                        .attr("x1", d => d.source.x)
+                        .attr("y1", d => d.source.y)
+                        .attr("x2", d => d.target.x)
+                        .attr("y2", d => d.target.y);
+
+                    node
+                        .attr("cx", d => d.x)
+                        .attr("cy", d => d.y);
+
+                    text
+                        .attr("x", d => d.x)
+                        .attr("y", d => d.y);
+                });
+            }
+
+            // --- Dragging Functions for D3.js ---
+            function dragstarted(event, d) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            }
+
+            function dragged(event, d) {
+                d.fx = event.x;
+                d.fy = event.y;
+            }
+
+            function dragended(event, d) {
+                if (!event.active) simulation.alphaTarget(0);
+                d.fx = null;
+                d.fy = null;
+            }
+
+            // --- Fisher-Yates (Knuth) shuffle algorithm for JavaScript ---
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+            }
+
+            // --- Node Testing and Details ---
+            function displayNodeDetails(nodeData) {
+                console.log("Node clicked:", nodeData);
+                const connectedLinks = links.filter(l => l.source.id === nodeData.id || l.target.id === nodeData.id);
+                const neighborNodes = new Set();
+                connectedLinks.forEach(l => {
+                    if (l.source.id === nodeData.id) neighborNodes.add(l.target.id);
+                    if (l.target.id === nodeData.id) neighborNodes.add(l.source.id);
+                });
+
+                // Update UI for node details
+                nodeIdDisplay.textContent = `ID: ${nodeData.id}`;
+                nodeDegreeDisplay.textContent = `Degree: ${connectedLinks.length}`;
+                nodeNeighborsDisplay.textContent = `Neighbors: ${neighborNodes.size > 0 ? Array.from(neighborNodes).join(', ') : 'None'}`;
+                clearHighlightButton.disabled = false;
+
+                // Clear previous highlights
+                clearHighlights();
+
+                // Highlight clicked node
+                nodeGroup.selectAll("circle")
+                    .filter(d => d.id === nodeData.id)
+                    .attr("class", "node highlighted");
+
+                textGroup.selectAll("text")
+                    .filter(d => d.id === nodeData.id)
+                    .attr("class", "node-label highlighted");
+
+                // Highlight connected links
+                linkGroup.selectAll("line")
+                    .filter(l => connectedLinks.includes(l))
+                    .attr("class", "link highlighted");
+
+                // Highlight neighbor nodes
+                nodeGroup.selectAll("circle")
+                    .filter(d => neighborNodes.has(d.id))
+                    .attr("class", "node highlighted-neighbor"); // Add a specific class for neighbors if different style is desired
+
+                textGroup.selectAll("text")
+                    .filter(d => neighborNodes.has(d.id))
+                    .attr("class", "node-label highlighted-neighbor");
+            }
+
+            function clearHighlights() {
+                nodeGroup.selectAll("circle").attr("class", "node");
+                textGroup.selectAll("text").attr("class", "node-label");
+                linkGroup.selectAll("line").attr("class", "link");
+                nodeIdDisplay.textContent = `ID: -`;
+                nodeDegreeDisplay.textContent = `Degree: -`;
+                nodeNeighborsDisplay.textContent = `Neighbors: -`;
+                clearHighlightButton.disabled = true;
+            }
+
+            // Click background to clear highlights
+            svg.on("click", () => {
+                clearHighlights();
+            });
+
+            clearHighlightButton.addEventListener('click', clearHighlights);
+
+            // --- Network Analytics ---
+            function updateNetworkMetrics() {
+                const numNodes = nodes.length;
+                const numEdges = links.length;
+
+                totalNodesDisplay.textContent = numNodes;
+                totalEdgesDisplay.textContent = numEdges;
+
+                // Calculate Average Degree
+                const avgDegree = numNodes > 0 ? (2 * numEdges / numNodes).toFixed(2) : '0.00';
+                avgDegreeDisplay.textContent = avgDegree;
+
+                // Calculate Network Density (for undirected graph)
+                let density = 0.00;
+                if (numNodes > 1) {
+                    const possibleEdges = numNodes * (numNodes - 1) / 2;
+                    density = (numEdges / possibleEdges).toFixed(2);
+                }
+                networkDensityDisplay.textContent = density;
+
+                console.log("Network Metrics Updated:", {
+                    nodes: numNodes,
+                    edges: numEdges,
+                    avgDegree: avgDegree,
+                    density: density
+                });
+            }
+
+            // --- Sequential Generation Logic ---
+            let isGenerating = false;
+
+            async function startSequentialGeneration() {
+                if (isGenerating) {
+                    console.log("Generation already in progress. Ignoring new request.");
+                    return;
+                }
+
+                console.log("Starting sequential generation...");
+                isGenerating = true;
+                startButton.disabled = true;
+                resetButton.disabled = false;
+                clearHighlightButton.disabled = true; // Disable clear button during generation
+
+                const totalNodesToGenerate = parseInt(numNodesInput.value);
+                const connectionProbability = parseFloat(connProbInput.value);
+                const maxConnectionsPerNode = parseInt(maxConnInput.value);
+                const delay = parseInt(delayInput.value);
+
+                nodes = [];
+                links = [];
+                updateVisualization();
+                clearHighlights(); // Clear any existing highlights
+                updateNetworkMetrics(); // Reset metrics before generation
+                currentStepStatus.textContent = "Starting generation...";
+                console.log("Initial visualization cleared. Entering generation loop.");
+
+                for (let i = 0; i < totalNodesToGenerate; i++) {
+                    if (!isGenerating) {
+                        console.log("Generation interrupted mid-loop.");
+                        break;
+                    }
+                    console.log(`--- Processing Node ${i} ---`);
+                    currentStepStatus.textContent = `Adding Node ${i}...`;
+
+                    nodes.push({ id: i });
+                    updateVisualization();
+                    updateNetworkMetrics(); // Update metrics after adding node
+                    console.log(`Node ${i} added to data. Total nodes: ${nodes.length}. Visualization updated.`);
+                    await new Promise(resolve => setTimeout(resolve, delay));
+
+                    if (i > 0) {
+                        const existingNodes = [...nodes].slice(0, i);
+                        shuffleArray(existingNodes);
+                        console.log(`Node ${i} attempting connections with existing nodes (shuffled):`, existingNodes.map(n => n.id));
+
+                        let connectionsMade = 0;
+                        for (const existingNode of existingNodes) {
+                            if (!isGenerating) {
+                                console.log("Generation interrupted during connection phase.");
+                                break;
+                            }
+                            if (connectionsMade >= maxConnectionsPerNode) {
+                                console.log(`Max connections (${maxConnectionsPerNode}) reached for Node ${i}. Moving to next node.`);
+                                break;
+                            }
+
+                            if (Math.random() < connectionProbability) {
+                                // Filter links to get the actual degree of the existingNode
+                                const existingNodeDegree = links.filter(l => l.source.id === existingNode.id || l.target.id === existingNode.id).length;
+
+                                if (existingNodeDegree < maxConnectionsPerNode + 2) { // Add some buffer for complexity
+                                    const newLink = { source: i, target: existingNode.id };
+                                    links.push(newLink);
+                                    console.log(`Link data added: ${i} - ${existingNode.id}. Total links: ${links.length}`);
+                                    updateVisualization();
+                                    updateNetworkMetrics(); // Update metrics after adding link
+
+                                    const addedLinkElement = linkGroup.selectAll("line")
+                                        .filter(d => (d.source.id === i && d.target.id === existingNode.id) || (d.source.id === existingNode.id && d.target.id === i));
+
+                                    if (!addedLinkElement.empty()) {
+                                        addedLinkElement
+                                            .attr("class", "link new-edge")
+                                            .transition()
+                                            .duration(delay * 0.8)
+                                            .attr("class", "link");
+                                        console.log(`Highlighted link: ${i} - ${existingNode.id}.`);
+                                    } else {
+                                        console.warn(`Could not find the newly added link element for highlighting: ${i} - ${existingNode.id}`);
+                                    }
+
+                                    currentStepStatus.textContent = `Connecting ${i} to ${existingNode.id}...`;
+                                    await new Promise(resolve => setTimeout(resolve, delay));
+                                    connectionsMade++;
+                                    console.log(`Connection successful for Node ${i} to ${existingNode.id}. Connections made: ${connectionsMade}.`);
+                                } else {
+                                    console.log(`Skipping connection from ${i} to ${existingNode.id}: existing node has too many connections (${existingNodeDegree}).`);
+                                }
+                            } else {
+                                console.log(`Skipping connection from ${i} to ${existingNode.id}: probability check failed.`);
+                            }
+                        }
+                    }
+                }
+                currentStepStatus.textContent = `Generation Complete: ${nodes.length} Nodes, ${links.length} Edges.`;
+                isGenerating = false;
+                startButton.disabled = false;
+                resetButton.disabled = false; // Enable reset button after completion
+                clearHighlightButton.disabled = false; // Enable clear button after generation
+                console.log("Sequential generation complete.");
+            }
+
+            function resetVisualization() {
+                console.log("Resetting visualization.");
+                isGenerating = false;
+                nodes = [];
+                links = [];
+                updateVisualization();
+                clearHighlights(); // Ensure highlights are cleared
+                updateNetworkMetrics(); // Reset metrics display
+                startButton.disabled = false;
+                resetButton.disabled = true;
+                clearHighlightButton.disabled = true; // Disable clear button initially
+                currentStepStatus.textContent = '';
+                simulation.alphaTarget(0);
+                svg.call(zoom.transform, d3.zoomIdentity); // Reset zoom/pan
+                console.log("Visualization reset. Ready to generate.");
+            }
+
+            startButton.addEventListener('click', startSequentialGeneration);
+            resetButton.addEventListener('click', resetVisualization);
+
+            // Toggle sidebar functionality
+            toggleSidebarButton.addEventListener('click', () => {
+                sidebar.classList.toggle('hidden');
+                // On mobile, toggle 'active' class to make it visible
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.toggle('active');
+                }
+            });
+
+            // Initial setup when the page loads
+            resetVisualization();
+        });
+    </script>
+</body>
+</html>

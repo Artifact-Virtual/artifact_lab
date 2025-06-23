@@ -10,7 +10,7 @@ from ollama_interface import query_model
 
 app = Flask(__name__)
 
-# Simple HTML template for the chat interface
+# Enhanced HTML template with Monaco Editor and File Management
 CHAT_HTML = """
 <!DOCTYPE html>
 <html lang="en">
@@ -19,6 +19,7 @@ CHAT_HTML = """
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARTIFACT VIRTUAL ASSISTANT</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/editor/editor.main.min.css">
     <style>
         body {
             background-color: #000000;
@@ -26,37 +27,77 @@ CHAT_HTML = """
             font-family: 'Arial', sans-serif;
             height: 100vh;
             overflow: hidden;
+            margin: 0;
         }
-        .chat-container {
-            max-width: 800px;
+        .main-container {
+            display: flex;
             height: 100vh;
-            margin: 0 auto;
+        }
+        .sidebar {
+            width: 300px;
+            background: rgba(255, 255, 255, 0.02);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             flex-direction: column;
+        }
+        .file-explorer {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+        }
+        .file-item {
+            padding: 4px 8px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin: 2px 0;
+        }
+        .file-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .file-item.selected {
+            background: rgba(0, 123, 255, 0.3);
+        }
+        .folder {
+            font-weight: bold;
+        }
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .editor-container {
+            flex: 1;
+            position: relative;
+        }
+        .chat-panel {
+            width: 400px;
             background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
         }
         .chat-header {
             text-align: center;
-            padding: 20px;
+            padding: 15px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         .chat-messages {
             flex: 1;
             overflow-y: auto;
-            padding: 20px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 12px;
         }
         .message {
-            padding: 12px 18px;
-            border-radius: 12px;
-            max-width: 80%;
+            padding: 8px 12px;
+            border-radius: 8px;
+            max-width: 85%;
             word-wrap: break-word;
+            font-size: 14px;
         }
         .user-message {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 123, 255, 0.2);
             align-self: flex-end;
         }
         .bot-message {
@@ -64,32 +105,37 @@ CHAT_HTML = """
             align-self: flex-start;
         }
         .chat-input-container {
-            padding: 20px;
+            padding: 15px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
-            gap: 12px;
+            gap: 8px;
         }
         .chat-input {
             flex: 1;
-            padding: 12px 18px;
+            padding: 8px 12px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
+            border-radius: 6px;
             color: white;
             outline: none;
+            font-size: 14px;
         }
         .send-button {
-            padding: 12px 24px;
-            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            background: rgba(0, 123, 255, 0.3);
             color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
+            border: 1px solid rgba(0, 123, 255, 0.5);
+            border-radius: 6px;
             cursor: pointer;
+            font-size: 14px;
+        }
+        .send-button:hover {
+            background: rgba(0, 123, 255, 0.4);
         }
         .status {
             text-align: center;
-            padding: 12px;
-            font-size: 14px;
+            padding: 8px;
+            font-size: 12px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         .status.ready {
@@ -100,31 +146,119 @@ CHAT_HTML = """
             background: rgba(255, 0, 0, 0.1);
             color: #ffa0a0;
         }
+        .toolbar {
+            display: flex;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            gap: 8px;
+        }
+        .toolbar button {
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .toolbar button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        #filePathDisplay {
+            flex: 1;
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            font-size: 12px;
+            color: #ccc;
+        }
     </style>
 </head>
 <body>
-    <div class="chat-container">
-        <div class="chat-header">
-            <h1>ARTIFACT VIRTUAL ASSISTANT</h1>
-            <p>Enhanced with File Management & Code Access</p>
-        </div>
-        <div id="status" class="status">Connecting...</div>
-        <div class="chat-messages" id="chatMessages">
-            <div class="bot-message">
-                Hello! I'm AVA. I can help you with code editing, file management, and more. I have access to your codebase and can make changes directly.
+    <div class="main-container">
+        <!-- File Explorer -->
+        <div class="sidebar">
+            <div style="padding: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                <h3 style="margin: 0; font-size: 14px;">File Explorer</h3>
+            </div>
+            <div class="file-explorer" id="fileExplorer">
+                Loading files...
             </div>
         </div>
-        <div class="chat-input-container">
-            <input type="text" class="chat-input" id="chatInput" placeholder="Type your message here..." disabled>
-            <button class="send-button" id="sendButton" onclick="sendMessage()" disabled>SEND</button>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <div id="filePathDisplay">No file selected</div>
+                <button onclick="saveCurrentFile()">Save</button>
+                <button onclick="refreshFiles()">Refresh</button>
+            </div>
+            
+            <!-- Monaco Editor -->
+            <div class="editor-container" id="editorContainer">
+                <div id="monaco-editor" style="height: 100%; width: 100%;"></div>
+            </div>
+        </div>
+
+        <!-- Chat Panel -->
+        <div class="chat-panel">
+            <div class="chat-header">
+                <h2 style="margin: 0; font-size: 16px;">AVA Assistant</h2>
+                <p style="margin: 5px 0 0 0; font-size: 12px;">AI Code Assistant</p>
+            </div>
+            <div id="status" class="status">Connecting...</div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="bot-message">
+                    Hello! I'm AVA, your AI assistant. I can help you with:
+                    <br>• Code editing and analysis
+                    <br>• File management operations  
+                    <br>• Project structure navigation
+                    <br>• Direct code modifications
+                </div>
+            </div>
+            <div class="chat-input-container">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Ask me anything..." disabled>
+                <button class="send-button" id="sendButton" onclick="sendMessage()" disabled>Send</button>
+            </div>
         </div>
     </div>
 
+    <!-- Monaco Editor -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+    
     <script>
         let isConnected = false;
+        let editor = null;
+        let currentFile = null;
+        let fileContent = '';
+        
+        // Initialize Monaco Editor
+        require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
+        require(['vs/editor/editor.main'], function () {
+            editor = monaco.editor.create(document.getElementById('monaco-editor'), {
+                value: '// Welcome to ARTIFACT VIRTUAL ASSISTANT\n// Select a file from the explorer to start editing\n// Ask AVA for help with your code!',
+                language: 'javascript',
+                theme: 'vs-dark',
+                automaticLayout: true,
+                fontSize: 14,
+                minimap: { enabled: true },
+                scrollBeyondLastLine: false,
+                wordWrap: 'on'
+            });
+            
+            // Auto-save on content change
+            editor.onDidChangeModelContent(function() {
+                if (currentFile && editor.getValue() !== fileContent) {
+                    // Mark file as modified (could add * to title)
+                }
+            });
+        });
         
         window.onload = function() {
             checkOllamaStatus();
+            loadFileExplorer();
         };
         
         async function checkOllamaStatus() {
@@ -137,7 +271,7 @@ CHAT_HTML = """
                 const sendButton = document.getElementById('sendButton');
                 
                 if (data.status === 'ready') {
-                    statusDiv.textContent = `✅ Connected (Model: ${data.model})`;
+                    statusDiv.textContent = `✅ Connected (${data.model})`;
                     statusDiv.className = 'status ready';
                     chatInput.disabled = false;
                     sendButton.disabled = false;
@@ -155,11 +289,144 @@ CHAT_HTML = """
             }
         }
         
-        function addMessage(content, isUser = false) {
+        async function loadFileExplorer() {
+            try {
+                const response = await fetch('/api/files/list');
+                const data = await response.json();
+                
+                if (data.success) {
+                    renderFileExplorer(data.items);
+                } else {
+                    document.getElementById('fileExplorer').innerHTML = 'Error loading files';
+                }
+            } catch (error) {
+                document.getElementById('fileExplorer').innerHTML = 'Error loading files';
+            }
+        }
+        
+        function renderFileExplorer(items) {
+            const explorer = document.getElementById('fileExplorer');
+            explorer.innerHTML = '';
+            
+            // Sort: directories first, then files
+            items.sort((a, b) => {
+                if (a.type === 'directory' && b.type === 'file') return -1;
+                if (a.type === 'file' && b.type === 'directory') return 1;
+                return a.name.localeCompare(b.name);
+            });
+            
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'file-item';
+                if (item.type === 'directory') {
+                    div.className += ' folder';
+                    div.innerHTML = `📁 ${item.name}`;
+                } else {
+                    div.innerHTML = `📄 ${item.name}`;
+                    div.onclick = () => openFile(item.name);
+                }
+                explorer.appendChild(div);
+            });
+        }
+        
+        async function openFile(fileName) {
+            try {
+                const response = await fetch(`/api/files/read?path=${encodeURIComponent(fileName)}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentFile = fileName;
+                    fileContent = data.content;
+                    
+                    // Update editor content
+                    if (editor) {
+                        editor.setValue(data.content);
+                        
+                        // Set language based on file extension
+                        const extension = fileName.split('.').pop().toLowerCase();
+                        const languageMap = {
+                            'js': 'javascript',
+                            'ts': 'typescript', 
+                            'py': 'python',
+                            'html': 'html',
+                            'css': 'css',
+                            'json': 'json',
+                            'md': 'markdown',
+                            'yml': 'yaml',
+                            'yaml': 'yaml',
+                            'xml': 'xml',
+                            'sql': 'sql',
+                            'sh': 'shell',
+                            'bat': 'bat',
+                            'ps1': 'powershell'
+                        };
+                        
+                        const language = languageMap[extension] || 'plaintext';
+                        monaco.editor.setModelLanguage(editor.getModel(), language);
+                    }
+                    
+                    // Update UI
+                    document.getElementById('filePathDisplay').textContent = fileName;
+                    
+                    // Highlight selected file
+                    document.querySelectorAll('.file-item').forEach(item => {
+                        item.classList.remove('selected');
+                        if (item.textContent.includes(fileName)) {
+                            item.classList.add('selected');
+                        }
+                    });
+                    
+                    addMessage(`Opened file: ${fileName}`, false, true);
+                }
+            } catch (error) {
+                addMessage(`Error opening file: ${error.message}`, false, true);
+            }
+        }
+        
+        async function saveCurrentFile() {
+            if (!currentFile || !editor) {
+                addMessage('No file is currently open', false, true);
+                return;
+            }
+            
+            try {
+                const content = editor.getValue();
+                const response = await fetch('/api/files/write', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ path: currentFile, content: content })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    fileContent = content;
+                    addMessage(`Saved: ${currentFile}`, false, true);
+                } else {
+                    addMessage(`Error saving: ${data.error}`, false, true);
+                }
+            } catch (error) {
+                addMessage(`Error saving file: ${error.message}`, false, true);
+            }
+        }
+        
+        function refreshFiles() {
+            loadFileExplorer();
+            addMessage('File explorer refreshed', false, true);
+        }
+        
+        function addMessage(content, isUser = false, isSystem = false) {
             const messagesDiv = document.getElementById('chatMessages');
             const messageDiv = document.createElement('div');
-            messageDiv.className = isUser ? 'message user-message' : 'message bot-message';
-            messageDiv.textContent = content;
+            
+            if (isSystem) {
+                messageDiv.className = 'message bot-message';
+                messageDiv.style.opacity = '0.7';
+                messageDiv.style.fontStyle = 'italic';
+            } else {
+                messageDiv.className = isUser ? 'message user-message' : 'message bot-message';
+            }
+            
+            messageDiv.innerHTML = content.replace(/\n/g, '<br>');
             messagesDiv.appendChild(messageDiv);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
@@ -181,20 +448,41 @@ CHAT_HTML = """
             
             chatInput.disabled = true;
             sendButton.disabled = true;
+            sendButton.textContent = 'Thinking...';
             
             try {
+                // Include context about current file and editor state
+                let contextMessage = message;
+                if (currentFile && editor) {
+                    contextMessage = `Current file: ${currentFile}\n\nUser message: ${message}\n\nCurrent file content:\n${editor.getValue()}`;
+                }
+                
                 const response = await fetch('/chat', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ message: message })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        message: contextMessage,
+                        context: {
+                            currentFile: currentFile,
+                            hasEditor: !!editor
+                        }
+                    })
                 });
                 
                 const data = await response.json();
                 
                 if (data.success) {
                     addMessage(data.response);
+                    
+                    // Check if response contains code that should be applied to editor
+                    if (data.fileOperations) {
+                        for (const op of data.fileOperations) {
+                            if (op.type === 'update' && op.path === currentFile && editor) {
+                                editor.setValue(op.content);
+                                addMessage(`Updated ${currentFile} with suggested changes`, false, true);
+                            }
+                        }
+                    }
                 } else {
                     addMessage(`Error: ${data.error}`);
                 }
@@ -204,6 +492,7 @@ CHAT_HTML = """
             
             chatInput.disabled = false;
             sendButton.disabled = false;
+            sendButton.textContent = 'Send';
             chatInput.focus();
         }
         
@@ -278,9 +567,83 @@ chat = OllamaWebChat()
 import hashlib
 import datetime
 
-def log_file_operation(operation, path, success=True, error=None):
+def log_file_operation(operation, path, success=True, error=None, user_context=None):
+    """Enhanced file operation logging with audit trail"""
     timestamp = datetime.datetime.now().isoformat()
-    print(f"[{timestamp}] File operation: {operation} on {path} - {'Success' if success else 'Failed'}")
+    
+    log_entry = {
+        'timestamp': timestamp,
+        'operation': operation,
+        'path': path,
+        'success': success,
+        'error': error,
+        'user_context': user_context
+    }
+    
+    # Log to console
+    status = 'Success' if success else 'Failed'
+    print(f"[{timestamp}] File operation: {operation} on {path} - {status}")
+    if error:
+        print(f"  Error: {error}")
+    
+    # Log to audit file
+    audit_log_path = os.path.join(os.path.dirname(__file__), 'audit_log.json')
+    try:
+        # Read existing log entries
+        if os.path.exists(audit_log_path):
+            with open(audit_log_path, 'r', encoding='utf-8') as f:
+                audit_log = json.load(f)
+        else:
+            audit_log = []
+        
+        # Add new entry
+        audit_log.append(log_entry)
+        
+        # Keep only last 1000 entries to prevent log file from growing too large
+        if len(audit_log) > 1000:
+            audit_log = audit_log[-1000:]
+        
+        # Write back to file
+        with open(audit_log_path, 'w', encoding='utf-8') as f:
+            json.dump(audit_log, f, indent=2, ensure_ascii=False)
+    except Exception as e:
+        print(f"Warning: Could not write to audit log: {e}")
+
+
+def log_llm_interaction(message, response, context=None, file_operations=None):
+    """Log LLM interactions for audit purposes"""
+    timestamp = datetime.datetime.now().isoformat()
+    
+    log_entry = {
+        'timestamp': timestamp,
+        'type': 'llm_interaction',
+        'message': message[:500] + '...' if len(message) > 500 else message,  # Truncate long messages
+        'response': response[:500] + '...' if len(response) > 500 else response,
+        'context': context,
+        'file_operations': file_operations
+    }
+    
+    print(f"[{timestamp}] LLM Interaction - Context: {context.get('currentFile', 'None') if context else 'None'}")
+    
+    # Log to audit file
+    audit_log_path = os.path.join(os.path.dirname(__file__), 'llm_audit_log.json')
+    try:
+        if os.path.exists(audit_log_path):
+            with open(audit_log_path, 'r', encoding='utf-8') as f:
+                audit_log = json.load(f)
+        else:
+            audit_log = []
+        
+        audit_log.append(log_entry)
+        
+        # Keep only last 500 entries
+        if len(audit_log) > 500:
+            audit_log = audit_log[-500:]
+        
+        with open(audit_log_path, 'w', encoding='utf-8') as f:
+            json.dump(audit_log, f, indent=2, ensure_ascii=False)
+    except Exception as e:
+        print(f"Warning: Could not write to LLM audit log: {e}")
 
 def get_workspace_root():
     return os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -359,7 +722,7 @@ def write_file():
         workspace_root = get_workspace_root()
         full_path = os.path.join(workspace_root, path.lstrip('/\\'))
         
-        os.makedirs(os.path.dirname(full_path), exist_ok=True)
+        os.makedirs(os.path.dirname(full_path), exist_ok=True);
         
         with open(full_path, 'w', encoding='utf-8') as f:
             f.write(content)
@@ -370,6 +733,41 @@ def write_file():
     except Exception as e:
         log_file_operation('write', path, success=False, error=str(e))
         return jsonify({'success': False, 'error': str(e)}), 500
+
+# Audit log viewing endpoints
+@app.route('/api/audit/files', methods=['GET'])
+def get_file_audit_log():
+    """Get file operation audit log"""
+    try:
+        audit_log_path = os.path.join(os.path.dirname(__file__), 'audit_log.json')
+        if os.path.exists(audit_log_path):
+            with open(audit_log_path, 'r', encoding='utf-8') as f:
+                audit_log = json.load(f)
+            
+            # Get recent entries (last 50)
+            recent_entries = audit_log[-50:] if len(audit_log) > 50 else audit_log
+            return jsonify({'success': True, 'entries': recent_entries})
+        else:
+            return jsonify({'success': True, 'entries': []})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/api/audit/llm', methods=['GET'])
+def get_llm_audit_log():
+    """Get LLM interaction audit log"""  
+    try:
+        audit_log_path = os.path.join(os.path.dirname(__file__), 'llm_audit_log.json')
+        if os.path.exists(audit_log_path):
+            with open(audit_log_path, 'r', encoding='utf-8') as f:
+                audit_log = json.load(f)
+            
+            # Get recent entries (last 25)
+            recent_entries = audit_log[-25:] if len(audit_log) > 25 else audit_log
+            return jsonify({'success': True, 'entries': recent_entries})
+        else:
+            return jsonify({'success': True, 'entries': []})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
 
 # Original chat endpoints
 @app.route('/')
@@ -390,6 +788,7 @@ def chat_endpoint():
     try:
         data = request.get_json()
         message = data.get('message', '').strip()
+        context = data.get('context', {})
         
         if not message:
             return jsonify({'success': False, 'error': 'Empty message'})
@@ -398,15 +797,72 @@ def chat_endpoint():
         if not is_ready:
             return jsonify({'success': False, 'error': f'Ollama not ready: {status_msg}'})
         
-        success, response = chat.send_message(message)
+        # Enhanced message with system context
+        enhanced_message = build_enhanced_message(message, context)
+        
+        success, response = chat.send_message(enhanced_message)
         
         if success:
-            return jsonify({'success': True, 'response': response})
+            # Check if the response contains actionable file operations
+            file_operations = parse_file_operations(response, context)
+            
+            # Log the interaction for audit purposes
+            log_llm_interaction(message, response, context, file_operations)
+            
+            result = {
+                'success': True, 
+                'response': response
+            }
+            
+            if file_operations:
+                result['fileOperations'] = file_operations
+            
+            return jsonify(result)
         else:
+            # Log failed interaction as well
+            log_llm_interaction(message, f"Error: {response}", context)
             return jsonify({'success': False, 'error': response})
             
     except Exception as e:
+        # Log system errors
+        log_llm_interaction(message if 'message' in locals() else 'Unknown', f"System error: {str(e)}", context if 'context' in locals() else None)
         return jsonify({'success': False, 'error': f'Server error: {str(e)}'})
+
+def build_enhanced_message(message, context):
+    """Build an enhanced message with system context for the LLM"""
+    system_prompt = """You are AVA (Artifact Virtual Assistant), an advanced AI code assistant with direct access to the user's codebase. You can:
+
+1. Analyze and understand code in any programming language
+2. Suggest improvements, fixes, and optimizations
+3. Help with debugging and troubleshooting
+4. Explain complex code concepts
+5. Assist with code refactoring and restructuring
+6. Provide direct code modifications when requested
+
+You have access to the complete project structure and can read/write files. When the user asks you to modify code, you can suggest specific changes or indicate that you can make direct modifications.
+
+Be concise, helpful, and practical in your responses. If you suggest code changes, make them clear and actionable."""
+    
+    enhanced = f"{system_prompt}\n\n"
+      # Add current file context if available
+    if context.get('currentFile'):
+        enhanced += f"Current file being edited: {context['currentFile']}\n"
+    
+    enhanced += f"User request: {message}"
+    
+    return enhanced
+
+
+def parse_file_operations(response, context):
+    """Parse LLM response for potential file operations"""
+    operations = []
+    
+    # This is a simple implementation - could be enhanced with more sophisticated parsing
+    # For now, we'll return empty as the frontend handles editor updates manually
+    # In a full implementation, we could parse response for code blocks and apply them
+    
+    return operations
+
 
 def run_webchat():
     print("Starting Enhanced Ollama Web Chat on http://localhost:8080")
