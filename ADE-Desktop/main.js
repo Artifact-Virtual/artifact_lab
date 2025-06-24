@@ -658,9 +658,14 @@ const testConnection = () => {
 // Test connection to Ollama services
 const testOllamaConnection = () => {
   return new Promise((resolve) => {
-    console.log('Testing Ollama service at http://localhost:11500/api/version');
+    console.log('Testing Ollama service at http://127.0.0.1:11500/api/version');
     const http = require('http');
-    const req = http.get('http://localhost:11500/api/version', (res) => {
+    const req = http.get({
+      hostname: '127.0.0.1',
+      port: 11500,
+      path: '/api/version',
+      family: 4 // Force IPv4
+    }, (res) => {
       console.log('Ollama service responded with status:', res.statusCode);
       resolve(res.statusCode === 200);
     });
