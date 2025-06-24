@@ -1,5 +1,5 @@
 {
-  "generated": "2025-06-24T01:00:09.846831",
+  "generated": "2025-06-24T01:10:54.598028",
   "checksums": {
     ".gitignore": {
       "checksum": "f11d702a2f0b54b917138c3e3f030c6dfedd2b41c0302a773d3ea9ea030bc7ea",
@@ -15,6 +15,11 @@
       "checksum": "4d6e71a3710f47d2c3db5004b2d8e832c5f2f387fef51a24a178a18fe3d071b5",
       "size": 2604,
       "lastModified": "2025-06-24T00:18:09.612006"
+    },
+    "COMPREHENSIVE_REFACTORING_PLAN.md": {
+      "checksum": "e69dee18b4015023dcd863fa392b379dc747f2888d65e051920307ca3e67beb8",
+      "size": 11376,
+      "lastModified": "2025-06-24T01:04:08.788831"
     },
     "license.txt": {
       "checksum": "28fffb165c6cc004ba7fb6f09b3c2749a79866ee345e67f019e45ba65c6fed50",
@@ -62,9 +67,9 @@
       "lastModified": "2025-06-23T22:33:56.614409"
     },
     ".git\\COMMIT_EDITMSG": {
-      "checksum": "687cb8f0cc5e6c2cb38ce2985288cd67e77a6ec5c9d6b5925184fab1819c02e5",
-      "size": 255,
-      "lastModified": "2025-06-24T00:20:37.599619"
+      "checksum": "c299aad05102574dcd48a443a4b0434cdd90b2afe5141537cd3dcede85ed018b",
+      "size": 805,
+      "lastModified": "2025-06-24T01:04:40.317892"
     },
     ".git\\config": {
       "checksum": "03902505645f4c37e05110c4346ee6b7bf21a6d93218cf24389cb80dedfa763e",
@@ -87,9 +92,9 @@
       "lastModified": "2025-06-23T22:33:54.989655"
     },
     ".git\\index": {
-      "checksum": "f4bc4296ea74cebb20c5d2fa506bf5da5c0b046de9723265c7d3a0de78ab23f2",
-      "size": 1349806,
-      "lastModified": "2025-06-24T00:20:37.596431"
+      "checksum": "e925c40858e72be15c162beb26108f3f19821cad634cdf0bd23e4faf78a3f9f8",
+      "size": 1350411,
+      "lastModified": "2025-06-24T01:04:40.315259"
     },
     ".git\\ORIG_HEAD": {
       "checksum": "6bb7c407034e3c11456a279867dafd09e2724bc86eab79f1260b485a4443be55",
@@ -292,9 +297,9 @@
       "lastModified": "2025-06-24T00:27:51.490223"
     },
     "logs\\file_checksums.json": {
-      "checksum": "ba37615dd5bbd01107981fa25df14b90cfd328fd3fc277e99c4c6f214882a974",
-      "size": 2536728,
-      "lastModified": "2025-06-24T00:59:58.287814"
+      "checksum": "ec00abc934a7021a1d9f5a4fd8a64d3cc88c91445e36c575104c03645c1409cb",
+      "size": 2540218,
+      "lastModified": "2025-06-24T01:10:13.782353"
     },
     "node_modules\\.package-lock.json": {
       "checksum": "b251c832d671505e267e001ba870590e47634bee9adcf2fc6810a4e0645a2e79",
@@ -427,14 +432,14 @@
       "lastModified": "2025-06-23T22:33:21.035659"
     },
     ".git\\logs\\HEAD": {
-      "checksum": "490103a9ca372e9976b3a5ce65ea42e3ce0a8b0b974ed676b8789f3eb1e2eb16",
-      "size": 1247,
-      "lastModified": "2025-06-24T00:20:37.601902"
+      "checksum": "995cc7387188684d695e9c31a164094d9bbeb931331069147b5861a958bb68b4",
+      "size": 1669,
+      "lastModified": "2025-06-24T01:04:40.320675"
     },
     ".git\\logs\\refs\\heads\\main": {
-      "checksum": "490103a9ca372e9976b3a5ce65ea42e3ce0a8b0b974ed676b8789f3eb1e2eb16",
-      "size": 1247,
-      "lastModified": "2025-06-24T00:20:37.601902"
+      "checksum": "995cc7387188684d695e9c31a164094d9bbeb931331069147b5861a958bb68b4",
+      "size": 1669,
+      "lastModified": "2025-06-24T01:04:40.321204"
     },
     ".git\\logs\\refs\\remotes\\origin\\HEAD": {
       "checksum": "f7d6aed9fd6c42ef6352a7be9580e326965ca977d433ac2628e2bd9a4d689ec6",
@@ -456,6 +461,11 @@
       "size": 580,
       "lastModified": "2025-06-23T23:58:39.672453"
     },
+    ".git\\objects\\0a\\4c13695da1eaa3f001421bfa5c0173b8853cc2": {
+      "checksum": "952d44498457c4ad59f93e21fe49cd38efbea1f5197062b52af380a704c7b1d6",
+      "size": 2675,
+      "lastModified": "2025-06-24T01:00:24.161417"
+    },
     ".git\\objects\\0d\\522cc31134a8f67c9c8ab5881417e4c5618c97": {
       "checksum": "a746cf2d10c4b3799c271ea960e6f826e3956a27424a39b40588cb1ce9fa26da",
       "size": 47,
@@ -465,6 +475,11 @@
       "checksum": "01fe394d2cb68d1358d211bb184d33017682a6e5811b85f932e012a8978ab067",
       "size": 235,
       "lastModified": "2025-06-23T23:58:39.665791"
+    },
+    ".git\\objects\\16\\3270876b17941112a66517eebf6b8a77510670": {
+      "checksum": "0082902a286923dcbc4e53def6e367cb731b8ea020c48e356701d07092e642e1",
+      "size": 142,
+      "lastModified": "2025-06-24T01:01:06.272064"
     },
     ".git\\objects\\18\\05d867b0b5b3ac189f5ac0f24d5378aba06e83": {
       "checksum": "01f1eb624755817b4f879560f1aebefca44791576011b13b7756afcda0ecf600",
@@ -491,15 +506,35 @@
       "size": 670,
       "lastModified": "2025-06-23T23:49:47.970130"
     },
+    ".git\\objects\\26\\bfafa3d6e7492b8c742cbd6cc61c2f0cb1e673": {
+      "checksum": "8b01ab75b7b3af4d001fe06a3f090149e017cf60a790c5a1a8919d91a273b1f4",
+      "size": 99,
+      "lastModified": "2025-06-24T01:01:06.271008"
+    },
     ".git\\objects\\2a\\b01abdd9e62178970611f5b6c95629f9892821": {
       "checksum": "4db965103d8cc0536e8127f72314ad1d09cf3770375d3d5e841928320cdf3597",
       "size": 635,
       "lastModified": "2025-06-23T23:58:39.673496"
     },
+    ".git\\objects\\2d\\9469b812ad2ab69691d52aa40c30c6cb56d82e": {
+      "checksum": "c0c3ba8059ba255562f411f2515f49f46f03d5eee5605e0b3f96a919f20b53ee",
+      "size": 683,
+      "lastModified": "2025-06-24T01:01:06.273124"
+    },
+    ".git\\objects\\31\\4ef6baa94f733dea3243c0352e22f2d00b4f71": {
+      "checksum": "4e77c38f4ddab12b191a96a61489947bb75387b2d7461895f43f4359688a0ea0",
+      "size": 247,
+      "lastModified": "2025-06-24T01:00:24.126007"
+    },
     ".git\\objects\\39\\77c5debd50b6456dd17356a06b0b1bf3c01690": {
       "checksum": "c6a6a4574135b9257bf5333108932363e2d10a45e5531d484a44722ecbbaa09e",
       "size": 447175,
       "lastModified": "2025-06-23T23:58:39.515749"
+    },
+    ".git\\objects\\50\\7fad7dcca82048db741e4cccf348abe075c176": {
+      "checksum": "336688dbfdfe1570e3f808a93ce30b12ef71b127c775f6020bae4d241074101c",
+      "size": 626,
+      "lastModified": "2025-06-24T01:04:40.318417"
     },
     ".git\\objects\\52\\dc0e78e0aa11e2a6b7e3566055fcf80d49a423": {
       "checksum": "d53d4570496f833de393a9d7dbd93258888cc884a239ee56cd85ad27f82341c4",
@@ -510,6 +545,11 @@
       "checksum": "c899dbc95e70eca5f3e03b354725acee75934ac208db78fca898b8ac2269bfd7",
       "size": 3633,
       "lastModified": "2025-06-24T00:20:04.299876"
+    },
+    ".git\\objects\\5a\\964ed02d222eb014d1e10e1728987a585e7a50": {
+      "checksum": "c1539a9eb53945a7e6ac919ac968586b04e8b8c609d4edfa4beecdbd42b407dd",
+      "size": 175,
+      "lastModified": "2025-06-24T01:02:18.612141"
     },
     ".git\\objects\\5f\\8377558eecb3229099a29e3d3df10d027e7f37": {
       "checksum": "284fabf88379a3fb96475719e6ccd3aac51dc445ecb6287ab58d756060b31e02",
@@ -546,6 +586,11 @@
       "size": 53,
       "lastModified": "2025-06-23T23:58:39.663726"
     },
+    ".git\\objects\\82\\4afac70bc9693a50b69aa30fd45d2a528031fe": {
+      "checksum": "3810477955fedb1ed7729db6e679aa92e5268060e6e5c77a40fba23a20392af5",
+      "size": 3669,
+      "lastModified": "2025-06-24T01:00:24.161417"
+    },
     ".git\\objects\\83\\f6d292d29925582492b01ac1f049a34b769e97": {
       "checksum": "b3f0a9ac9b99a8a1c175171fd04517c52078e74657065251962c9da3a484b0d4",
       "size": 1304,
@@ -576,6 +621,11 @@
       "size": 322,
       "lastModified": "2025-06-23T23:58:39.444144"
     },
+    ".git\\objects\\97\\8923c50c6592ebbfff3a8e620b3a74263bd286": {
+      "checksum": "2d8ca06c7c94fe22c3aaa16ec66f4e705514ee2a521bb94a44cbdcc1ad0d6251",
+      "size": 739,
+      "lastModified": "2025-06-24T01:04:40.310560"
+    },
     ".git\\objects\\99\\b79330ca951eb9277d2f6dbc6c34ba80a36c04": {
       "checksum": "c8be5901d40c98e5f2053357a27a7137fa85e31ab82d059b0ca65086312c8ff6",
       "size": 2613041,
@@ -596,6 +646,11 @@
       "size": 635,
       "lastModified": "2025-06-23T23:26:36.069331"
     },
+    ".git\\objects\\a3\\0eef92e6bff158e4dacd7903671e77e1d57284": {
+      "checksum": "5379eadd1af7a0bd7e5ff089d2454700c21c88bc3727baf96ef76e311a51b013",
+      "size": 590484,
+      "lastModified": "2025-06-24T01:00:24.158939"
+    },
     ".git\\objects\\a3\\f3cb013b1ac563acf02960bb4ed24f9e446542": {
       "checksum": "3e476c203f266a71fd69c54a79d94cf6098c69aa7f8c4423ead873ef3fd728ed",
       "size": 1079,
@@ -611,6 +666,11 @@
       "size": 549,
       "lastModified": "2025-06-23T23:26:36.068292"
     },
+    ".git\\objects\\b7\\105ac892680283b0974b15a9d7bff179ddc340": {
+      "checksum": "5c34d9d69ef95874027fc03dbd46b1bb639aa9547bb539941b5ef1bae8996eb2",
+      "size": 429,
+      "lastModified": "2025-06-24T01:01:06.280692"
+    },
     ".git\\objects\\b9\\d59d70890ea6829fc95f2981c5b41c30a4f1c5": {
       "checksum": "5df3fc708b090271ad47989dd45675c723298de7b59e2c4aa0e5aea715621eb9",
       "size": 323,
@@ -620,6 +680,11 @@
       "checksum": "eb7dce1d22e30e36945c3673dfe6dbd700a7a5acb9455d29135b7b448a2f75b2",
       "size": 2980641,
       "lastModified": "2025-06-24T00:20:04.218410"
+    },
+    ".git\\objects\\bd\\76329bab33343ea52d04b5e44d3bfc576cc3d2": {
+      "checksum": "cafd6fe205492c4636e4dc7a1a8c9e27cd77a70ed2732afbe134330d29884602",
+      "size": 2901,
+      "lastModified": "2025-06-24T01:00:24.161417"
     },
     ".git\\objects\\cb\\ab54005f007e7dffd251a70977a52d49bb0ec0": {
       "checksum": "f417dd988c6e778a1b79bb4960775b6a447499baaafb9513f0ce95a34e238a1f",
@@ -671,6 +736,11 @@
       "size": 2098,
       "lastModified": "2025-06-23T23:26:35.959613"
     },
+    ".git\\objects\\f6\\3f13ba92fe569fa96424121dabc176fc61468f": {
+      "checksum": "1ea73dcefbafdf38223a048546429ddcc973e80470293538765e1928c5c73cc2",
+      "size": 4731,
+      "lastModified": "2025-06-24T01:04:27.667377"
+    },
     ".git\\objects\\fa\\3ea7aea399cf6eb4bb68f80413c345d8910101": {
       "checksum": "6039cc006f704b596a96832545c2af00716763883b828d54e2f4dcd194c8d553",
       "size": 624,
@@ -702,14 +772,19 @@
       "lastModified": "2025-06-23T22:33:54.933362"
     },
     ".git\\refs\\heads\\main": {
-      "checksum": "b8f9a387b4b55d9ea9510130da1389ae400d83766507f80918de5408265603c7",
+      "checksum": "0d559d8514232837e4d10a4797f1f6f4d04d74f4dee67e89f544099c77ef7d51",
       "size": 41,
-      "lastModified": "2025-06-24T00:20:37.601377"
+      "lastModified": "2025-06-24T01:04:40.320675"
     },
     ".git\\refs\\tags\\v0.1.0-pre-refactor": {
       "checksum": "9e0e5e7109d509ebe3ba56c7bdd97c7b6d5a7a198979a3a190e4f2a8dd03d4e4",
       "size": 41,
       "lastModified": "2025-06-24T00:22:22.262608"
+    },
+    ".git\\refs\\tags\\v0.2.0-safety-systems": {
+      "checksum": "92f12f56024e7a0faf75b47f896200458f7639eb2a390470e562c0fefe414064",
+      "size": 41,
+      "lastModified": "2025-06-24T01:02:18.612141"
     },
     ".git\\refs\\remotes\\origin\\HEAD": {
       "checksum": "2bb6a24aa0fc6c484100f5d51a29bbad841cd2c755f5d93faa204e5dbb4eb2b4",
@@ -52395,8 +52470,8 @@
     }
   ],
   "stats": {
-    "totalFiles": 10473,
+    "totalFiles": 10488,
     "largeFileCount": 5,
-    "totalSize": 167657504
+    "totalSize": 168282010
   }
 }

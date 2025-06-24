@@ -185,6 +185,5 @@ To improve performance and focus the tool's scope, the following components have
 - **Plugin System**: An extension architecture to add custom functionality.
 
 ### 11.2. Planned Integrations
-- **Airtable**: Integrate with Airtable for advanced project and workflow management.
 - **Windmill**: Use Windmill for workflow automation and complex data operations.
 - **Vector Database**: Integrate a vector DB for semantic code search and enhanced AI context.

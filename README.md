@@ -24,7 +24,6 @@ A comprehensive development studio featuring a clean, professional Monaco Editor
 - **Chat Integration**: AI chat with file/project context (Phase 5)
 
 ### **Advanced Workflow Automation (Phase 5)**
-- **Airtable Integration**: Database and workflow management
 - **Windmill Integration**: Workflow automation and data processing
 - **Multi-file Operations**: Bulk operations across project files
 - **Advanced Search**: Semantic search with vector DB integration
@@ -244,7 +243,7 @@ See [license.txt](license.txt) for details (MIT License).
 - ✅ All documentation and SOPs updated
 - ✅ Enhanced visualizer is now the only analytics/visualization option
 - 🚧 Studio interface with Monaco+AI+search (in progress)
-- 🚧 Airtable/Windmill integration (planned)
+- 🚧 Windmill integration (planned)
 - 🚧 Advanced chat/file context for AI (planned)
 - 🚧 Multi-file/project operations, search, git, and collaboration (planned)
 

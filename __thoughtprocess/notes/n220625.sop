@@ -1,3 +1,9 @@
+# USER LOCKED
+1 - warp install for simulation or altrenate.
+
+
+
+------------------------------------------------------------------------------
 ╔════════════════════════════════════════════════════════════════════════════╗
 ║                  STANDARD OPERATING PROCEDURES (SOP)                       ║
 ╠════════════════════════════════════════════════════════════════════════════╣
@@ -20,12 +26,11 @@
    15. ▶ Backend API must support advanced file/code management (list, read, write, create, search).
    16. ▶ Monaco Editor is primary development interface; ensure all file operations work seamlessly.
    17. ▶ If using vector DB or code store, ensure LLM can utilize for semantic code search.
-   18. ▶ All LLM-driven changes must be user-controllable (approve, undo) and meticulously logged.
-   19. ▶ AVA File Manager and Studio must maintain VS Code-like experience with professional interface.
+   18. ▶ All LLM-driven changes must be user-controllable (approve, undo) and meticulously logged.   19. ▶ AVA File Manager and Studio must maintain VS Code-like experience with professional interface.
    20. ▶ Monitor server status regularly; restart if connections fail.
    21. ▶ Ensure Ollama service is running before starting any AVA components.
    22. ▶ Use Monaco Editor as primary development environment with AI chat integration.
-   23. ▶ Integrate Airtable and Windmill for enhanced workflow automation (planned, see roadmap).
+   23. ▶ Integrate Windmill for enhanced workflow automation (planned, see roadmap).
    24. ▶ Maintain comprehensive documentation for all file manager and studio capabilities.
    25. ▶ Use the chat panel in Studio for AI-driven file operations and code assistance (planned).
 
@@ -46,12 +51,11 @@
  ✅ Professional VS Code-like interface with 180+ language support
  ✅ Dedicated file manager at / (root) endpoint - now default interface
  ✅ ADAM-matching color scheme: pure black background, white text, gray accents
- ✅ Clean, professional UI with consistent monochromatic theme
- ✅ Comprehensive documentation created (FILE_MANAGER.md, STUDIO_FEATURES.md)
+ ✅ Clean, professional UI with consistent monochromatic theme ✅ Comprehensive documentation created (FILE_MANAGER.md, STUDIO_FEATURES.md)
  ✅ Enhanced visualizer streamlined (3D visualizer removed)
  ✅ Updated all project documentation (README.md, WORKSPACE_MANAGER.md)
  ✅ Studio interface (Monaco+AI+search) ready for Phase 5
- 🔄 PHASE 5 PENDING: Advanced integrations (Airtable, Windmill, workflow automation)
+ 🔄 PHASE 5 PENDING: Advanced integrations (Windmill, workflow automation)
  🔄 PHASE 6 PENDING: Chat integration with file context, multi-file/project operations, advanced search, git, and collaboration
 
 ╠════════════════════════════════════════════════════════════════════════════╣
@@ -72,11 +76,10 @@
    • Supported Languages: 180+ with full syntax highlighting
    • Key Shortcuts: Ctrl+S (save), Ctrl+R (refresh), Ctrl+N (new file)
    • Features: IntelliSense, error detection, find/replace, multiple cursors, multi-tab
-   • File Tree: Click files to open, automatic language detection
-   • Status Bar: Real-time feedback on operations and modifications
+   • File Tree: Click files to open, automatic language detection   • Status Bar: Real-time feedback on operations and modifications
    • Clean UI: Professional, consistent monochromatic design
    • Chat Panel: AI can reference and modify open files (Phase 5)
-   • Airtable/Windmill: Workflow/data management integration (Phase 5)
+   • Windmill: Workflow/data management integration (Phase 5)
 
  ▶ TROUBLESHOOTING PROCEDURES:
    • Monaco Editor not loading:
@@ -88,10 +91,9 @@
    • AI chat not responding:
      → Check Ollama status and model availability
      → Restart backend if needed
-
  ▶ ROADMAP & FUTURE PLANS:
    • Studio interface with Monaco+AI+search (multi-tab, chat, search, git, context menus)
-   • Airtable and Windmill integration for advanced workflow/data management
+   • Windmill integration for advanced workflow/data management
    • Chat panel with file/project context and direct file operations
    • Multi-file/project operations, advanced search, git/source control, real-time collaboration
    • Semantic search and vector DB integration
