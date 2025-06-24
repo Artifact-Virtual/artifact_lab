@@ -146,4 +146,7 @@ requests>=2.31.0
 #
 # This is a Python requirements file. Go is a system dependency.
 
+# System requirement: certbot (https://certbot.eff.org/instructions)
+# On Windows, install manually or with Chocolatey: choco install certbot -y
+
 
