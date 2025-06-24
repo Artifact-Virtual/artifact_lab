@@ -630,9 +630,14 @@ const notifyRenderer = (channel, data) => {
 // Test connection to ADE services
 const testConnection = () => {
   return new Promise((resolve) => {
-    console.log('Testing ADE service at http://localhost:9000');
+    console.log('Testing ADE service at http://127.0.0.1:9000');
     const http = require('http');
-    const req = http.get('http://localhost:9000', (res) => {
+    const req = http.get({
+      hostname: '127.0.0.1',
+      port: 9000,
+      path: '/',
+      family: 4 // Force IPv4
+    }, (res) => {
       console.log('ADE service responded with status:', res.statusCode);
       resolve(res.statusCode === 200);
     });
