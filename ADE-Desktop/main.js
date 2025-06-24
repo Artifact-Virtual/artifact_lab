@@ -9,9 +9,97 @@ let mainWindow;
 let ollamaProcess = null;
 let adeProcess = null;
 let splashWindow = null;
+let serviceStatus = {
+  ollama: 'stopped',
+  ade: 'stopped'
+};
 
 // Development mode detection
 const isDevelopment = process.env.NODE_ENV === 'development';
+
+// Settings storage
+const Store = require('electron-store');
+const store = new Store();
+
+// IPC Handlers
+function setupIPC() {
+  // Window controls
+  ipcMain.handle('minimize-window', () => {
+    if (mainWindow) mainWindow.minimize();
+  });
+
+  ipcMain.handle('maximize-window', () => {
+    if (mainWindow) {
+      if (mainWindow.isMaximized()) {
+        mainWindow.unmaximize();
+      } else {
+        mainWindow.maximize();
+      }
+    }
+  });
+
+  ipcMain.handle('close-window', () => {
+    if (mainWindow) mainWindow.close();
+  });
+
+  // Service management
+  ipcMain.handle('start-services', async () => {
+    console.log('IPC: Starting services...');
+    await startServicesAndLoad();
+  });
+
+  ipcMain.handle('stop-services', async () => {
+    console.log('IPC: Stopping services...');
+    stopServices();
+  });
+
+  ipcMain.handle('get-service-status', () => {
+    return serviceStatus;
+  });
+
+  // Settings
+  ipcMain.handle('save-settings', (event, settings) => {
+    console.log('IPC: Saving settings:', settings);
+    store.set('settings', settings);
+    return true;
+  });
+
+  ipcMain.handle('load-settings', () => {
+    const settings = store.get('settings', {
+      serverUrl: 'http://localhost:8080',
+      theme: 'dark',
+      autoLaunch: false,
+      hardwareAcceleration: true
+    });
+    console.log('IPC: Loading settings:', settings);
+    return settings;
+  });
+
+  // App info
+  ipcMain.handle('get-app-version', () => {
+    return app.getVersion();
+  });
+
+  // File dialogs
+  ipcMain.handle('show-save-dialog', async () => {
+    const result = await dialog.showSaveDialog(mainWindow, {
+      filters: [
+        { name: 'All Files', extensions: ['*'] }
+      ]
+    });
+    return result;
+  });
+
+  ipcMain.handle('show-open-dialog', async () => {
+    const result = await dialog.showOpenDialog(mainWindow, {
+      properties: ['openFile', 'multiSelections'],
+      filters: [
+        { name: 'All Files', extensions: ['*'] }
+      ]
+    });
+    return result;
+  });
+}
 
 // Custom window controls and styling
 const createWindow = () => {
@@ -88,9 +176,8 @@ const createWindow = () => {
       event.preventDefault();
     }
   });
-
-  // Load the ADE Studio once services are ready
-  startServicesAndLoad();
+  // Load the renderer HTML file instead of external URL initially
+  mainWindow.loadFile(path.join(__dirname, 'renderer', 'index.html'));
 };
 
 const createSplashScreen = () => {
@@ -570,26 +657,67 @@ const startADEServices = () => {
 
 const startServicesAndLoad = async () => {
   try {
+    // Update service status
+    serviceStatus.ollama = 'starting';
+    serviceStatus.ade = 'starting';
+    notifyRenderer('service-status', { type: 'starting', service: 'ollama' });
+    notifyRenderer('progress-update', { percentage: 10, message: 'Starting Ollama service...' });
+    
     // Start Ollama first
     await startOllama();
+    serviceStatus.ollama = 'running';
+    notifyRenderer('service-status', { type: 'running', service: 'ollama' });
+    notifyRenderer('progress-update', { percentage: 40, message: 'Starting ADE services...' });
     
     // Then start ADE services
     await startADEServices();
+    serviceStatus.ade = 'running';
+    notifyRenderer('service-status', { type: 'running', service: 'ade' });
+    notifyRenderer('progress-update', { percentage: 80, message: 'Services started successfully...' });
     
-    // Load the ADE Studio
-    mainWindow.loadURL('http://localhost:8080');
+    // Test connection
+    const isConnected = await testConnection();
+    notifyRenderer('connection-status', isConnected);
+    
+    if (isConnected) {
+      notifyRenderer('progress-update', { percentage: 100, message: 'Ready to connect...' });
+    } else {
+      throw new Error('Unable to connect to ADE services');
+    }
     
   } catch (error) {
     console.error('Failed to start services:', error);
-    
-    // Show error dialog
-    dialog.showErrorBox(
-      'Service Startup Error',
-      `Failed to start ADE services:\n\n${error.message}\n\nPlease ensure Python and Ollama are installed and try again.`
-    );
-    
-    app.quit();
+    serviceStatus.ollama = 'error';
+    serviceStatus.ade = 'error';
+    notifyRenderer('service-status', { type: 'error', service: 'both' });
+    notifyRenderer('app-error', { message: error.message });
   }
+};
+
+// Helper function to notify renderer
+const notifyRenderer = (channel, data) => {
+  if (mainWindow && mainWindow.webContents) {
+    mainWindow.webContents.send(channel, data);
+  }
+};
+
+// Test connection to ADE services
+const testConnection = () => {
+  return new Promise((resolve) => {
+    const http = require('http');
+    const req = http.get('http://localhost:8080', (res) => {
+      resolve(res.statusCode === 200);
+    });
+    
+    req.on('error', () => {
+      resolve(false);
+    });
+    
+    req.setTimeout(5000, () => {
+      req.abort();
+      resolve(false);
+    });
+  });
 };
 
 const restartOllama = async () => {
@@ -645,6 +773,10 @@ const stopServices = () => {
 
 // App event handlers
 app.whenReady().then(() => {
+  // Setup IPC handlers
+  setupIPC();
+  
+  // Create the main window
   createWindow();
   
   // Global shortcuts
@@ -659,6 +791,9 @@ app.whenReady().then(() => {
       mainWindow.setFullScreen(!mainWindow.isFullScreen());
     }
   });
+
+  // Register protocol for deep linking (future feature)
+  app.setAsDefaultProtocolClient('ade-studio');
 });
 
 app.on('window-all-closed', () => {

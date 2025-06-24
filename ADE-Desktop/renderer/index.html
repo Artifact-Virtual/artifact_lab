@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADE Studio - Desktop IDE</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Custom Title Bar (bezelless design) -->
+    <div class="title-bar" id="title-bar">
+        <div class="title-bar-drag-region">
+            <div class="title-bar-left">
+                <div class="app-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span class="app-title">ADE Studio</span>
+            </div>
+            <div class="title-bar-center">
+                <div class="status-indicator" id="status-indicator">
+                    <div class="status-dot"></div>
+                    <span class="status-text">Initializing...</span>
+                </div>
+            </div>
+            <div class="title-bar-right">
+                <div class="connection-status" id="connection-status">
+                    <svg class="connection-icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                        <path d="M12 1a11 11 0 1 0 0 22 11 11 0 0 0 0-22" stroke="currentColor" stroke-width="2"/>
+                        <path d="M8 12h8" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    <span class="connection-text">Connecting...</span>
+                </div>
+            </div>
+        </div>
+        <div class="window-controls">
+            <button class="window-control minimize-btn" id="minimize-btn">
+                <svg width="12" height="12" viewBox="0 0 12 12">
+                    <path d="M2 6h8" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+            </button>
+            <button class="window-control maximize-btn" id="maximize-btn">
+                <svg width="12" height="12" viewBox="0 0 12 12">
+                    <rect x="2" y="2" width="8" height="8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                </svg>
+            </button>
+            <button class="window-control close-btn" id="close-btn">
+                <svg width="12" height="12" viewBox="0 0 12 12">
+                    <path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-container">
+        <!-- Loading Screen -->
+        <div class="loading-screen" id="loading-screen">
+            <div class="loading-content">
+                <div class="app-logo">
+                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                        <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                        <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h1 class="loading-title">ADE Studio</h1>
+                <p class="loading-subtitle">Artifact Development Engine</p>
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                </div>
+                <p class="loading-status" id="loading-status">Starting services...</p>
+                <div class="loading-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <span class="progress-text" id="progress-text">0%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Screen -->
+        <div class="error-screen" id="error-screen" style="display: none;">
+            <div class="error-content">
+                <div class="error-icon">
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                        <line x1="15" y1="9" x2="9" y2="15" stroke="currentColor" stroke-width="2"/>
+                        <line x1="9" y1="9" x2="15" y2="15" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </div>
+                <h2 class="error-title">Connection Failed</h2>
+                <p class="error-message" id="error-message">Unable to connect to ADE services. Please check your configuration.</p>
+                <div class="error-actions">
+                    <button class="btn btn-primary" id="retry-btn">Retry Connection</button>
+                    <button class="btn btn-secondary" id="settings-btn">Open Settings</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main IDE Container -->
+        <div class="ide-container" id="ide-container" style="display: none;">
+            <webview 
+                id="ade-webview" 
+                src="http://localhost:8080"
+                partition="persist:ade"
+                allowpopups
+                disablewebsecurity="false"
+                preload="../preload.js">
+            </webview>
+        </div>
+    </div>
+
+    <!-- Settings Panel -->
+    <div class="settings-panel" id="settings-panel" style="display: none;">
+        <div class="settings-header">
+            <h3>ADE Studio Settings</h3>
+            <button class="close-settings" id="close-settings">
+                <svg width="16" height="16" viewBox="0 0 24 24">
+                    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2"/>
+                </svg>
+            </button>
+        </div>
+        <div class="settings-content">
+            <div class="setting-group">
+                <label class="setting-label">ADE Server URL</label>
+                <input type="text" id="server-url" class="setting-input" value="http://localhost:8080" placeholder="http://localhost:8080">
+            </div>
+            <div class="setting-group">
+                <label class="setting-label">Theme</label>
+                <select id="theme-select" class="setting-select">
+                    <option value="dark">Dark (AMOLED)</option>
+                    <option value="light">Light</option>
+                    <option value="auto">Auto</option>
+                </select>
+            </div>
+            <div class="setting-group">
+                <label class="setting-label">Auto-launch on startup</label>
+                <div class="setting-toggle">
+                    <input type="checkbox" id="auto-launch" class="toggle-input">
+                    <label for="auto-launch" class="toggle-label"></label>
+                </div>
+            </div>
+            <div class="setting-group">
+                <label class="setting-label">Hardware acceleration</label>
+                <div class="setting-toggle">
+                    <input type="checkbox" id="hardware-acceleration" class="toggle-input" checked>
+                    <label for="hardware-acceleration" class="toggle-label"></label>
+                </div>
+            </div>
+        </div>
+        <div class="settings-footer">
+            <button class="btn btn-secondary" id="reset-settings">Reset to Defaults</button>
+            <button class="btn btn-primary" id="save-settings">Save Settings</button>
+        </div>
+    </div>
+
+    <!-- System Tray Menu (hidden) -->
+    <div class="tray-menu" id="tray-menu" style="display: none;">
+        <div class="tray-item" data-action="show">Show ADE Studio</div>
+        <div class="tray-item" data-action="settings">Settings</div>
+        <div class="tray-separator"></div>
+        <div class="tray-item" data-action="quit">Quit</div>
+    </div>
+
+    <!-- Notification Container -->
+    <div class="notification-container" id="notification-container"></div>
+
+    <script src="renderer.js"></script>
+</body>
+</html>

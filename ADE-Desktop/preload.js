@@ -16,6 +16,41 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // Development mode
   isDevelopment: process.env.NODE_ENV === 'development',
   
+  // Window controls
+  minimizeWindow: () => ipcRenderer.invoke('minimize-window'),
+  maximizeWindow: () => ipcRenderer.invoke('maximize-window'),
+  closeWindow: () => ipcRenderer.invoke('close-window'),
+  
+  // Service management
+  startServices: () => ipcRenderer.invoke('start-services'),
+  stopServices: () => ipcRenderer.invoke('stop-services'),
+  getServiceStatus: () => ipcRenderer.invoke('get-service-status'),
+  
+  // Settings
+  saveSettings: (settings) => ipcRenderer.invoke('save-settings', settings),
+  loadSettings: () => ipcRenderer.invoke('load-settings'),
+  
+  // Event listeners
+  onServiceStatus: (callback) => {
+    ipcRenderer.on('service-status', (event, status) => callback(status));
+    return () => ipcRenderer.removeAllListeners('service-status');
+  },
+  
+  onConnectionStatus: (callback) => {
+    ipcRenderer.on('connection-status', (event, isConnected) => callback(isConnected));
+    return () => ipcRenderer.removeAllListeners('connection-status');
+  },
+  
+  onError: (callback) => {
+    ipcRenderer.on('app-error', (event, error) => callback(error));
+    return () => ipcRenderer.removeAllListeners('app-error');
+  },
+  
+  onProgress: (callback) => {
+    ipcRenderer.on('progress-update', (event, progress) => callback(progress));
+    return () => ipcRenderer.removeAllListeners('progress-update');
+  },
+  
   // Custom events
   onWindowResize: (callback) => {
     ipcRenderer.on('window-resize', callback);
@@ -42,11 +77,10 @@ contextBridge.exposeInMainWorld('systemTheme', {
   }
 });
 
-// Window controls for frameless window
+// Legacy window controls (deprecated)
 contextBridge.exposeInMainWorld('windowControls', {
   minimize: () => {
-    const { remote } = require('electron');
-    remote.getCurrentWindow().minimize();
+    ipcRenderer.invoke('minimize-window');
   },
   
   maximize: () => {
