@@ -1,5 +1,4 @@
-# Project: Blacknet - Maximized Viable Prototype II (MVPII)
-
+# Project: Blacknet 
 ## Overview
 Blacknet is a next-generation privacy-focused, programmable networking protocol combining onion routing, mixnets, and zk-SNARK-based identity validation. It aims to provide scalable, low-latency, censorship-resistant IP-level anonymity while supporting clearnet access, SNApp hosting, and quantum-resistant cryptography.
 
