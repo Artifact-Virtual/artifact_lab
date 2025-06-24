@@ -10,8 +10,7 @@ A comprehensive development studio featuring a clean, professional Monaco Editor
 
 ### **Monaco Editor File Manager (Primary Interface)**
 - **Professional Interface**: Clean, Monaco Editor-based file manager at `http://localhost:8080`
-- **ADAM-Matching Theme**: Pure black background (#000000), white text (#ffffff), gray accents
-- **VS Code Experience**: Full IDE capabilities with IntelliSense, syntax highlighting, and 180+ language support
+- **IDE Experience**: Full IDE capabilities with IntelliSense, syntax highlighting, and 180+ language support
 - **Clean Design**: Minimal, professional interface without visual clutter
 - **File Tree Navigation**: Hierarchical explorer with expand/collapse functionality
 - **Consistent UI**: Monochromatic design with subtle gray hover effects
