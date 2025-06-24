@@ -1,0 +1,13 @@
+﻿{
+    "data":  {
+                 "verifyIntegrity":  true,
+                 "location":  "L:\\devops\\backups\\artifact_lab",
+                 "type":  "full",
+                 "dryRun":  false
+             },
+    "message":  "Starting backup system",
+    "timestamp":  "2025-06-24T00:25:13.3918117-07:00",
+    "machine":  "VICTUS",
+    "level":  "INFO",
+    "user":  "alish"
+}
