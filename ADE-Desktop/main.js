@@ -552,6 +552,10 @@ const stopServices = () => {
 
 const startServicesAndLoad = async () => {
   try {
+    // Give services a moment to fully start up
+    console.log('Waiting for services to be ready...');
+    await new Promise(resolve => setTimeout(resolve, 3000)); // Wait 3 seconds
+    
     // Update service status - we assume services are already started by run.sh/run.ps1
     serviceStatus.ollama = 'checking';
     serviceStatus.ade = 'checking';
@@ -560,7 +564,9 @@ const startServicesAndLoad = async () => {
     
     // Check if Ollama is available (but don't start it)
     try {
+      console.log('Testing Ollama connection...');
       const ollamaAvailable = await testOllamaConnection();
+      console.log('Ollama test result:', ollamaAvailable);
       if (ollamaAvailable) {
         serviceStatus.ollama = 'running';
         notifyRenderer('service-status', { type: 'running', service: 'ollama' });
@@ -580,7 +586,9 @@ const startServicesAndLoad = async () => {
     
     // Check if ADE services are available (but don't start them)
     try {
+      console.log('Testing ADE connection...');
       const adeAvailable = await testConnection();
+      console.log('ADE test result:', adeAvailable);
       if (adeAvailable) {
         serviceStatus.ade = 'running';
         notifyRenderer('service-status', { type: 'running', service: 'ade' });
@@ -622,16 +630,20 @@ const notifyRenderer = (channel, data) => {
 // Test connection to ADE services
 const testConnection = () => {
   return new Promise((resolve) => {
+    console.log('Testing ADE service at http://localhost:9000');
     const http = require('http');
     const req = http.get('http://localhost:9000', (res) => {
+      console.log('ADE service responded with status:', res.statusCode);
       resolve(res.statusCode === 200);
     });
     
-    req.on('error', () => {
+    req.on('error', (error) => {
+      console.log('ADE service connection error:', error.message);
       resolve(false);
     });
     
-    req.setTimeout(5000, () => {
+    req.setTimeout(8000, () => {
+      console.log('ADE service connection timeout');
       req.abort();
       resolve(false);
     });
@@ -641,19 +653,24 @@ const testConnection = () => {
 // Test connection to Ollama services
 const testOllamaConnection = () => {
   return new Promise((resolve) => {
+    console.log('Testing Ollama service at http://localhost:11500/api/version');
     const http = require('http');
     const req = http.get('http://localhost:11500/api/version', (res) => {
+      console.log('Ollama service responded with status:', res.statusCode);
       resolve(res.statusCode === 200);
     });
     
-    req.on('error', () => {
+    req.on('error', (error) => {
+      console.log('Ollama service connection error:', error.message);
       resolve(false);
     });
     
-    req.setTimeout(5000, () => {
+    req.setTimeout(8000, () => {
+      console.log('Ollama service connection timeout');
       req.abort();
       resolve(false);
-    });  });
+    });
+  });
 };
 
 // App event handlers

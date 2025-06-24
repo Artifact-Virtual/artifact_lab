@@ -59,7 +59,7 @@ Write-Host "ADE service should be ready!" -ForegroundColor Green
 
 # Launch the Electron desktop app
 Write-Host "Launching ADE Desktop application..." -ForegroundColor Cyan
-Set-Location -Path "ADE-Desktop"
+Set-Location -Path "$workspaceRoot\ADE-Desktop"
 
 if (Test-Path "node_modules") {
     Write-Host "Starting ADE Desktop..." -ForegroundColor Green
