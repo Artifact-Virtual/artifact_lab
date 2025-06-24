@@ -1,4 +1,6 @@
-# ARTIFACT VIRTUAL LABORATORY
+# ARTIFACT DEVELOPMENT ENGINE
+
+[   Studio] version 1.0.0
 
 > Professional Monaco Editor-based development environment with ADAM-matching aesthetics, AI-powered assistance, and advanced workflow automation.
 
