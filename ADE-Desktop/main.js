@@ -3,12 +3,15 @@ const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 const net = require('net');
+const { UpdateManager, CrashRecovery } = require('./update-manager');
 
 // Keep a global reference of the window object
 let mainWindow;
 let ollamaProcess = null;
 let adeProcess = null;
 let splashWindow = null;
+let updateManager = null;
+let crashRecovery = null;
 let serviceStatus = {
   ollama: 'stopped',
   ade: 'stopped'
@@ -175,9 +178,17 @@ const createWindow = () => {
     if (parsedUrl.origin !== 'http://localhost:8080') {
       event.preventDefault();
     }
-  });
-  // Load the renderer HTML file instead of external URL initially
+  });  // Load the renderer HTML file instead of external URL initially
   mainWindow.loadFile(path.join(__dirname, 'renderer', 'index.html'));
+
+  // Initialize update manager and crash recovery (not in development)
+  if (!isDevelopment) {
+    updateManager = new UpdateManager(mainWindow);
+    crashRecovery = new CrashRecovery(mainWindow);
+    
+    // Try to restore session after crash
+    crashRecovery.restoreSession();
+  }
 };
 
 const createSplashScreen = () => {

@@ -40,18 +40,17 @@
                 </div>
             </div>
         </div>
-        <div class="window-controls">
-            <button class="window-control minimize-btn" id="minimize-btn">
+        <div class="window-controls">            <button class="window-control minimize-btn" id="minimize-btn" title="Minimize">
                 <svg width="12" height="12" viewBox="0 0 12 12">
                     <path d="M2 6h8" stroke="currentColor" stroke-width="1.5"/>
                 </svg>
             </button>
-            <button class="window-control maximize-btn" id="maximize-btn">
+            <button class="window-control maximize-btn" id="maximize-btn" title="Maximize">
                 <svg width="12" height="12" viewBox="0 0 12 12">
                     <rect x="2" y="2" width="8" height="8" stroke="currentColor" stroke-width="1.5" fill="none"/>
                 </svg>
             </button>
-            <button class="window-control close-btn" id="close-btn">
+            <button class="window-control close-btn" id="close-btn" title="Close">
                 <svg width="12" height="12" viewBox="0 0 12 12">
                     <path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" stroke-width="1.5"/>
                 </svg>
@@ -84,10 +83,8 @@
                     <span class="progress-text" id="progress-text">0%</span>
                 </div>
             </div>
-        </div>
-
-        <!-- Error Screen -->
-        <div class="error-screen" id="error-screen" style="display: none;">
+        </div>        <!-- Error Screen -->
+        <div class="error-screen" id="error-screen">
             <div class="error-content">
                 <div class="error-icon">
                     <svg width="60" height="60" viewBox="0 0 24 24" fill="none">
@@ -106,7 +103,7 @@
         </div>
 
         <!-- Main IDE Container -->
-        <div class="ide-container" id="ide-container" style="display: none;">
+        <div class="ide-container" id="ide-container">
             <webview 
                 id="ade-webview" 
                 src="http://localhost:8080"
@@ -116,13 +113,10 @@
                 preload="../preload.js">
             </webview>
         </div>
-    </div>
-
-    <!-- Settings Panel -->
-    <div class="settings-panel" id="settings-panel" style="display: none;">
+    </div>    <!-- Settings Panel -->
+    <div class="settings-panel" id="settings-panel">
         <div class="settings-header">
-            <h3>ADE Studio Settings</h3>
-            <button class="close-settings" id="close-settings">
+            <h3>ADE Studio Settings</h3>            <button class="close-settings" id="close-settings" title="Close Settings">
                 <svg width="16" height="16" viewBox="0 0 24 24">
                     <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2"/>
                 </svg>
@@ -130,28 +124,28 @@
         </div>
         <div class="settings-content">
             <div class="setting-group">
-                <label class="setting-label">ADE Server URL</label>
+                <label class="setting-label" for="server-url">ADE Server URL</label>
                 <input type="text" id="server-url" class="setting-input" value="http://localhost:8080" placeholder="http://localhost:8080">
             </div>
             <div class="setting-group">
-                <label class="setting-label">Theme</label>
-                <select id="theme-select" class="setting-select">
+                <label class="setting-label" for="theme-select">Theme</label>
+                <select id="theme-select" class="setting-select" title="Select theme">
                     <option value="dark">Dark (AMOLED)</option>
                     <option value="light">Light</option>
                     <option value="auto">Auto</option>
                 </select>
             </div>
             <div class="setting-group">
-                <label class="setting-label">Auto-launch on startup</label>
+                <label class="setting-label" for="auto-launch">Auto-launch on startup</label>
                 <div class="setting-toggle">
-                    <input type="checkbox" id="auto-launch" class="toggle-input">
+                    <input type="checkbox" id="auto-launch" class="toggle-input" title="Auto-launch ADE Studio on system startup">
                     <label for="auto-launch" class="toggle-label"></label>
                 </div>
             </div>
             <div class="setting-group">
-                <label class="setting-label">Hardware acceleration</label>
+                <label class="setting-label" for="hardware-acceleration">Hardware acceleration</label>
                 <div class="setting-toggle">
-                    <input type="checkbox" id="hardware-acceleration" class="toggle-input" checked>
+                    <input type="checkbox" id="hardware-acceleration" class="toggle-input" checked title="Enable hardware acceleration for better performance">
                     <label for="hardware-acceleration" class="toggle-label"></label>
                 </div>
             </div>
@@ -163,7 +157,7 @@
     </div>
 
     <!-- System Tray Menu (hidden) -->
-    <div class="tray-menu" id="tray-menu" style="display: none;">
+    <div class="tray-menu" id="tray-menu">
         <div class="tray-item" data-action="show">Show ADE Studio</div>
         <div class="tray-item" data-action="settings">Settings</div>
         <div class="tray-separator"></div>
