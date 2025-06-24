@@ -4,8 +4,7 @@ class ADEStudioRenderer {
         this.isConnected = false;
         this.isLoading = true;
         this.retryCount = 0;
-        this.maxRetries = 5;
-        this.currentProgress = 0;
+        this.maxRetries = 5;        this.currentProgress = 0;
         this.settings = {
             serverUrl: 'http://localhost:9000',
             theme: 'dark',
@@ -542,8 +541,7 @@ class ADEStudioRenderer {
         this.showNotification('Settings saved successfully', 'success');
     }
 
-    resetSettings() {
-        this.settings = {
+    resetSettings() {        this.settings = {
             serverUrl: 'http://localhost:9000',
             theme: 'dark',
             autoLaunch: false,

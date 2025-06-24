@@ -114,7 +114,7 @@ The application stores settings in the user's data directory:
 - **Linux**: `~/.config/ade-studio/`
 
 ### Available Settings
-- **Server URL**: ADE service endpoint (default: http://localhost:8080)
+- **Server URL**: ADE service endpoint (default: http://localhost:9000)
 - **Theme**: Dark (AMOLED), Light, or Auto
 - **Auto-launch**: Start with system boot
 - **Hardware Acceleration**: Enable GPU acceleration
@@ -178,7 +178,7 @@ The project includes GitHub Actions workflows for:
    - Restart the application
 
 #### Connection Issues
-1. Verify ADE server is running on http://localhost:8080
+1. Verify ADE server is running on http://localhost:9000
 2. Check firewall settings
 3. Try changing the server URL in settings
 

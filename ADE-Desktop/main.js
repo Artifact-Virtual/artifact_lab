@@ -7,11 +7,13 @@ const net = require('net');
 
 // Keep a global reference of the window object
 let mainWindow;
+let ollamaProcess = null;
 let adeProcess = null;
 let splashWindow = null;
 let updateManager = null;
 let crashRecovery = null;
 let serviceStatus = {
+  ollama: 'stopped',
   ade: 'stopped'
 };
 
@@ -64,7 +66,6 @@ function setupIPC() {
     store.set('settings', settings);
     return true;
   });
-
   ipcMain.handle('load-settings', () => {
     const settings = store.get('settings', {
       serverUrl: 'http://localhost:9000',
@@ -171,8 +172,7 @@ const createWindow = () => {
   });
 
   // Security: prevent navigation to external sites
-  mainWindow.webContents.on('will-navigate', (event, navigationUrl) => {
-    const parsedUrl = new URL(navigationUrl);
+  mainWindow.webContents.on('will-navigate', (event, navigationUrl) => {    const parsedUrl = new URL(navigationUrl);
     if (parsedUrl.origin !== 'http://localhost:9000') {
       event.preventDefault();
     }
@@ -535,6 +535,8 @@ Navigation:
   });
 };
 
+const OLLAMA_PORT = 11500;
+
 const checkPort = (port) => {
   return new Promise((resolve) => {
     const server = net.createServer();
@@ -549,7 +551,7 @@ const checkPort = (port) => {
   });
 };
 
-const waitForService = (url, maxAttempts = 20) => {
+const waitForService = (url, maxAttempts = 30, timeoutPerAttempt = 1000) => {
   return new Promise((resolve, reject) => {
     let attempts = 0;
     const checkService = () => {
@@ -561,14 +563,12 @@ const waitForService = (url, maxAttempts = 20) => {
           retry();
         }
       });
-      
       req.on('error', retry);
-      req.setTimeout(2000, retry); // Increase timeout to 2 seconds
-      
+      req.setTimeout(timeoutPerAttempt, retry);
       function retry() {
         attempts++;
         if (attempts < maxAttempts) {
-          setTimeout(checkService, 1000); // Check every 500ms instead of 1000ms
+          setTimeout(checkService, 1000);
         } else {
           reject(new Error(`Service at ${url} not ready after ${maxAttempts} attempts`));
         }
@@ -578,25 +578,80 @@ const waitForService = (url, maxAttempts = 20) => {
   });
 };
 
+const startOllama = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      // Check if Ollama command exists
+      const checkCommand = spawn('where', ['ollama'], { stdio: 'pipe' });
+      checkCommand.on('error', () => {
+        console.log('Ollama not found on system - skipping Ollama startup');
+        resolve();
+        return;
+      });
+      checkCommand.on('exit', async (code) => {
+        if (code !== 0) {
+          console.log('Ollama not installed - continuing without Ollama');
+          resolve();
+          return;
+        }
+        // Check if Ollama is already running on the dedicated port
+        const ollamaRunning = await checkPort(OLLAMA_PORT);
+        if (ollamaRunning) {
+          console.log(`Ollama is already running on port ${OLLAMA_PORT}`);
+          resolve();
+          return;
+        }
+        console.log(`Starting Ollama server on port ${OLLAMA_PORT}...`);
+        ollamaProcess = spawn('ollama', ['serve', '--port', String(OLLAMA_PORT)], {
+          stdio: 'ignore',
+          detached: true
+        });
+        ollamaProcess.unref();
+        ollamaProcess.on('error', (error) => {
+          console.error('Failed to start Ollama:', error.message);
+          resolve();
+        });
+        // Wait for Ollama to be ready (but don't fail if it's not)
+        try {
+          await waitForService(`http://localhost:${OLLAMA_PORT}/api/version`, 20, 10000); // 10s per attempt
+          console.log('Ollama started successfully');
+          resolve();
+        } catch (error) {
+          console.log('Ollama startup timeout - continuing anyway');
+          resolve();
+        }
+      });
+    } catch (error) {
+      console.error('Error checking for Ollama:', error.message);
+      resolve();
+    }
+  });
+};
+
 const startADEServices = () => {
   return new Promise(async (resolve, reject) => {
     try {
-      const adeCorePath = path.join(__dirname, 'ade_core');
+      const adePath = path.join(__dirname, '..', 'ADE');
+      
+      console.log('Starting ADE services...');
+      
+      // Start main.py for background services
+      const mainProcess = spawn('python', ['main.py'], {
+        cwd: adePath,
+        stdio: 'pipe',
+        detached: false
+      });
 
-      // First check if ADE is already running
-      try {
-        await waitForService('http://localhost:9000', 5); // quick check
-        console.log('ADE Studio is already running!');
-        resolve();
-        return;
-      } catch (error) {
-        console.log('ADE not running, starting services...');
-      }
+      // Start enhanced_visualizer.py
+      const visualizerProcess = spawn('python', ['enhanced_visualizer.py'], {
+        cwd: adePath,
+        stdio: 'pipe',
+        detached: false
+      });
 
-      // Start only internal services from ade_core
-      // If you add more services, ensure they are in ade_core and update here
+      // Start webchat.py for the main IDE
       adeProcess = spawn('python', ['webchat.py'], {
-        cwd: adeCorePath,
+        cwd: adePath,
         stdio: 'pipe',
         detached: false
       });
@@ -608,7 +663,7 @@ const startADEServices = () => {
 
       // Wait for ADE Studio to be ready
       try {
-        await waitForService('http://localhost:9000', 20); // longer wait for startup
+        await waitForService('http://localhost:9000');
         console.log('ADE Studio is ready!');
         resolve();
       } catch (error) {
@@ -623,57 +678,57 @@ const startADEServices = () => {
 
 const startServicesAndLoad = async () => {
   try {
-    // Update service status  
+    // Update service status
+    serviceStatus.ollama = 'starting';
     serviceStatus.ade = 'starting';
-    notifyRenderer('service-status', { type: 'starting', service: 'ade' });
-    notifyRenderer('progress-update', { percentage: 20, message: 'Starting ADE services...' });
+    notifyRenderer('service-status', { type: 'starting', service: 'ollama' });
+    notifyRenderer('progress-update', { percentage: 10, message: 'Starting Ollama service...' });
     
-    // Start ADE services (ADE will handle Ollama internally via its config)
+    // Start Ollama first (but don't fail if it doesn't work)
+    try {
+      await startOllama();
+      serviceStatus.ollama = 'running';
+      notifyRenderer('service-status', { type: 'running', service: 'ollama' });
+    } catch (error) {
+      console.log('Ollama startup failed, continuing without it:', error.message);
+      serviceStatus.ollama = 'optional';
+      notifyRenderer('service-status', { type: 'optional', service: 'ollama' });
+    }
+    
+    notifyRenderer('progress-update', { percentage: 40, message: 'Starting ADE services...' });
+    
+    // Then start ADE services
     try {
       await startADEServices();
       serviceStatus.ade = 'running';
       notifyRenderer('service-status', { type: 'running', service: 'ade' });
-      notifyRenderer('progress-update', { percentage: 70, message: 'ADE services started...' });
+      notifyRenderer('progress-update', { percentage: 80, message: 'Services started successfully...' });
       
-      // Give ADE some time to fully initialize (including its internal Ollama connection)
-      notifyRenderer('progress-update', { percentage: 80, message: 'Initializing ADE system...' });
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      
-      // Test connection to ADE web interface
-      notifyRenderer('progress-update', { percentage: 90, message: 'Testing web interface...' });
+      // Test connection
       const isConnected = await testConnection();
       notifyRenderer('connection-status', isConnected);
       
       if (isConnected) {
-        notifyRenderer('progress-update', { percentage: 100, message: 'ADE Studio ready!' });
+        notifyRenderer('progress-update', { percentage: 100, message: 'Ready to connect...' });
       } else {
-        // ADE services are running but web interface isn't ready yet
-        notifyRenderer('progress-update', { percentage: 95, message: 'ADE services ready, web interface starting...' });
-        
-        // Wait a bit more and retry
-        setTimeout(async () => {
-          const retryConnected = await testConnection();
-          notifyRenderer('connection-status', retryConnected);
-          if (retryConnected) {
-            notifyRenderer('progress-update', { percentage: 100, message: 'ADE Studio ready!' });
-          } else {
-            notifyRenderer('progress-update', { percentage: 100, message: 'ADE services running (please check ADE console)' });
-          }
-        }, 5000);
+        // If ADE services aren't available, just show the UI anyway
+        notifyRenderer('progress-update', { percentage: 100, message: 'Ready (services will connect when available)...' });
+        notifyRenderer('connection-status', false);
       }
     } catch (error) {
       console.log('ADE services startup failed, showing UI anyway:', error.message);
       serviceStatus.ade = 'error';
       notifyRenderer('service-status', { type: 'error', service: 'ade' });
-      notifyRenderer('progress-update', { percentage: 100, message: 'Ready (please start ADE services manually)' });
+      notifyRenderer('progress-update', { percentage: 100, message: 'Ready (services will connect when available)...' });
       notifyRenderer('connection-status', false);
     }
     
   } catch (error) {
     console.error('Failed to start services:', error);
+    serviceStatus.ollama = 'error';
     serviceStatus.ade = 'error';
-    notifyRenderer('service-status', { type: 'error', service: 'ade' });
-    notifyRenderer('progress-update', { percentage: 100, message: 'Ready (please start ADE services manually)' });
+    notifyRenderer('service-status', { type: 'error', service: 'both' });
+    notifyRenderer('progress-update', { percentage: 100, message: 'Ready (services will connect when available)...' });
     notifyRenderer('connection-status', false);
   }
 };
@@ -744,6 +799,11 @@ const restartADEServices = async () => {
 };
 
 const stopServices = () => {
+  if (ollamaProcess) {
+    ollamaProcess.kill();
+    ollamaProcess = null;
+  }
+  
   if (adeProcess) {
     adeProcess.kill();
     adeProcess = null;

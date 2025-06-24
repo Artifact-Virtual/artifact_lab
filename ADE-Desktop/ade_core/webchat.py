@@ -25,7 +25,7 @@ class OllamaWebChat:
         
         self.config = config
         self.ollama_host = config.get('ollama_host', 'localhost')
-        self.ollama_port = config.get('ollama_port', 11434)
+        self.ollama_port = config.get('ollama_port', 11500)
         self.model = config.get('ollama_model', 'codellama:7b')
         self.base_url = f"http://{self.ollama_host}:{self.ollama_port}"
         self.model_provider = config.get('model_provider', 'ollama')
@@ -376,9 +376,9 @@ def parse_file_operations(response, context):
     return operations
 
 def run_webchat():
-    print("Starting Enhanced Ollama Web Chat on http://localhost:8080")
+    print("Starting Enhanced Ollama Web Chat on http://localhost:9000")
     print("Features: LLM Code Access, File Management API")
-    app.run(host='0.0.0.0', port=8080, debug=False, threaded=True)
+    app.run(host='0.0.0.0', port=9000, debug=False, threaded=True)
 
 @app.route('/test')
 def test_page():
