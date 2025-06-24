@@ -1,5 +1,7 @@
 {
   "dependencies": {
-    "compromise": "^14.14.4"
+    "compromise": "^14.14.4",
+    "electron-store": "^10.1.0",
+    "electron-updater": "^6.6.2"
   }
 }

@@ -3,17 +3,15 @@ const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 const net = require('net');
-const { UpdateManager, CrashRecovery } = require('./update-manager');
+// const { UpdateManager, CrashRecovery } = require('./update-manager');
 
 // Keep a global reference of the window object
 let mainWindow;
-let ollamaProcess = null;
 let adeProcess = null;
 let splashWindow = null;
 let updateManager = null;
 let crashRecovery = null;
 let serviceStatus = {
-  ollama: 'stopped',
   ade: 'stopped'
 };
 
@@ -69,7 +67,7 @@ function setupIPC() {
 
   ipcMain.handle('load-settings', () => {
     const settings = store.get('settings', {
-      serverUrl: 'http://localhost:8080',
+      serverUrl: 'http://localhost:9000',
       theme: 'dark',
       autoLaunch: false,
       hardwareAcceleration: true
@@ -175,19 +173,18 @@ const createWindow = () => {
   // Security: prevent navigation to external sites
   mainWindow.webContents.on('will-navigate', (event, navigationUrl) => {
     const parsedUrl = new URL(navigationUrl);
-    if (parsedUrl.origin !== 'http://localhost:8080') {
+    if (parsedUrl.origin !== 'http://localhost:9000') {
       event.preventDefault();
     }
   });  // Load the renderer HTML file instead of external URL initially
   mainWindow.loadFile(path.join(__dirname, 'renderer', 'index.html'));
-
   // Initialize update manager and crash recovery (not in development)
   if (!isDevelopment) {
-    updateManager = new UpdateManager(mainWindow);
-    crashRecovery = new CrashRecovery(mainWindow);
+    // updateManager = new UpdateManager(mainWindow);
+    // crashRecovery = new CrashRecovery(mainWindow);
     
     // Try to restore session after crash
-    crashRecovery.restoreSession();
+    // crashRecovery.restoreSession();
   }
 };
 
@@ -552,7 +549,7 @@ const checkPort = (port) => {
   });
 };
 
-const waitForService = (url, maxAttempts = 30) => {
+const waitForService = (url, maxAttempts = 20) => {
   return new Promise((resolve, reject) => {
     let attempts = 0;
     const checkService = () => {
@@ -566,12 +563,12 @@ const waitForService = (url, maxAttempts = 30) => {
       });
       
       req.on('error', retry);
-      req.setTimeout(1000, retry);
+      req.setTimeout(2000, retry); // Increase timeout to 2 seconds
       
       function retry() {
         attempts++;
         if (attempts < maxAttempts) {
-          setTimeout(checkService, 1000);
+          setTimeout(checkService, 1000); // Check every 500ms instead of 1000ms
         } else {
           reject(new Error(`Service at ${url} not ready after ${maxAttempts} attempts`));
         }
@@ -581,67 +578,25 @@ const waitForService = (url, maxAttempts = 30) => {
   });
 };
 
-const startOllama = () => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      // Check if Ollama is already running
-      const ollamaRunning = await checkPort(11434);
-      if (ollamaRunning) {
-        console.log('Ollama is already running');
-        resolve();
-        return;
-      }
-
-      console.log('Starting Ollama server...');
-      ollamaProcess = spawn('ollama', ['serve'], {
-        stdio: 'pipe',
-        detached: false
-      });
-
-      ollamaProcess.on('error', (error) => {
-        console.error('Error starting Ollama:', error);
-        reject(error);
-      });
-
-      // Wait for Ollama to be ready
-      try {
-        await waitForService('http://localhost:11434/api/version');
-        console.log('Ollama server is ready!');
-        resolve();
-      } catch (error) {
-        console.error('Ollama failed to start:', error);
-        reject(error);
-      }
-    } catch (error) {
-      reject(error);
-    }
-  });
-};
-
 const startADEServices = () => {
   return new Promise(async (resolve, reject) => {
     try {
-      const adePath = path.join(__dirname, '..', 'ADE');
-      
-      console.log('Starting ADE services...');
-      
-      // Start main.py for background services
-      const mainProcess = spawn('python', ['main.py'], {
-        cwd: adePath,
-        stdio: 'pipe',
-        detached: false
-      });
+      const adeCorePath = path.join(__dirname, 'ade_core');
 
-      // Start enhanced_visualizer.py
-      const visualizerProcess = spawn('python', ['enhanced_visualizer.py'], {
-        cwd: adePath,
-        stdio: 'pipe',
-        detached: false
-      });
+      // First check if ADE is already running
+      try {
+        await waitForService('http://localhost:9000', 5); // quick check
+        console.log('ADE Studio is already running!');
+        resolve();
+        return;
+      } catch (error) {
+        console.log('ADE not running, starting services...');
+      }
 
-      // Start webchat.py for the main IDE
+      // Start only internal services from ade_core
+      // If you add more services, ensure they are in ade_core and update here
       adeProcess = spawn('python', ['webchat.py'], {
-        cwd: adePath,
+        cwd: adeCorePath,
         stdio: 'pipe',
         detached: false
       });
@@ -653,7 +608,7 @@ const startADEServices = () => {
 
       // Wait for ADE Studio to be ready
       try {
-        await waitForService('http://localhost:8080');
+        await waitForService('http://localhost:9000', 20); // longer wait for startup
         console.log('ADE Studio is ready!');
         resolve();
       } catch (error) {
@@ -668,40 +623,58 @@ const startADEServices = () => {
 
 const startServicesAndLoad = async () => {
   try {
-    // Update service status
-    serviceStatus.ollama = 'starting';
+    // Update service status  
     serviceStatus.ade = 'starting';
-    notifyRenderer('service-status', { type: 'starting', service: 'ollama' });
-    notifyRenderer('progress-update', { percentage: 10, message: 'Starting Ollama service...' });
+    notifyRenderer('service-status', { type: 'starting', service: 'ade' });
+    notifyRenderer('progress-update', { percentage: 20, message: 'Starting ADE services...' });
     
-    // Start Ollama first
-    await startOllama();
-    serviceStatus.ollama = 'running';
-    notifyRenderer('service-status', { type: 'running', service: 'ollama' });
-    notifyRenderer('progress-update', { percentage: 40, message: 'Starting ADE services...' });
-    
-    // Then start ADE services
-    await startADEServices();
-    serviceStatus.ade = 'running';
-    notifyRenderer('service-status', { type: 'running', service: 'ade' });
-    notifyRenderer('progress-update', { percentage: 80, message: 'Services started successfully...' });
-    
-    // Test connection
-    const isConnected = await testConnection();
-    notifyRenderer('connection-status', isConnected);
-    
-    if (isConnected) {
-      notifyRenderer('progress-update', { percentage: 100, message: 'Ready to connect...' });
-    } else {
-      throw new Error('Unable to connect to ADE services');
+    // Start ADE services (ADE will handle Ollama internally via its config)
+    try {
+      await startADEServices();
+      serviceStatus.ade = 'running';
+      notifyRenderer('service-status', { type: 'running', service: 'ade' });
+      notifyRenderer('progress-update', { percentage: 70, message: 'ADE services started...' });
+      
+      // Give ADE some time to fully initialize (including its internal Ollama connection)
+      notifyRenderer('progress-update', { percentage: 80, message: 'Initializing ADE system...' });
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      
+      // Test connection to ADE web interface
+      notifyRenderer('progress-update', { percentage: 90, message: 'Testing web interface...' });
+      const isConnected = await testConnection();
+      notifyRenderer('connection-status', isConnected);
+      
+      if (isConnected) {
+        notifyRenderer('progress-update', { percentage: 100, message: 'ADE Studio ready!' });
+      } else {
+        // ADE services are running but web interface isn't ready yet
+        notifyRenderer('progress-update', { percentage: 95, message: 'ADE services ready, web interface starting...' });
+        
+        // Wait a bit more and retry
+        setTimeout(async () => {
+          const retryConnected = await testConnection();
+          notifyRenderer('connection-status', retryConnected);
+          if (retryConnected) {
+            notifyRenderer('progress-update', { percentage: 100, message: 'ADE Studio ready!' });
+          } else {
+            notifyRenderer('progress-update', { percentage: 100, message: 'ADE services running (please check ADE console)' });
+          }
+        }, 5000);
+      }
+    } catch (error) {
+      console.log('ADE services startup failed, showing UI anyway:', error.message);
+      serviceStatus.ade = 'error';
+      notifyRenderer('service-status', { type: 'error', service: 'ade' });
+      notifyRenderer('progress-update', { percentage: 100, message: 'Ready (please start ADE services manually)' });
+      notifyRenderer('connection-status', false);
     }
     
   } catch (error) {
     console.error('Failed to start services:', error);
-    serviceStatus.ollama = 'error';
     serviceStatus.ade = 'error';
-    notifyRenderer('service-status', { type: 'error', service: 'both' });
-    notifyRenderer('app-error', { message: error.message });
+    notifyRenderer('service-status', { type: 'error', service: 'ade' });
+    notifyRenderer('progress-update', { percentage: 100, message: 'Ready (please start ADE services manually)' });
+    notifyRenderer('connection-status', false);
   }
 };
 
@@ -716,7 +689,7 @@ const notifyRenderer = (channel, data) => {
 const testConnection = () => {
   return new Promise((resolve) => {
     const http = require('http');
-    const req = http.get('http://localhost:8080', (res) => {
+    const req = http.get('http://localhost:9000', (res) => {
       resolve(res.statusCode === 200);
     });
     
@@ -771,11 +744,6 @@ const restartADEServices = async () => {
 };
 
 const stopServices = () => {
-  if (ollamaProcess) {
-    ollamaProcess.kill();
-    ollamaProcess = null;
-  }
-  
   if (adeProcess) {
     adeProcess.kill();
     adeProcess = null;
@@ -831,40 +799,4 @@ app.on('web-contents-created', (event, contents) => {
     event.preventDefault();
     shell.openExternal(navigationUrl);
   });
-});
-
-// IPC handlers for communication with renderer
-ipcMain.handle('get-app-version', () => {
-  return app.getVersion();
-});
-
-ipcMain.handle('show-save-dialog', async () => {
-  const result = await dialog.showSaveDialog(mainWindow, {
-    filters: [
-      { name: 'All Files', extensions: ['*'] },
-      { name: 'JavaScript', extensions: ['js'] },
-      { name: 'TypeScript', extensions: ['ts'] },
-      { name: 'Python', extensions: ['py'] },
-      { name: 'JSON', extensions: ['json'] },
-      { name: 'Markdown', extensions: ['md'] },
-      { name: 'Text', extensions: ['txt'] }
-    ]
-  });
-  return result;
-});
-
-ipcMain.handle('show-open-dialog', async () => {
-  const result = await dialog.showOpenDialog(mainWindow, {
-    properties: ['openFile'],
-    filters: [
-      { name: 'All Files', extensions: ['*'] },
-      { name: 'JavaScript', extensions: ['js'] },
-      { name: 'TypeScript', extensions: ['ts'] },
-      { name: 'Python', extensions: ['py'] },
-      { name: 'JSON', extensions: ['json'] },
-      { name: 'Markdown', extensions: ['md'] },
-      { name: 'Text', extensions: ['txt'] }
-    ]
-  });
-  return result;
 });

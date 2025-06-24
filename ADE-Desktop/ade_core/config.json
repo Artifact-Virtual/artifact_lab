@@ -1,0 +1,14 @@
+{
+  "ollama_endpoint": "http://localhost:11434/api/generate",
+  "ollama_model": "codellama:7b",
+  "ollama_host": "localhost",
+  "ollama_port": 11434,
+  "webchat_port": 9000,
+  "model_provider": "ollama",
+  "system_prompt": "1. Ensure all dependencies are installed using npm install. 3. Use npm start to launch the application. 4. Run tests with npm test before committing changes. 5. Follow PEP8 guidelines for Python code. 6. Always update this file. ALWAYS. no exceptions. 7. Perform a full codebase review periodically to ensure no errors exist. Fix all issues, big or small, without workarounds or cutting corners. 8. Always validate and fix JSON config files for strict compliance (no trailing commas, valid syntax). 9. Ensure all model/provider logic is routed through a single config file (config.json). 10. Standardize import paths and config resolution for all entry-point scripts. 11. ALWAYS UPDATE ADE\\config.json with latest updated SOPs l:\\devops\\artifact_lab\\_thoughtprocess\\notes\\n220625.sop 12. All dependency index should be reviewed via system prompt: l:\\devops\\artifact_lab\\ADE\\dependency_index.json. 13. Also review the system summary: l:\\devops\\artifact_lab\\ADE\\system_summary.json.",
+  "sop_summary": "LLM must have secure, auditable read/write access to the codebase via backend API. LLM can both suggest and directly make codebase changes (with audit trail and user control). Backend API must support advanced file/code management (list, read, write, create, delete, search). Monaco Editor is integrated in webchat; LLM can trigger Monaco actions (open, edit, diff, save). All LLM-driven changes must be user-controllable (approve, undo) and meticulously logged. AVA system is fully operational with troubleshooting procedures. Monitor server status regularly and use restart procedures if loading issues occur. System updated June 23, 2025 with complete operational procedures.",
+  "last_updated": "2025-06-23T07:25:00Z",
+  "system_status": "FULLY_OPERATIONAL",
+  "troubleshooting_guide": "ADE/ADE.md"
+}
+

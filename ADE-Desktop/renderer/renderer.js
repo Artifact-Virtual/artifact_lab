@@ -7,7 +7,7 @@ class ADEStudioRenderer {
         this.maxRetries = 5;
         this.currentProgress = 0;
         this.settings = {
-            serverUrl: 'http://localhost:8080',
+            serverUrl: 'http://localhost:9000',
             theme: 'dark',
             autoLaunch: false,
             hardwareAcceleration: true
@@ -257,9 +257,7 @@ class ADEStudioRenderer {
             this.showIDE();
             this.showNotification('Connected to ADE Studio', 'success');
         }, 500);
-    }
-
-    onConnectionFailed() {
+    }    onConnectionFailed() {
         console.log('Failed to connect to ADE Studio');
         this.isConnected = false;
         this.isLoading = false;
@@ -275,9 +273,51 @@ class ADEStudioRenderer {
                 this.retryConnection();
             }, 3000);
         } else {
-            // Show error screen
+            // Instead of showing error screen, show IDE with connection warning
             this.hideLoadingScreen();
-            this.showError('Unable to connect to ADE services. Please check your configuration.');
+            this.showIDE();
+            this.showNotification('Unable to connect to ADE services. IDE will work in offline mode.', 'warning');
+            
+            // Update webview to show a local message instead of trying to connect
+            const webview = document.getElementById('ade-webview');
+            if (webview) {
+                webview.style.display = 'none';
+            }
+            
+            // Show a connection status message in the IDE container
+            this.showOfflineMessage();
+        }
+    }
+
+    showOfflineMessage() {
+        const ideContainer = document.getElementById('ide-container');
+        if (ideContainer) {
+            ideContainer.innerHTML = `
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 40px;">
+                    <div style="font-size: 48px; margin-bottom: 20px; opacity: 0.5;">⚠️</div>
+                    <h2 style="color: #ffffff; margin-bottom: 16px; font-weight: 600;">ADE Services Offline</h2>
+                    <p style="color: #b3b3b3; margin-bottom: 24px; max-width: 500px; line-height: 1.5;">
+                        Unable to connect to ADE services. The desktop IDE is ready, but you'll need to start the ADE services manually.
+                    </p>
+                    <div style="display: flex; gap: 12px; margin-bottom: 32px;">
+                        <button class="btn btn-primary" onclick="window.adeRenderer.retryConnection()">
+                            Retry Connection
+                        </button>
+                        <button class="btn btn-secondary" onclick="window.adeRenderer.showSettings()">
+                            Settings
+                        </button>
+                    </div>
+                    <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 20px; max-width: 600px;">
+                        <h3 style="color: #ffffff; margin-bottom: 12px; font-size: 16px;">To start ADE services manually:</h3>
+                        <ol style="color: #b3b3b3; text-align: left; padding-left: 20px; line-height: 1.6;">
+                            <li>Open a terminal in your ADE directory</li>
+                            <li>Run: <code style="background: #333; padding: 2px 6px; border-radius: 4px; color: #ffffff;">python main.py</code></li>
+                            <li>In another terminal, run: <code style="background: #333; padding: 2px 6px; border-radius: 4px; color: #ffffff;">python webchat.py</code></li>
+                            <li>Click "Retry Connection" above</li>
+                        </ol>
+                    </div>
+                </div>
+            `;
         }
     }
 
@@ -504,7 +544,7 @@ class ADEStudioRenderer {
 
     resetSettings() {
         this.settings = {
-            serverUrl: 'http://localhost:8080',
+            serverUrl: 'http://localhost:9000',
             theme: 'dark',
             autoLaunch: false,
             hardwareAcceleration: true
@@ -572,7 +612,7 @@ class ADEStudioRenderer {
 // Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM loaded, initializing ADE Studio Renderer...');
-    new ADEStudioRenderer();
+    window.adeRenderer = new ADEStudioRenderer();
 });
 
 // Global error handler
