@@ -1,3 +1,7 @@
+import sys
+import os
+sys.path.append(os.path.dirname(__file__))
+
 import threading
 from watcher import start_watcher
 from dependency_indexer import build_dependency_index
