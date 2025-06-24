@@ -2,9 +2,9 @@
   "root": {
     "files": {
       ".gitignore": {
-        "hash": "f11d702a2f0b54b917138c3e3f030c6dfedd2b41c0302a773d3ea9ea030bc7ea",
-        "size": 437,
-        "modified": 1750743235.0048318,
+        "hash": "01e6ab10e5b50fadde128392b83bdc5596bd52ac201a70df30b5edc607afe937",
+        "size": 409,
+        "modified": 1750758794.7146096,
         "type": "no_extension",
         "is_dotfile": true
       },
@@ -58,9 +58,9 @@
         "is_dotfile": false
       },
       "README.md": {
-        "hash": "258abee6c6ef883916724576e8b2e738b5d23353db32e04d9818e45c73135c05",
-        "size": 10022,
-        "modified": 1750753646.2378688,
+        "hash": "dc8f48fa820a05eb4f96c45d40823c20b61fa482f43f3d1d192324984730b537",
+        "size": 9700,
+        "modified": 1750758797.4619205,
         "type": ".md",
         "is_dotfile": false
       },
@@ -79,38 +79,38 @@
         "is_dotfile": false
       },
       "run.ps1": {
-        "hash": "ef1511dd7eacc65be24ae8858eba6ff2610bc1ac9e6ead9890592cd4d5df01a8",
-        "size": 1414,
-        "modified": 1750743236.6144087,
+        "hash": "4a43f78e5bfcdfa8a1ce9bd453af47eadff5170e690f4b12e0da8a4d16379df4",
+        "size": 1948,
+        "modified": 1750760246.8561203,
         "type": ".ps1",
         "is_dotfile": false
       },
       "run.sh": {
-        "hash": "786dff3e6b79b2b0b6ced9875746e283017ba1292c7978b2480ef038383ae3b6",
-        "size": 2000,
-        "modified": 1750754471.7371838,
+        "hash": "b43f72e900cff2216d85b096f6185ae595486e6d1df49a1e75cc3d2109c0845d",
+        "size": 2105,
+        "modified": 1750760185.311496,
         "type": ".sh",
         "is_dotfile": false
       },
       "test_system.bat": {
-        "hash": "98ee900666044906770c12d0b2c4d4bfada24534462ece8237f03954ce9ea0ce",
-        "size": 367,
-        "modified": 1750743236.6144087,
+        "hash": "f9595ed6108f7938fe9a0999c010c32055a9eeedfdcb9659fcb7f8c5b8e40e93",
+        "size": 353,
+        "modified": 1750758796.7323282,
         "type": ".bat",
         "is_dotfile": false
       }
     },
     "stats": {
       "total_files": 14,
-      "total_size": 58068,
+      "total_size": 58343,
       "file_types": [
+        ".bat",
         ".json",
+        "no_extension",
+        ".txt",
         ".sh",
         ".ps1",
-        ".md",
-        "no_extension",
-        ".bat",
-        ".txt"
+        ".md"
       ],
       "dotfiles_count": 2,
       "largest_file": "requirements.lock.txt"
@@ -152,7 +152,15 @@
     "files": {},
     "stats": {}
   },
+  ".git\\objects\\00": {
+    "files": {},
+    "stats": {}
+  },
   ".git\\objects\\01": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\04": {
     "files": {},
     "stats": {}
   },
@@ -208,6 +216,10 @@
     "files": {},
     "stats": {}
   },
+  ".git\\objects\\2c": {
+    "files": {},
+    "stats": {}
+  },
   ".git\\objects\\2d": {
     "files": {},
     "stats": {}
@@ -217,6 +229,10 @@
     "stats": {}
   },
   ".git\\objects\\39": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\4f": {
     "files": {},
     "stats": {}
   },
@@ -240,6 +256,10 @@
     "files": {},
     "stats": {}
   },
+  ".git\\objects\\5e": {
+    "files": {},
+    "stats": {}
+  },
   ".git\\objects\\5f": {
     "files": {},
     "stats": {}
@@ -248,7 +268,15 @@
     "files": {},
     "stats": {}
   },
+  ".git\\objects\\69": {
+    "files": {},
+    "stats": {}
+  },
   ".git\\objects\\6a": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\6e": {
     "files": {},
     "stats": {}
   },
@@ -292,11 +320,23 @@
     "files": {},
     "stats": {}
   },
+  ".git\\objects\\86": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\89": {
+    "files": {},
+    "stats": {}
+  },
   ".git\\objects\\8c": {
     "files": {},
     "stats": {}
   },
   ".git\\objects\\8d": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\94": {
     "files": {},
     "stats": {}
   },
@@ -329,6 +369,14 @@
     "stats": {}
   },
   ".git\\objects\\a7": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\ae": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\b1": {
     "files": {},
     "stats": {}
   },
@@ -384,11 +432,19 @@
     "files": {},
     "stats": {}
   },
+  ".git\\objects\\da": {
+    "files": {},
+    "stats": {}
+  },
   ".git\\objects\\dc": {
     "files": {},
     "stats": {}
   },
   ".git\\objects\\e8": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\e9": {
     "files": {},
     "stats": {}
   },
@@ -447,30 +503,30 @@
   "ADE": {
     "files": {
       "ADE.md": {
-        "hash": "82298b4511cc46794fe0d3785c7a453ef2ce028a27a763cfe335f829b07c6b46",
-        "size": 10532,
-        "modified": 1750753826.3903863,
+        "hash": "22eacb16cde502b56fd2dbd2f51c4cca03e8e81fc07e631c4c0bc0e298ebd3b5",
+        "size": 10502,
+        "modified": 1750758798.133113,
         "type": ".md",
         "is_dotfile": false
       },
       "audit_log.json": {
-        "hash": "88d7ab357f83719921c3995a0a6b238204fe9dbc75842851f2d8bc162b7a21a1",
-        "size": 17639,
-        "modified": 1750753975.3987215,
+        "hash": "eb8a4cc879c0211763a0b6004f912512ac8030b70f87ab89251409aecff3b61f",
+        "size": 41365,
+        "modified": 1750760387.897749,
         "type": ".json",
         "is_dotfile": false
       },
       "config.json": {
-        "hash": "5101190a43c392ad89072b52df1e561e855279984a66a54f0698859d599be1cc",
-        "size": 2119,
-        "modified": 1750743236.6144087,
+        "hash": "c5bb927d97f37727175409bea903fc8e3236c40dfcdbf454fb57c41cb1a8de45",
+        "size": 2057,
+        "modified": 1750758794.042346,
         "type": ".json",
         "is_dotfile": false
       },
       "dependency_index.json": {
-        "hash": "8ca583397c91a62912c6452392054d68687f74249edd15886f34ecdd7b085bd3",
-        "size": 43129,
-        "modified": 1750755507.0360367,
+        "hash": "6ddc3dc1043cb589621f0d493d97f4a39476ea65bccafe8d9b4bfc839fb306fb",
+        "size": 44066,
+        "modified": 1750760364.7235212,
         "type": ".json",
         "is_dotfile": false
       },
@@ -484,7 +540,7 @@
       "enhanced_visualizer.py": {
         "hash": "feee9b4e4eeb968efd025a2f4a24ea0ae06c4274cf9b7b8c6259289f97272015",
         "size": 12260,
-        "modified": 1750755562.6400247,
+        "modified": 1750755976.4318857,
         "type": ".py",
         "is_dotfile": false
       },
@@ -503,9 +559,9 @@
         "is_dotfile": false
       },
       "llm_audit_log.json": {
-        "hash": "c0a6f9cf8c4c4e6b0c5277e6a3bb4b2cb4e15698471d74f54fe793eea7c1576f",
-        "size": 3278,
-        "modified": 1750753989.3335035,
+        "hash": "0489848ccbabc24e9b17076e53d627356d34924c8750eb6ab6a2b20c4967d1a6",
+        "size": 10142,
+        "modified": 1750759835.7446449,
         "type": ".json",
         "is_dotfile": false
       },
@@ -519,7 +575,7 @@
       "main.py": {
         "hash": "a097aaaed6eaffa18f2df0aeb17e5bd29a1fe7bd0fc9f3d0e0005af46fdbb427",
         "size": 762,
-        "modified": 1750754459.7852144,
+        "modified": 1750755976.4303749,
         "type": ".py",
         "is_dotfile": false
       },
@@ -531,9 +587,9 @@
         "is_dotfile": false
       },
       "ollama_interface.py": {
-        "hash": "e92c17960897b3499bf932645e7c799e74bf8fb1bfdce6d42ab8cad5735ed27e",
-        "size": 1478,
-        "modified": 1750743236.6144087,
+        "hash": "e8268db33fc26777220309a63257e68e5851a2993309c3110143ee99c9469180",
+        "size": 1451,
+        "modified": 1750758793.3696675,
         "type": ".py",
         "is_dotfile": false
       },
@@ -559,9 +615,9 @@
         "is_dotfile": false
       },
       "studio_enhanced.html": {
-        "hash": "2a690db8482e137532ce44de917f72619339cc922f53f1475343441ff845b865",
-        "size": 59719,
-        "modified": 1750743236.6144087,
+        "hash": "b5a3f54f564e0daa44955c9fb888a2c3b9f968c3bd947c3213b68926acdb3788",
+        "size": 63939,
+        "modified": 1750759865.8474846,
         "type": ".html",
         "is_dotfile": false
       },
@@ -594,30 +650,30 @@
         "is_dotfile": false
       },
       "webchat.py": {
-        "hash": "2ef998035543001ea9c0a59780946d9a0c86e2d269a11b939b7b7c369a2300ba",
-        "size": 36361,
-        "modified": 1750743236.6144087,
+        "hash": "abd168634742485a19395e5798369cd9d9c7e7b6e39563647f10946bfe20d3d0",
+        "size": 15256,
+        "modified": 1750758798.8018322,
         "type": ".py",
         "is_dotfile": false
       },
       "__init__.py": {
-        "hash": "85a7e40306e7fbf6dff838e5c378962bdf9acdfac41b46e2368e17a0af1154e7",
-        "size": 37,
-        "modified": 1750743236.6144087,
+        "hash": "3e1daec53f395a56c05f14b5bc976681808ccbb65444580fd64d8d893a5bdce1",
+        "size": 23,
+        "modified": 1750758795.148872,
         "type": ".py",
         "is_dotfile": false
       }
     },
     "stats": {
       "total_files": 23,
-      "total_size": 318724,
+      "total_size": 333233,
       "file_types": [
-        ".json",
-        ".html",
-        ".css",
         ".md",
         ".py",
-        ".txt"
+        ".json",
+        ".txt",
+        ".css",
+        ".html"
       ],
       "dotfiles_count": 0,
       "largest_file": "studio_enhanced.html"
@@ -648,8 +704,8 @@
       "total_files": 2,
       "total_size": 1992,
       "file_types": [
-        ".md",
-        ".toml"
+        ".toml",
+        ".md"
       ],
       "dotfiles_count": 0,
       "largest_file": "README.md"
@@ -690,10 +746,10 @@
       "total_files": 4,
       "total_size": 4541,
       "file_types": [
-        ".sh",
-        ".md",
         ".yml",
-        "no_extension"
+        "no_extension",
+        ".sh",
+        ".md"
       ],
       "dotfiles_count": 1,
       "largest_file": "init-letsencrypt.sh"
@@ -1028,8 +1084,8 @@
       "total_files": 2,
       "total_size": 1430,
       "file_types": [
-        ".sh",
-        ".yaml"
+        ".yaml",
+        ".sh"
       ],
       "dotfiles_count": 0,
       "largest_file": "test_config.yaml"
@@ -1068,8 +1124,8 @@
       "total_files": 2,
       "total_size": 22653,
       "file_types": [
-        ".md",
-        ".txt"
+        ".txt",
+        ".md"
       ],
       "dotfiles_count": 0,
       "largest_file": "README.md"
@@ -1109,9 +1165,9 @@
         "is_dotfile": false
       },
       "ollama_interface.py": {
-        "hash": "e92c17960897b3499bf932645e7c799e74bf8fb1bfdce6d42ab8cad5735ed27e",
-        "size": 1478,
-        "modified": 1750743236.532949,
+        "hash": "d00e704ceb717f9caca06bd593cd0041ea7bb70859bd6b3706f70c06ad81948d",
+        "size": 1450,
+        "modified": 1750759237.4642172,
         "type": ".py",
         "is_dotfile": false
       },
@@ -1167,7 +1223,7 @@
     },
     "stats": {
       "total_files": 9,
-      "total_size": 214288,
+      "total_size": 214260,
       "file_types": [
         ".json",
         ".js",
@@ -1685,8 +1741,8 @@
       "total_files": 3,
       "total_size": 32423,
       "file_types": [
-        ".ps1",
-        ".py"
+        ".py",
+        ".ps1"
       ],
       "dotfiles_count": 0,
       "largest_file": "refactoring_safety.py"
@@ -1710,8 +1766,8 @@
   },
   "_metadata": {
     "total_files": 108,
-    "total_directories": 154,
-    "generated_at": 1750755607.2069044,
+    "total_directories": 168,
+    "generated_at": 1750760401.2725635,
     "root_path": "L:\\devops\\artifact_lab"
   }
 }

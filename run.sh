@@ -70,7 +70,9 @@ VIZ_PID=$!
 
 sleep 2
 
-echo "Starting web chat interface (Monaco editor, file manager, chat)..."
+echo "Starting ADE Studio IDE (Monaco editor, file manager, AVA chat)..."
+echo "ADE Studio will be available at: http://localhost:8080"
+echo "Press Ctrl+C to stop all services"
 $PYTHON_CMD webchat.py
 
 # Cleanup will run on exit

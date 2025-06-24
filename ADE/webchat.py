@@ -2,7 +2,7 @@ import os
 import sys
 import json
 import requests
-from flask import Flask, render_template_string, request, jsonify
+from flask import Flask, request, jsonify  # removed render_template_string (unused)
 
 # Add DevCore to path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'DevCore')))
@@ -10,533 +10,9 @@ from ollama_interface import query_model
 
 app = Flask(__name__)
 
-# Enhanced HTML template with Monaco Editor and File Management
-CHAT_HTML = """
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARTIFACT VIRTUAL ASSISTANT</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/editor/editor.main.min.css">
-    <style>
-        body {
-            background-color: #000000;
-            color: #FFFFFF;
-            font-family: 'Arial', sans-serif;
-            height: 100vh;
-            overflow: hidden;
-            margin: 0;
-        }
-        .main-container {
-            display: flex;
-            height: 100vh;
-        }
-        .sidebar {
-            width: 300px;
-            background: rgba(255, 255, 255, 0.02);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            flex-direction: column;
-        }
-        .file-explorer {
-            flex: 1;
-            padding: 10px;
-            overflow-y: auto;
-        }
-        .file-item {
-            padding: 4px 8px;
-            cursor: pointer;
-            border-radius: 4px;
-            margin: 2px 0;
-        }
-        .file-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        .file-item.selected {
-            background: rgba(0, 123, 255, 0.3);
-        }
-        .folder {
-            font-weight: bold;
-        }
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        .editor-container {
-            flex: 1;
-            position: relative;
-        }
-        .chat-panel {
-            width: 400px;
-            background: rgba(255, 255, 255, 0.02);
-            border-left: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            flex-direction: column;
-        }
-        .chat-header {
-            text-align: center;
-            padding: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .message {
-            padding: 8px 12px;
-            border-radius: 8px;
-            max-width: 85%;
-            word-wrap: break-word;
-            font-size: 14px;
-        }
-        .user-message {
-            background: rgba(0, 123, 255, 0.2);
-            align-self: flex-end;
-        }
-        .bot-message {
-            background: rgba(255, 255, 255, 0.05);
-            align-self: flex-start;
-        }
-        .chat-input-container {
-            padding: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            gap: 8px;
-        }
-        .chat-input {
-            flex: 1;
-            padding: 8px 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 6px;
-            color: white;
-            outline: none;
-            font-size: 14px;
-        }
-        .send-button {
-            padding: 8px 16px;
-            background: rgba(0, 123, 255, 0.3);
-            color: white;
-            border: 1px solid rgba(0, 123, 255, 0.5);
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .send-button:hover {
-            background: rgba(0, 123, 255, 0.4);
-        }
-        .status {
-            text-align: center;
-            padding: 8px;
-            font-size: 12px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .status.ready {
-            background: rgba(0, 255, 0, 0.1);
-            color: #a0ffa0;
-        }
-        .status.error {
-            background: rgba(255, 0, 0, 0.1);
-            color: #ffa0a0;
-        }
-        .toolbar {
-            display: flex;
-            padding: 8px;
-            background: rgba(255, 255, 255, 0.02);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            gap: 8px;
-        }
-        .toolbar button {
-            padding: 6px 12px;
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        .toolbar button:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        #filePathDisplay {
-            flex: 1;
-            padding: 6px 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 4px;
-            font-size: 12px;
-            color: #ccc;
-        }
-    </style>
-</head>
-<body>
-    <div class="main-container">
-        <!-- File Explorer -->        <div class="sidebar">
-            <div style="padding: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
-                <h3 style="margin: 0; font-size: 14px;">File Explorer</h3>
-                <div id="debugInfo" style="font-size: 10px; color: #888; margin-top: 5px;"></div>
-            </div>
-            <div class="file-explorer" id="fileExplorer">
-                Loading files...
-            </div>
-        </div>
+# Removed CHAT_HTML and all legacy chat panel HTML/JS
 
-        <!-- Main Content Area -->
-        <div class="main-content">
-            <!-- Toolbar -->
-            <div class="toolbar">
-                <div id="filePathDisplay">No file selected</div>
-                <button onclick="saveCurrentFile()">Save</button>
-                <button onclick="refreshFiles()">Refresh</button>
-            </div>
-            
-            <!-- Monaco Editor -->
-            <div class="editor-container" id="editorContainer">
-                <div id="monaco-editor" style="height: 100%; width: 100%;"></div>
-            </div>
-        </div>
-
-        <!-- Chat Panel -->
-        <div class="chat-panel">
-            <div class="chat-header">
-                <h2 style="margin: 0; font-size: 16px;">AVA Assistant</h2>
-                <p style="margin: 5px 0 0 0; font-size: 12px;">AI Code Assistant</p>
-            </div>
-            <div id="status" class="status">Connecting...</div>
-            <div class="chat-messages" id="chatMessages">
-                <div class="bot-message">
-                    Hello! I'm AVA, your AI assistant. I can help you with:
-                    <br>• Code editing and analysis
-                    <br>• File management operations  
-                    <br>• Project structure navigation
-                    <br>• Direct code modifications
-                </div>
-            </div>
-            <div class="chat-input-container">
-                <input type="text" class="chat-input" id="chatInput" placeholder="Ask me anything..." disabled>
-                <button class="send-button" id="sendButton" onclick="sendMessage()" disabled>Send</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Monaco Editor -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
-    
-    <script>        let isConnected = false;
-        let editor = null;
-        let currentFile = null;
-        let fileContent = '';
-        
-        function debugLog(message) {
-            console.log(message);
-            const debugDiv = document.getElementById('debugInfo');
-            if (debugDiv) {
-                debugDiv.innerHTML = message + '<br>' + debugDiv.innerHTML;
-            }
-        }
-        
-        // Initialize Monaco Editor
-        function initializeMonaco() {
-            console.log('Initializing Monaco Editor...');
-            require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
-            require(['vs/editor/editor.main'], function () {
-                console.log('Monaco loaded successfully');
-                editor = monaco.editor.create(document.getElementById('monaco-editor'), {
-                    value: '// Welcome to AVA Code Assistant\n// Select a file from the explorer to start editing',
-                    language: 'javascript',
-                    theme: 'vs-dark',
-                    automaticLayout: true,
-                    minimap: { enabled: false },
-                    fontSize: 14,
-                    lineNumbers: 'on',
-                    wordWrap: 'on'
-                });
-                
-                // Auto-save on content change
-                editor.onDidChangeModelContent(function() {
-                    if (currentFile && editor.getValue() !== fileContent) {
-                        // Mark file as modified (could add * to title)
-                    }
-                });
-            });
-        }
-          window.onload = function() {
-            debugLog('Page loaded, initializing...');
-            // Initialize without Monaco first
-            checkOllamaStatus();
-            loadFileExplorer();
-            // Initialize Monaco Editor after other components
-            setTimeout(initializeMonaco, 1000);
-        };async function checkOllamaStatus() {
-            debugLog('Checking Ollama status...');
-            try {
-                const response = await fetch('/status');
-                debugLog(`Status response: ${response.status}`);
-                const data = await response.json();
-                debugLog(`Status data: ${JSON.stringify(data)}`);
-                
-                const statusDiv = document.getElementById('status');
-                const chatInput = document.getElementById('chatInput');
-                const sendButton = document.getElementById('sendButton');
-                
-                debugLog(`Elements found: status=${!!statusDiv}, input=${!!chatInput}, button=${!!sendButton}`);
-                
-                if (data.status === 'ready') {
-                    statusDiv.textContent = `✅ Connected (${data.model})`;
-                    statusDiv.className = 'status ready';
-                    chatInput.disabled = false;
-                    sendButton.disabled = false;
-                    isConnected = true;
-                    debugLog('Status set to ready');
-                } else {
-                    statusDiv.textContent = `❌ ${data.message}`;
-                    statusDiv.className = 'status error';
-                    isConnected = false;
-                    debugLog('Status set to error');
-                }
-            } catch (error) {
-                debugLog(`Error checking status: ${error.message}`);
-                const statusDiv = document.getElementById('status');
-                statusDiv.textContent = '❌ Failed to connect';
-                statusDiv.className = 'status error';
-                isConnected = false;
-            }
-        }        async function loadFileExplorer() {
-            debugLog('Loading file explorer...');
-            try {
-                const response = await fetch('/api/files/list');
-                debugLog(`File list response: ${response.status}`);
-                const data = await response.json();
-                debugLog(`File count: ${data.items ? data.items.length : 0}`);
-                
-                if (data.success) {
-                    renderFileExplorer(data.items);
-                } else {
-                    document.getElementById('fileExplorer').innerHTML = `<div style="color: #ff6b6b; padding: 10px;">Error: ${data.error || 'Unknown error'}</div>`;
-                }
-            } catch (error) {
-                debugLog(`Error loading files: ${error.message}`);
-                document.getElementById('fileExplorer').innerHTML = `<div style="color: #ff6b6b; padding: 10px;">Failed to load files: ${error.message}</div>`;
-            }
-        }
-          function renderFileExplorer(items) {
-            console.log('Rendering file explorer with items:', items);
-            const explorer = document.getElementById('fileExplorer');
-            explorer.innerHTML = '';
-            
-            if (!items || items.length === 0) {
-                explorer.innerHTML = '<div style="color: #888; padding: 10px;">No files found</div>';
-                return;
-            }
-            
-            // Sort: directories first, then files
-            items.sort((a, b) => {
-                if (a.type === 'directory' && b.type === 'file') return -1;
-                if (a.type === 'file' && b.type === 'directory') return 1;
-                return a.name.localeCompare(b.name);
-            });
-            
-            items.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'file-item';
-                if (item.type === 'directory') {
-                    div.className += ' folder';
-                    div.innerHTML = `📁 ${item.name}`;
-                } else {
-                    div.innerHTML = `📄 ${item.name}`;
-                    div.onclick = () => openFile(item.name);
-                }
-                explorer.appendChild(div);
-            });
-            
-            console.log(`Rendered ${items.length} items in file explorer`);
-        }
-        
-        async function openFile(fileName) {
-            try {
-                const response = await fetch(`/api/files/read?path=${encodeURIComponent(fileName)}`);
-                const data = await response.json();
-                
-                if (data.success) {
-                    currentFile = fileName;
-                    fileContent = data.content;
-                    
-                    // Update editor content
-                    if (editor) {
-                        editor.setValue(data.content);
-                        
-                        // Set language based on file extension
-                        const extension = fileName.split('.').pop().toLowerCase();
-                        const languageMap = {
-                            'js': 'javascript',
-                            'ts': 'typescript', 
-                            'py': 'python',
-                            'html': 'html',
-                            'css': 'css',
-                            'json': 'json',
-                            'md': 'markdown',
-                            'yml': 'yaml',
-                            'yaml': 'yaml',
-                            'xml': 'xml',
-                            'sql': 'sql',
-                            'sh': 'shell',
-                            'bat': 'bat',
-                            'ps1': 'powershell'
-                        };
-                        
-                        const language = languageMap[extension] || 'plaintext';
-                        monaco.editor.setModelLanguage(editor.getModel(), language);
-                    }
-                    
-                    // Update UI
-                    document.getElementById('filePathDisplay').textContent = fileName;
-                    
-                    // Highlight selected file
-                    document.querySelectorAll('.file-item').forEach(item => {
-                        item.classList.remove('selected');
-                        if (item.textContent.includes(fileName)) {
-                            item.classList.add('selected');
-                        }
-                    });
-                    
-                    addMessage(`Opened file: ${fileName}`, false, true);
-                }
-            } catch (error) {
-                addMessage(`Error opening file: ${error.message}`, false, true);
-            }
-        }
-        
-        async function saveCurrentFile() {
-            if (!currentFile || !editor) {
-                addMessage('No file is currently open', false, true);
-                return;
-            }
-            
-            try {
-                const content = editor.getValue();
-                const response = await fetch('/api/files/write', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ path: currentFile, content: content })
-                });
-                
-                const data = await response.json();
-                if (data.success) {
-                    fileContent = content;
-                    addMessage(`Saved: ${currentFile}`, false, true);
-                } else {
-                    addMessage(`Error saving: ${data.error}`, false, true);
-                }
-            } catch (error) {
-                addMessage(`Error saving file: ${error.message}`, false, true);
-            }
-        }
-        
-        async function refreshFiles() {
-            document.getElementById('fileExplorer').innerHTML = '<div style="color: #888; padding: 10px;">Loading files...</div>';
-            await loadFileExplorer();
-        }
-        
-        function addMessage(content, isUser = false, isSystem = false) {
-            const messagesDiv = document.getElementById('chatMessages');
-            const messageDiv = document.createElement('div');
-            
-            if (isSystem) {
-                messageDiv.className = 'message bot-message';
-                messageDiv.style.opacity = '0.7';
-                messageDiv.style.fontStyle = 'italic';
-            } else {
-                messageDiv.className = isUser ? 'message user-message' : 'message bot-message';
-            }
-            
-            messageDiv.innerHTML = content.replace(/\n/g, '<br>');
-            messagesDiv.appendChild(messageDiv);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        }
-        
-        async function sendMessage() {
-            if (!isConnected) {
-                alert('Not connected to Ollama. Please check the server status.');
-                return;
-            }
-            
-            const chatInput = document.getElementById('chatInput');
-            const sendButton = document.getElementById('sendButton');
-            const message = chatInput.value.trim();
-            
-            if (!message) return;
-            
-            addMessage(message, true);
-            chatInput.value = '';
-            
-            chatInput.disabled = true;
-            sendButton.disabled = true;
-            sendButton.textContent = 'Thinking...';
-            
-            try {
-                // Include context about current file and editor state
-                let contextMessage = message;
-                if (currentFile && editor) {
-                    contextMessage = `Current file: ${currentFile}\n\nUser message: ${message}\n\nCurrent file content:\n${editor.getValue()}`;
-                }
-                
-                const response = await fetch('/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        message: contextMessage,
-                        context: {
-                            currentFile: currentFile,
-                            hasEditor: !!editor
-                        }
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    addMessage(data.response);
-                    
-                    // Check if response contains code that should be applied to editor
-                    if (data.fileOperations) {
-                        for (const op of data.fileOperations) {
-                            if (op.type === 'update' && op.path === currentFile && editor) {
-                                editor.setValue(op.content);
-                                addMessage(`Updated ${currentFile} with suggested changes`, false, true);
-                            }
-                        }
-                    }
-                } else {
-                    addMessage(`Error: ${data.error}`);
-                }
-            } catch (error) {
-                addMessage(`Error: Failed to send message - ${error.message}`);
-            }
-            
-            chatInput.disabled = false;
-            sendButton.disabled = false;
-            sendButton.textContent = 'Send';
-            chatInput.focus();
-        }
-        
-        document.getElementById('chatInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                sendMessage();
-            }
-        });
-        
-        setInterval(checkOllamaStatus, 30000);
-    </script>
-</body>
-</html>
-"""
+# Removed /chat and /chat-old endpoints and all related logic
 
 class OllamaWebChat:
     def __init__(self):
@@ -579,7 +55,7 @@ SYSTEM CONTEXT: You are an AI assistant with file management capabilities. You c
 - Answer questions about codebases
 
 Current workspace: w:\\worxpace\\artifact_lab
-Available components: workspace_manager, DevCore, blacknet
+Available components: ADE, DevCore, BlackNet
 
 Instructions: Be helpful and provide detailed assistance.
 """
@@ -798,11 +274,10 @@ def get_llm_audit_log():
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
-# Original chat endpoints
 @app.route('/')
 def index():
-    """Serve the clean Monaco-based file manager as the main interface"""
-    file_path = os.path.join(os.path.dirname(__file__), 'file_manager_clean.html')
+    """Serve the AVA Studio interface as the main interface"""
+    file_path = os.path.join(os.path.dirname(__file__), 'studio_enhanced.html')
     with open(file_path, 'r', encoding='utf-8') as f:
         return f.read()
 
@@ -811,11 +286,6 @@ def file_manager_redirect():
     """Redirect old file-manager URL to root for backwards compatibility"""
     from flask import redirect
     return redirect('/')
-
-@app.route('/chat-old')
-def old_chat():
-    """Old chat interface if needed for reference"""
-    return render_template_string(CHAT_HTML)
 
 @app.route('/status')
 def status():
@@ -887,14 +357,13 @@ You have access to the complete project structure and can read/write files. When
 Be concise, helpful, and practical in your responses. If you suggest code changes, make them clear and actionable."""
     
     enhanced = f"{system_prompt}\n\n"
-      # Add current file context if available
+    # Add current file context if available
     if context.get('currentFile'):
         enhanced += f"Current file being edited: {context['currentFile']}\n"
     
     enhanced += f"User request: {message}"
     
     return enhanced
-
 
 def parse_file_operations(response, context):
     """Parse LLM response for potential file operations"""
@@ -905,7 +374,6 @@ def parse_file_operations(response, context):
     # In a full implementation, we could parse response for code blocks and apply them
     
     return operations
-
 
 def run_webchat():
     print("Starting Enhanced Ollama Web Chat on http://localhost:8080")
@@ -920,8 +388,8 @@ def test_page():
 
 @app.route('/studio')
 def studio():
-    """Serve the AVA Studio interface with advanced integrations"""
-    file_path = os.path.join(os.path.dirname(__file__), 'studio.html')
+    """Serve the AVA Studio interface (legacy, for compatibility)"""
+    file_path = os.path.join(os.path.dirname(__file__), 'studio_enhanced.html')
     with open(file_path, 'r', encoding='utf-8') as f:
         return f.read()
 

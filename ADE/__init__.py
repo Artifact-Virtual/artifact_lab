@@ -1,1 +1,1 @@
-# __init__.py for workspace_manager
+# __init__.py for ADE

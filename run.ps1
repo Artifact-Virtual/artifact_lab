@@ -1,4 +1,4 @@
-Write-Host "Starting Artifact Lab Workspace Manager..." -ForegroundColor Green
+Write-Host "Starting ADE (Artifact Development Engine)..." -ForegroundColor Cyan
 
 # Check if Ollama is running
 $ollamaRunning = Get-Process -Name "ollama" -ErrorAction SilentlyContinue
@@ -27,10 +27,21 @@ if (-not $ollamaRunning) {
     Write-Host "Ollama server is already running" -ForegroundColor Green
 }
 
-# Start the AVA web chat interface
-Write-Host "Starting AVA web chat interface..." -ForegroundColor Green
-cd workspace_manager
-python webchat.py
+# Change to ADE directory
+Set-Location -Path "ADE"
 
-Write-Host "Press any key to continue..." -ForegroundColor Gray
-$null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+Write-Host "Starting background services (watcher, summarizer, dependency indexer)..." -ForegroundColor Yellow
+Start-Process -FilePath "python" -ArgumentList "main.py" -WindowStyle Hidden
+
+Start-Sleep -Seconds 2
+
+Write-Host "Launching Enhanced Metrics Visualizer in background..." -ForegroundColor Yellow  
+Start-Process -FilePath "python" -ArgumentList "enhanced_visualizer.py" -WindowStyle Hidden
+
+Start-Sleep -Seconds 2
+
+# Start the ADE Studio IDE
+Write-Host "Starting ADE Studio IDE (Monaco editor, file manager, AVA chat)..." -ForegroundColor Cyan
+Write-Host "ADE Studio will be available at: http://localhost:8080" -ForegroundColor Green  
+Write-Host "Press Ctrl+C to stop all services" -ForegroundColor Yellow
+python webchat.py

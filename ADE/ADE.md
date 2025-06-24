@@ -126,7 +126,7 @@ The ADE Studio is a comprehensive development environment featuring a profession
 ### 7.1. Quick Start
 1.  Navigate to the project root directory.
 2.  Ensure Ollama server is running.
-3.  Launch the web application: `python -m workspace_manager.webchat`
+3.  Launch the web application: `python -m ADE.webchat`
 4.  Access the interface at `http://localhost:8080`.
 
 ### 7.2. CLI Examples
@@ -169,7 +169,7 @@ The editor provides syntax highlighting and language support for a wide range of
 
 ### 9.3. Module Not Found Errors
 - **Cause**: Scripts are not being run from the correct project root directory.
-- **Solution**: Always run scripts from the project root (`w:\worxpace\artifact_lab`) or use the module syntax (`python -m workspace_manager.main`) to ensure correct path resolution.
+- **Solution**: Always run scripts from the project root (`l:\devops\artifact_lab`) or use the module syntax (`python -m ADE.main`) to ensure correct path resolution.
 
 ## 10. Project Evolution: Removed Components
 

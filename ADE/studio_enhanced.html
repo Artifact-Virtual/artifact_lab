@@ -3,28 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AVA Development Studio</title>
-    <style>
-        * {
+    <title>ADE - Artifact Development Engine</title>
+    <style>        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        body {
+        
+        /* Smooth transitions for all interactive elements */
+        button, .tab, .file-item, .editor-tab, .toolbar-button, .chat-action, 
+        .panel-action, .search-result, .context-menu-item, input, textarea {
+            transition: all 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        /* Subtle hover lift effect */
+        button:hover, .tab:hover, .file-item:hover, .editor-tab:hover, 
+        .toolbar-button:hover, .search-result:hover {
+            transform: translateY(-1px);
+        }
+        
+        /* Panel and resizer animations */
+        .sidebar, .chat-panel, .editor-tabs, .toolbar {
+            transition: all 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+        }body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #1e1e1e;
-            color: #d4d4d4;
+            background: #000000;
+            color: #ffffff;
             height: 100vh;
             overflow: hidden;
         }
         .container {
             display: flex;
             height: 100vh;
-        }
-        .sidebar {
+        }        .sidebar {
             width: 280px;
-            background: #252526;
-            border-right: 1px solid #3e3e42;
+            background: #000000;
+            border-right: 1px solid #333333;
             display: flex;
             flex-direction: column;
             position: relative;
@@ -41,28 +55,29 @@
         }
         .sidebar-resizer:hover {
             background: #007acc;
-        }
-        .tab-bar {
+        }        .tab-bar {
             display: flex;
-            background: #2d2d30;
-            border-bottom: 1px solid #3e3e42;
-        }
-        .tab {
+            background: #000000;
+            border-bottom: 1px solid #333333;
+        }        .tab {
             padding: 8px 12px;
             cursor: pointer;
-            border-right: 1px solid #3e3e42;
+            border-right: 1px solid #333333;
             font-size: 11px;
-            background: #37373d;
-            color: #cccccc;
+            background: #111111;
+            color: #ffffff;
             min-width: 60px;
             text-align: center;
+            transition: all 0.15s ease;
         }
         .tab.active {
-            background: #252526;
+            background: #000000;
             color: #ffffff;
+            box-shadow: inset 0 -2px 0 #007acc;
         }
         .tab:hover {
-            background: #2a2d2e;
+            background: #222222;
+            transform: translateY(-1px);
         }
         .panel {
             flex: 1;
@@ -71,11 +86,10 @@
         }
         .panel.active {
             display: block;
-        }
-        .panel-header {
+        }        .panel-header {
             padding: 10px 16px;
-            background: #2d2d30;
-            border-bottom: 1px solid #3e3e42;
+            background: #000000;
+            border-bottom: 1px solid #333333;
             font-weight: 600;
             font-size: 12px;
             display: flex;
@@ -100,18 +114,21 @@
         }
         .file-tree {
             padding: 8px 0;
-        }
-        .file-item {
+        }        .file-item {
             padding: 4px 16px;
             cursor: pointer;
             display: flex;
             align-items: center;
             font-size: 12px;
-            border-radius: 0;
+            border-radius: 3px;
             position: relative;
+            margin: 1px 4px;
+            transition: all 0.12s ease;
         }
         .file-item:hover {
-            background: #2a2d2e;
+            background: #1a1a1a;
+            transform: translateX(2px);
+            box-shadow: 2px 0 4px rgba(0, 122, 204, 0.1);
         }
         .file-item.selected {
             background: #094771;
@@ -158,32 +175,38 @@
         }
         .search-container {
             padding: 8px 16px;
-        }
-        .search-input {
+        }        .search-input {
             width: 100%;
             padding: 6px 10px;
-            background: #3c3c3c;
-            border: 1px solid #3e3e42;
-            color: #cccccc;
+            background: #111111;
+            border: 1px solid #333333;
+            color: #ffffff;
             border-radius: 4px;
             font-size: 12px;
+            transition: all 0.2s ease;
         }
         .search-input:focus {
             outline: none;
             border-color: #007acc;
+            box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+            transform: scale(1.02);
         }
         .search-results {
             padding: 8px 0;
-        }
-        .search-result {
+        }        .search-result {
             padding: 4px 16px;
             cursor: pointer;
             display: flex;
             align-items: center;
             font-size: 12px;
+            border-radius: 3px;
+            margin: 1px 4px;
+            transition: all 0.12s ease;
         }
         .search-result:hover {
-            background: #2a2d2e;
+            background: #1a1a1a;
+            transform: translateX(2px);
+            box-shadow: 2px 0 4px rgba(0, 122, 204, 0.1);
         }
         .search-result-path {
             color: #858585;
@@ -194,44 +217,43 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-        }
-        .editor-tabs {
+        }        .editor-tabs {
             height: 35px;
-            background: #2d2d30;
-            border-bottom: 1px solid #3e3e42;
+            background: #000000;
+            border-bottom: 1px solid #333333;
             display: flex;
             overflow-x: auto;
             scrollbar-width: thin;
         }
         .editor-tabs::-webkit-scrollbar {
             height: 4px;
-        }
-        .editor-tabs::-webkit-scrollbar-track {
-            background: #2d2d30;
+        }        .editor-tabs::-webkit-scrollbar-track {
+            background: #000000;
         }
         .editor-tabs::-webkit-scrollbar-thumb {
             background: #007acc;
             border-radius: 2px;
-        }
-        .editor-tab {
+        }        .editor-tab {
             display: flex;
             align-items: center;
             padding: 0 12px;
-            background: #37373d;
-            color: #cccccc;
-            border-right: 1px solid #3e3e42;
+            background: #111111;
+            color: #ffffff;
+            border-right: 1px solid #333333;
             cursor: pointer;
             font-size: 12px;
             min-width: 120px;
             max-width: 200px;
             position: relative;
-        }
-        .editor-tab.active {
-            background: #1e1e1e;
+            transition: all 0.15s ease;
+            border-radius: 3px 3px 0 0;
+        }        .editor-tab.active {
+            background: #000000;
             color: #ffffff;
-        }
-        .editor-tab:hover {
-            background: #2a2d2e;
+            box-shadow: inset 0 -2px 0 #007acc;
+        }        .editor-tab:hover {
+            background: #222222;
+            transform: translateY(-1px);
         }
         .editor-tab.modified::after {
             content: "●";
@@ -255,32 +277,38 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-        }
-        .toolbar {
+        }        .toolbar {
             height: 35px;
-            background: #2d2d30;
-            border-bottom: 1px solid #3e3e42;
+            background: #000000;
+            border-bottom: 1px solid #333333;
             display: flex;
             align-items: center;
             padding: 0 12px;
             gap: 8px;
-        }
-        .toolbar-button {
+        }        .toolbar-button {
             padding: 4px 8px;
             background: #007acc;
             color: white;
             border: none;
-            border-radius: 2px;
+            border-radius: 3px;
             cursor: pointer;
             font-size: 11px;
+            transition: all 0.15s ease;
         }
         .toolbar-button:hover {
             background: #1177bb;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 122, 204, 0.3);
+        }
+        .toolbar-button:active {
+            transform: translateY(0);
         }
         .toolbar-button:disabled {
-            background: #3e3e42;
-            color: #858585;
+            background: #333333;
+            color: #666666;
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
         .toolbar-separator {
             width: 1px;
@@ -335,14 +363,19 @@
         .status-bar .status-right {
             margin-left: auto;
             margin-right: 0;
-        }
-        .chat-panel {
+        }        .chat-panel {
             width: 350px;
-            background: #252526;
-            border-left: 1px solid #3e3e42;
+            background: #000000;
+            border-left: 1px solid #333333;
             display: flex;
             flex-direction: column;
             position: relative;
+            transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+            transform: translateX(0);
+        }
+        .chat-panel.hidden {
+            transform: translateX(100%);
+            opacity: 0;
         }
         .chat-panel-resizer {
             width: 4px;
@@ -356,11 +389,10 @@
         }
         .chat-panel-resizer:hover {
             background: #007acc;
-        }
-        .chat-header {
+        }        .chat-header {
             padding: 12px 16px;
-            background: #2d2d30;
-            border-bottom: 1px solid #3e3e42;
+            background: #000000;
+            border-bottom: 1px solid #333333;
             font-weight: 600;
             font-size: 12px;
             display: flex;
@@ -429,29 +461,30 @@
         }
         .message-action:hover {
             background: rgba(0, 122, 204, 0.5);
-        }
-        .chat-input-container {
+        }        .chat-input-container {
             padding: 12px;
-            border-top: 1px solid #3e3e42;
+            border-top: 1px solid #333333;
             display: flex;
             flex-direction: column;
             gap: 8px;
-        }
-        .chat-input {
+        }        .chat-input {
             width: 100%;
             padding: 8px 12px;
-            background: #3c3c3c;
-            border: 1px solid #3e3e42;
-            color: #cccccc;
+            background: #111111;
+            border: 1px solid #333333;
+            color: #ffffff;
             border-radius: 4px;
             font-size: 12px;
             resize: vertical;
             min-height: 60px;
             max-height: 120px;
+            transition: all 0.2s ease;
         }
         .chat-input:focus {
             outline: none;
             border-color: #007acc;
+            box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+            transform: scale(1.01);
         }
         .chat-input-actions {
             display: flex;
@@ -487,11 +520,10 @@
         }
         .chat-option input {
             margin: 0;
-        }
-        .context-menu {
+        }        .context-menu {
             position: fixed;
-            background: #2d2d30;
-            border: 1px solid #3e3e42;
+            background: #000000;
+            border: 1px solid #333333;
             border-radius: 4px;
             padding: 4px 0;
             z-index: 1000;
@@ -505,17 +537,36 @@
         }
         .context-menu-item:hover {
             background: #094771;
-        }
-        .context-menu-separator {
+        }        .context-menu-separator {
             height: 1px;
-            background: #3e3e42;
+            background: #333333;
             margin: 4px 0;
-        }
-        .loading {
+        }        .loading {
             text-align: center;
             padding: 20px;
             color: #858585;
             font-size: 12px;
+            animation: pulse 1.5s ease-in-out infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+        
+        @keyframes slideIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(10px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
+        .file-item, .search-result, .editor-tab {
+            animation: slideIn 0.2s ease-out;
         }
         .error {
             color: #f48771;
@@ -570,11 +621,10 @@
         }
         .git-status-deleted {
             color: #f48771;
-        }
-        .breadcrumb {
+        }        .breadcrumb {
             padding: 8px 16px;
-            background: #2d2d30;
-            border-bottom: 1px solid #3e3e42;
+            background: #000000;
+            border-bottom: 1px solid #333333;
             font-size: 11px;
             color: #858585;
         }
@@ -656,8 +706,7 @@
                     <span class="tab-label">Welcome</span>
                 </div>
             </div>
-            
-            <!-- Toolbar -->
+              <!-- Toolbar -->
             <div class="toolbar">
                 <button class="toolbar-button" id="saveBtn" onclick="saveFile()" disabled>Save</button>
                 <button class="toolbar-button" id="saveAllBtn" onclick="saveAllFiles()">Save All</button>
@@ -669,6 +718,7 @@
                 <button class="toolbar-button" onclick="findInFile()">Find</button>
                 <button class="toolbar-button" onclick="findAndReplace()">Replace</button>
                 <div class="toolbar-separator"></div>
+                <button class="toolbar-button" onclick="toggleChat()">AVA</button>
                 <button class="toolbar-button" onclick="toggleTheme()">Theme</button>
             </div>
             
@@ -689,27 +739,25 @@
                 <div id="statusLanguage"></div>
                 <div id="statusPosition">Line 1, Column 1</div>
                 <div id="statusSelection"></div>
-                <div class="status-right" id="statusRight">AVA Development Studio</div>
+                <div class="status-right" id="statusRight">ADE - Artifact Development Engine</div>
             </div>
         </div>
         
         <!-- AI Chat Panel -->
         <div class="chat-panel" id="chatPanel">
             <div class="chat-panel-resizer"></div>
-            <div class="chat-header">
-                <div>
-                    <strong>AVA Assistant</strong>
-                    <div style="font-size: 10px; font-weight: normal; color: #858585;">AI Code Assistant</div>
+            <div class="chat-header">                <div>
+                    <strong>AVA</strong>
+                    <div style="font-size: 10px; font-weight: normal; color: #858585;">Artifact Virtual Assistant</div>
                 </div>
                 <div class="chat-actions">
                     <button class="chat-action" onclick="clearChat()" title="Clear Chat">✕</button>
                     <button class="chat-action" onclick="toggleChat()" title="Toggle Chat">⟲</button>
                 </div>
             </div>
-            
-            <div class="chat-messages" id="chatMessages">
+              <div class="chat-messages" id="chatMessages">
                 <div class="ai-message">
-                    <div>Hello! I'm AVA, your AI development assistant. I can help you with:</div>
+                    <div>Hello! I'm AVA, your Artifact Virtual Assistant for the Artifact Development Engine. I can help you with:</div>
                     <div style="margin-top: 8px;">
                         • Code analysis and suggestions<br>
                         • File operations and management<br>
@@ -838,6 +886,9 @@
                     }
                 });
 
+                // Auto-focus the editor after creation
+                setTimeout(() => { editor.focus(); }, 200);
+
                 // Add editor event listeners
                 editor.onDidChangeModelContent(() => {
                     if (currentFile !== 'welcome') {
@@ -937,9 +988,7 @@
             } catch (error) {
                 showError('Error loading files: ' + error.message);
             }
-        }
-
-        function renderFileTree(items) {
+        }        function renderFileTree(items) {
             const tree = document.getElementById('fileTree');
             tree.innerHTML = '';
 
@@ -948,24 +997,35 @@
                 return;
             }
 
+            // Sort items: directories first, then files, both alphabetically
+            items.sort((a, b) => {
+                if (a.type === 'directory' && b.type === 'file') return -1;
+                if (a.type === 'file' && b.type === 'directory') return 1;
+                return a.name.localeCompare(b.name);
+            });
+
             items.forEach(item => {
                 const fileItem = document.createElement('div');
                 fileItem.className = `file-item ${item.type}`;
-                fileItem.innerHTML = `
-                    <span class="file-item-name">${item.name}</span>
-                    <div class="file-item-actions">
-                        ${item.type === 'file' ? 
-                            '<button class="file-action" onclick="openFile(\'' + item.name + '\')">Open</button>' : 
-                            '<button class="file-action" onclick="navigateToFolder(\'' + item.name + '\')">Open</button>'
-                        }
-                        <button class="file-action" onclick="showContextMenu(event, \'' + item.name + '\', \'' + item.type + '\')">⋮</button>
-                    </div>
-                `;
                 
-                if (item.type === 'file') {
-                    fileItem.onclick = () => openFile(item.name);
-                } else {
+                if (item.type === 'directory') {
+                    fileItem.innerHTML = `
+                        <span class="file-item-name">📁 ${item.name}</span>
+                        <div class="file-item-actions">
+                            <button class="file-action" onclick="navigateToFolder('${item.name}')">Open</button>
+                            <button class="file-action" onclick="showContextMenu(event, '${item.name}', '${item.type}')">⋮</button>
+                        </div>
+                    `;
                     fileItem.onclick = () => navigateToFolder(item.name);
+                } else {
+                    fileItem.innerHTML = `
+                        <span class="file-item-name">📄 ${item.name}</span>
+                        <div class="file-item-actions">
+                            <button class="file-action" onclick="openFile('${item.name}')">Open</button>
+                            <button class="file-action" onclick="showContextMenu(event, '${item.name}', '${item.type}')">⋮</button>
+                        </div>
+                    `;
+                    fileItem.onclick = () => openFile(item.name);
                 }
                 
                 tree.appendChild(fileItem);
@@ -1194,29 +1254,34 @@
             }
             
             performSearch(query);
-        });
-
-        async function performSearch(query) {
+        });        async function performSearch(query) {
             const results = document.getElementById('searchResults');
             results.innerHTML = '<div class="loading">Searching...</div>';
             
             try {
-                // This would be enhanced with backend search
-                const matchingFiles = files.filter(file => 
-                    file.type === 'file' && file.name.toLowerCase().includes(query)
-                );
+                // Search through all files recursively
+                const response = await fetch(`/api/files/list?path=${encodeURIComponent('/')}`);
+                const data = await response.json();
                 
-                if (matchingFiles.length === 0) {
-                    results.innerHTML = '<div class="loading">No results found</div>';
-                    return;
+                if (data.success) {
+                    const matchingFiles = data.items.filter(file => 
+                        file.type === 'file' && file.name.toLowerCase().includes(query)
+                    );
+                    
+                    if (matchingFiles.length === 0) {
+                        results.innerHTML = '<div class="loading">No results found</div>';
+                        return;
+                    }
+                    
+                    results.innerHTML = matchingFiles.map(file => 
+                        `<div class="search-result" onclick="openFile('${file.name}')">
+                            <span>📄 ${file.name}</span>
+                            <span class="search-result-path">${currentPath}</span>
+                        </div>`
+                    ).join('');
+                } else {
+                    results.innerHTML = '<div class="error">Search failed: ' + (data.error || 'Unknown error') + '</div>';
                 }
-                
-                results.innerHTML = matchingFiles.map(file => 
-                    `<div class="search-result" onclick="openFile('${file.name}')">
-                        <span>${file.name}</span>
-                        <span class="search-result-path">${currentPath}</span>
-                    </div>`
-                ).join('');
             } catch (error) {
                 results.innerHTML = '<div class="error">Search error: ' + error.message + '</div>';
             }
@@ -1283,9 +1348,8 @@
                 openFiles: Array.from(openFiles.keys()).filter(name => name !== 'welcome'),
                 currentPath: currentPath
             } : {};
-            
-            try {
-                const response = await fetch('/api/chat', {
+              try {
+                const response = await fetch('/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -1343,11 +1407,15 @@
                     <div class="message-time">${new Date().toLocaleTimeString()}</div>
                 </div>
             `;
-        }
-
-        function toggleChat() {
+        }        function toggleChat() {
             const chatPanel = document.getElementById('chatPanel');
-            chatPanel.style.display = chatPanel.style.display === 'none' ? 'flex' : 'none';
+            chatPanel.classList.toggle('hidden');
+            
+            // Update button text
+            const chatButton = document.querySelector('button[onclick="toggleChat()"]');
+            if (chatButton) {
+                chatButton.textContent = chatPanel.classList.contains('hidden') ? 'Show AVA' : 'AVA';
+            }
         }
 
         // Editor functionality
@@ -1470,17 +1538,15 @@
                 'makefile': 'makefile'
             };
             return languageMap[extension] || 'plaintext';
-        }
-
-        function getWelcomeContent() {
+        }        function getWelcomeContent() {
             return `<div class="welcome-content">
-                <h1>Welcome to AVA Development Studio</h1>
-                <p>Your AI-powered development workspace</p>
+                <h1>Welcome to ADE</h1>
+                <p>Artifact Development Engine - Your AI-powered development workspace</p>
                 
                 <h2>Features</h2>
                 <ul>
                     <li><strong>Monaco Editor</strong> - Full VS Code editing experience</li>
-                    <li><strong>AI Assistant</strong> - Intelligent code help and suggestions</li>
+                    <li><strong>AVA</strong> - Intelligent code help and suggestions</li>
                     <li><strong>File Management</strong> - Complete file and folder operations</li>
                     <li><strong>Multi-tab Editing</strong> - Work with multiple files simultaneously</li>
                     <li><strong>Advanced Search</strong> - Find files and content quickly</li>
@@ -1491,7 +1557,7 @@
                 <ul>
                     <li>Browse files in the <span class="highlight">Explorer</span> panel</li>
                     <li>Use <span class="highlight">Ctrl+S</span> to save files</li>
-                    <li>Ask the <span class="highlight">AI Assistant</span> for help</li>
+                    <li>Ask <span class="highlight">AVA</span> for help</li>
                     <li>Use <span class="highlight">Ctrl+F</span> to find in files</li>
                     <li>Right-click for context menus</li>
                 </ul>

@@ -1,9 +1,8 @@
 import subprocess
 import os
 import json
-import torch
 
-CONFIG_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../workspace_manager/config.json'))
+CONFIG_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../ADE/config.json'))
 
 
 def get_config():

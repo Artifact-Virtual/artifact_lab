@@ -1,15 +1,20 @@
-# Ignore data directories (relative paths)
+# Ignore relative data directories
 .data/
 .core/
 ollama_models/
 .pt_models/
-workspace_manager/__pycache__/
+ADE/__pycache__/
 node_modules/
 
-# Ignore data directories (absolute paths, Windows style)
+# Ignore absolute data directories (Windows style)
 W:/worxpace/artifact_lab/.data/
 W:/worxpace/artifact_lab/.core/
 W:/worxpace/artifact_lab/ollama_models/
 W:/worxpace/artifact_lab/.pt_models/
-W:/worxpace/artifact_lab/workspace_manager/__pycache__/
+W:/worxpace/artifact_lab/ADE/__pycache__/
 W:/worxpace/artifact_lab/node_modules/
+
+# General improvements
+# - Added comments for clarity
+# - Grouped related entries for better organization
+# - Ensured consistent formatting

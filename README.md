@@ -40,7 +40,7 @@ A comprehensive development studio featuring a clean, professional Monaco Editor
 ├── .pt_models/             # PyTorch model storage
 ├── _thoughtprocess/        # Drafts, notes, SOPs
 ├── system/                 # BlackNet, DevCore, and related system modules
-├── workspace_manager/      # Main analytics, visualization, and orchestration code
+├── ADE/                    # Main analytics, visualization, and orchestration code
 │   ├── __init__.py
 │   ├── config.json
 │   ├── dependency_index.json
@@ -86,7 +86,7 @@ A comprehensive development studio featuring a clean, professional Monaco Editor
   ollama pull qwen2.5-coder:latest
   ```
 
-3. **(Optional) Configure settings** in `workspace_manager/config.json`:
+3. **(Optional) Configure settings** in `ADE/config.json`:
   ```json
   {
     "ollama_model": "qwen2.5-coder:latest",
@@ -168,17 +168,17 @@ A comprehensive development studio featuring a clean, professional Monaco Editor
 
 ## Components
 
-- **Web Chat Interface** (`workspace_manager/webchat.py`): Modern browser chat with Ollama AI.
-- **3D Visualizer** (`workspace_manager/visualizer.py`): Interactive 3D codebase visualization.
-- **File Watcher** (`workspace_manager/watcher.py`): Monitors file system changes.
-- **Dependency Indexer** (`workspace_manager/dependency_indexer.py`): Scans workspace and builds dependency index.
-- **AI Summarizer** (`workspace_manager/summarizer.py`): Summarizes codebase using Ollama.
-- **Enhanced Visualizer** (`workspace_manager/enhanced_visualizer.py`): Advanced analytics dashboard.
+- **Web Chat Interface** (`ADE/webchat.py`): Modern browser chat with Ollama AI.
+- **3D Visualizer** (`ADE/visualizer.py`): Interactive 3D codebase visualization.
+- **File Watcher** (`ADE/watcher.py`): Monitors file system changes.
+- **Dependency Indexer** (`ADE/dependency_indexer.py`): Scans workspace and builds dependency index.
+- **AI Summarizer** (`ADE/summarizer.py`): Summarizes codebase using Ollama.
+- **Enhanced Visualizer** (`ADE/enhanced_visualizer.py`): Advanced analytics dashboard.
 - **Amenzia VPN Integration**: Provides a secure, invisible network layer for all lab operations.
 
 ## Configuration
 
-Edit `workspace_manager/config.json` to customize Ollama and webchat settings.  
+Edit `ADE/config.json` to customize Ollama and webchat settings.  
 Configure Amenzia VPN as per [Amenzia documentation](https://amenzia.com/docs) for maximum privacy.
 
 ## Troubleshooting
@@ -201,23 +201,23 @@ Configure Amenzia VPN as per [Amenzia documentation](https://amenzia.com/docs) f
 To run components individually:
 
 ```bash
-python workspace_manager/visualizer.py        # Just the visualizer
-python workspace_manager/webchat.py           # Just the web chat
-python -m workspace_manager.main              # Main orchestrator (no Ollama auto-start)
+python ADE/visualizer.py        # Just the visualizer
+python ADE/webchat.py           # Just the web chat
+python -m ADE.main              # Main orchestrator (no Ollama auto-start)
 ```
 
 ## Commands & Modules
 
 - `run.sh` — Entrypoint script (starts Ollama and the lab)
-- `workspace_manager/main.py` — Main orchestrator
-- `workspace_manager/watcher.py` — Watches for file changes
-- `workspace_manager/dependency_indexer.py` — Builds/updates dependency index
-- `workspace_manager/summarizer.py` — Summarizes codebase using Ollama
-- `workspace_manager/ollama_client.py` — Abstraction for Ollama LLM API
-- `workspace_manager/visualizer.py` — 3D visualization of codebase
-- `workspace_manager/config.json` — Ollama configuration
-- `workspace_manager/dependency_index.json` — Directory-wise dependency index
-- `workspace_manager/system_summary.json` — Maintained codebase summary
+- `ADE/main.py` — Main orchestrator
+- `ADE/watcher.py` — Watches for file changes
+- `ADE/dependency_indexer.py` — Builds/updates dependency index
+- `ADE/summarizer.py` — Summarizes codebase using Ollama
+- `ADE/ollama_client.py` — Abstraction for Ollama LLM API
+- `ADE/visualizer.py` — 3D visualization of codebase
+- `ADE/config.json` — Ollama configuration
+- `ADE/dependency_index.json` — Directory-wise dependency index
+- `ADE/system_summary.json` — Maintained codebase summary
 
 ## Requirements
 
@@ -228,7 +228,7 @@ python -m workspace_manager.main              # Main orchestrator (no Ollama aut
 
 ## Notes
 
-- All data, config, and outputs are in `workspace_manager/`.
+- All data, config, and outputs are in `ADE/`.
 - Designed for extensibility and can be adapted for larger codebases or additional LLMs.
 - For best results, ensure Ollama is installed and the desired model is pulled.
 - For maximum privacy and invisibility, enable Amenzia VPN during all operations.
@@ -250,5 +250,5 @@ See [license.txt](license.txt) for details (MIT License).
 ## See Also
 - `FILE_MANAGER.md` for file manager help and supported languages
 - `STUDIO_FEATURES.md` for full studio features and API
-- `workspace_manager/WORKSPACE_MANAGER.md` for system architecture
+- `ADE/ADE.md` for system architecture
 - `_thoughtprocess/notes/n220625.sop` for operational procedures and changelog

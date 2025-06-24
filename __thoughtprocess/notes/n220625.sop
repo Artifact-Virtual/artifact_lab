@@ -1,7 +1,7 @@
 # USER LOCKED
 1 - warp install for simulation or altrenate.
 2 - add multi language support
-3 - automation
+3 - automation setup
 
 
 ------------------------------------------------------------------------------
@@ -9,10 +9,10 @@
 ║                  STANDARD OPERATING PROCEDURES (SOP)                       ║
 ╠════════════════════════════════════════════════════════════════════════════╣
     1. ▶ Always run `./run.sh` from root when you login to the workspace.
-    2. ▶ Use `python workspace_manager/webchat.py` to start the AVA system.
-    3. ▶ Access file manager at http://localhost:8080/file-manager for development.
-    4. ▶ Access AI chat interface at http://localhost:8080 for assistance.
-    5. ▶ Use the new Studio interface (`studio.html`/`studio_enhanced.html`) for advanced Monaco+AI+search workflows (coming soon).
+    2. ▶ Use `python ADE/webchat.py` to start the ADE system.
+    3. ▶ Access the Studio interface at http://localhost:8080 for development.
+    4. ▶ Access AI chat interface at http://localhost:8080 for AVA assistance.
+    5. ▶ Use the Studio interface (`studio_enhanced.html`) for Monaco+AI+search workflows.
     6. ▶ Follow PEP8 guidelines for Python code.
     7. ▶ Always update this file. ALWAYS. No exceptions.
     8. ▶ Perform a full codebase review periodically to ensure no errors exist.
@@ -21,19 +21,20 @@
                 ▸ (no trailing commas, valid syntax).
    10. ▶ Ensure all model/provider logic is routed through a single config file (`config.json`).
    11. ▶ Standardize import paths and config resolution for all entry-point scripts.
-   12. ▶ ALWAYS UPDATE workspace_manager\config.json with latest updated SOPs (this file).
+   12. ▶ ALWAYS UPDATE ADE\config.json with latest updated SOPs (this file).
    13. ▶ LLM must have secure, auditable read/write access to the codebase via backend API.
    14. ▶ LLM should be able to both suggest and directly make codebase changes (with audit trail).
    15. ▶ Backend API must support advanced file/code management (list, read, write, create, search).
    16. ▶ Monaco Editor is primary development interface; ensure all file operations work seamlessly.
    17. ▶ If using vector DB or code store, ensure LLM can utilize for semantic code search.
-   18. ▶ All LLM-driven changes must be user-controllable (approve, undo) and meticulously logged.   19. ▶ AVA File Manager and Studio must maintain VS Code-like experience with professional interface.
+   18. ▶ All LLM-driven changes must be user-controllable (approve, undo) and meticulously logged.
+   19. ▶ ADE Studio must maintain VS Code-like experience with professional AMOLED interface.
    20. ▶ Monitor server status regularly; restart if connections fail.
-   21. ▶ Ensure Ollama service is running before starting any AVA components.
-   22. ▶ Use Monaco Editor as primary development environment with AI chat integration.
+   21. ▶ Ensure Ollama service is running before starting any ADE components.
+   22. ▶ Use Monaco Editor as primary development environment with AVA chat integration.
    23. ▶ Integrate Windmill for enhanced workflow automation (planned, see roadmap).
-   24. ▶ Maintain comprehensive documentation for all file manager and studio capabilities.
-   25. ▶ Use the chat panel in Studio for AI-driven file operations and code assistance (planned).
+   24. ▶ Maintain comprehensive documentation for all studio capabilities.
+   25. ▶ Use the integrated chat panel in Studio for AI-driven file operations and code assistance.
 
 ╠════════════════════════════════════════════════════════════════════════════╣
 ║                                CHANGELOG                                   ║
@@ -47,57 +48,86 @@
  ✅ Full-featured code editor with syntax highlighting, file explorer, and save functionality
  ✅ LLM interaction logging and audit trail system implemented
  ✅ Enhanced chat interface with file context and code modification capabilities
- ✅ PHASE 3 COMPLETE: System operational with troubleshooting procedures
- ✅ AVA system fully functional with comprehensive monitoring and restart capabilities ✅ PHASE 4 COMPLETE: Monaco-First File Manager Implementation
+ ✅ PHASE 3 COMPLETE: System operational with troubleshooting procedures ✅ AVA system fully functional with comprehensive monitoring and restart capabilities 
+ ✅ PHASE 4 COMPLETE: Studio Enhanced Implementation
  ✅ Professional VS Code-like interface with 180+ language support
- ✅ Dedicated file manager at / (root) endpoint - now default interface
- ✅ ADAM-matching color scheme: pure black background, white text, gray accents
- ✅ Clean, professional UI with consistent monochromatic theme ✅ Comprehensive documentation created (FILE_MANAGER.md, STUDIO_FEATURES.md)
- ✅ Enhanced visualizer streamlined (3D visualizer removed)
- ✅ Updated all project documentation (README.md, WORKSPACE_MANAGER.md)
- ✅ Studio interface (Monaco+AI+search) ready for Phase 5
- 🔄 PHASE 5 PENDING: Advanced integrations (Windmill, workflow automation)
- 🔄 PHASE 6 PENDING: Chat integration with file context, multi-file/project operations, advanced search, git, and collaboration
+ ✅ ADE Studio at / (root) endpoint - now default interface
+ ✅ AMOLED theme: pure black background (#000000), white text (#ffffff), consistent theming
+ ✅ Clean, professional UI with true AMOLED black theme throughout
+ ✅ PHASE 5 COMPLETE: Directory Restructure & Naming Consistency
+ ✅ Renamed workspace_manager → ADE (Artifact Development Engine)
+ ✅ Updated all file paths and config references
+ ✅ Consistent naming: ADE = platform, AVA = AI assistant
+ ✅ Fixed all import paths and configuration loading
+ ✅ Updated documentation and interface naming ✅ Studio interface (Monaco+AI+search+chat) fully operational
+ ✅ PHASE 6 COMPLETE: UI Polish & Animation Enhancement
+ ✅ Fixed chat toggle functionality with smooth slide animations
+ ✅ Added subtle, professional animations throughout IDE (0.15s transitions)
+ ✅ Enhanced responsiveness with hover effects, focus animations, and visual feedback
+ ✅ Improved file sorting (directories first, alphabetical)
+ ✅ Updated run.sh script with clear ADE Studio IDE startup messaging
+ 🔄 PHASE 7 PENDING: Advanced integrations (Windmill, workflow automation)
+ 🔄 PHASE 8 PENDING: Multi-file/project operations, advanced search, git, and collaboration
 
 ╠════════════════════════════════════════════════════════════════════════════╣
-║                  AVA FILE MANAGER & STUDIO OPERATIONAL PROCEDURES (2025-06-23)      ║
-╠════════════════════════════════════════════════════════════════════════════╣
- ▶ DAILY STARTUP CHECKLIST:
+║              ADE STUDIO & AVA OPERATIONAL PROCEDURES (2025-06-24)          ║
+╠════════════════════════════════════════════════════════════════════════════╣ ▶ DAILY STARTUP CHECKLIST:
    1. Verify Ollama service: `ollama list` (confirm models available)
-   2. Start AVA server: `cd workspace_manager && python webchat.py`
-   3. Test file manager: http://localhost:8080 (now default interface)
-   4. Test legacy chat interface: http://localhost:8080/chat-old
-   5. Test Studio interface: http://localhost:8080/studio (Phase 5)
-   6. Verify file operations: open, edit, save functionality
- ▶ FILE MANAGER & STUDIO OPERATIONS:
-   • Primary Interface: http://localhost:8080 (Monaco file manager - default)
-   • Studio Interface: http://localhost:8080/studio (Phase 5 - advanced integrations)
-   • Legacy Chat: http://localhost:8080/chat-old (backup interface)
-   • Design: ADAM-matching theme - pure black background, white text, gray accents
-   • Supported Languages: 180+ with full syntax highlighting
-   • Key Shortcuts: Ctrl+S (save), Ctrl+R (refresh), Ctrl+N (new file)
-   • Features: IntelliSense, error detection, find/replace, multiple cursors, multi-tab
-   • File Tree: Click files to open, automatic language detection   • Status Bar: Real-time feedback on operations and modifications
-   • Clean UI: Professional, consistent monochromatic design
-   • Chat Panel: AI can reference and modify open files (Phase 5)
-   • Windmill: Workflow/data management integration (Phase 5)
-
+   2. Start complete ADE system: `./run.sh` from root (RECOMMENDED - starts everything)
+      OR manually: `cd ADE && python webchat.py` (IDE only)
+   3. Access ADE Studio IDE: http://localhost:8080 (automatically opens after run.sh)
+   4. Test AVA chat integration: Use AVA button in toolbar or chat panel
+   5. Verify file operations: open, edit, save functionality with smooth animations
+   6. Confirm AMOLED theme: pure black backgrounds, white text, subtle animations ▶ ADE STUDIO OPERATIONS:
+   • Primary Interface: http://localhost:8080 (ADE Studio Enhanced - default)
+   • Startup Command: `./run.sh` (starts Ollama + background services + ADE Studio IDE)
+   • Alternative Access: http://localhost:8080/studio (same interface)
+   • Platform: ADE (Artifact Development Engine)
+   • AI Assistant: AVA (Artifact Virtual Assistant) - integrated in chat panel
+   • Theme: True AMOLED black - pure black (#000000) background, white (#ffffff) text
+   • Animations: Subtle 0.15s transitions, hover effects, focus animations for professional feel
+   • Supported Languages: 180+ with full syntax highlighting via Monaco Editor
+   • Key Shortcuts: Ctrl+S (save), Ctrl+Shift+S (save all), Ctrl+F (find), Ctrl+H (replace)
+   • Features: IntelliSense, error detection, find/replace, multiple cursors, multi-tab editing
+   • File Explorer: Sidebar with folder navigation, smooth animations, sorted display
+   • Search: Real-time file search in sidebar with instant results and hover effects
+   • Status Bar: Real-time feedback on file operations, cursor position, language detection
+   • Chat Panel: AVA with file context, direct code modifications, toggle via toolbar
+   • Context Menus: Right-click for file operations (copy, cut, paste, rename, delete)
+   • Tabs: Multi-file editing with modified indicators, close buttons, and hover animations
+   • Toolbar: Save, format, find/replace, AVA toggle, theme toggle, word wrap, minimap controls
  ▶ TROUBLESHOOTING PROCEDURES:
    • Monaco Editor not loading:
      → Check internet connection (CDN dependency)
-     → Verify browser compatibility (Chrome 90+, Firefox 88+)
+     → Verify browser compatibility (Chrome 90+, Firefox 88+, Safari 14+)
    • File operations failing:
      → Check API endpoints: /api/files/list, /api/files/read, /api/files/write
      → Verify file permissions and path validity
-   • AI chat not responding:
-     → Check Ollama status and model availability
-     → Restart backend if needed
- ▶ ROADMAP & FUTURE PLANS:
-   • Studio interface with Monaco+AI+search (multi-tab, chat, search, git, context menus)
-   • Windmill integration for advanced workflow/data management
-   • Chat panel with file/project context and direct file operations
-   • Multi-file/project operations, advanced search, git/source control, real-time collaboration
-   • Semantic search and vector DB integration
+     → Ensure ADE/config.json exists and is properly formatted
+   • AVA chat not responding:
+     → Check Ollama status: `ollama list` and `ollama serve`
+     → Verify model availability (codellama:7b default)
+     → Check ADE/config.json for correct Ollama endpoint
+     → Restart ADE server if needed: `python ADE/webchat.py`
+   • AMOLED theme issues:
+     → Verify CSS consistency in studio_enhanced.html
+     → Check for gray backgrounds - should be pure black (#000000)
+     → Ensure text is white (#ffffff) for maximum contrast ▶ ROADMAP & FUTURE PLANS:
+   • Multi-project workspace management and project templates
+   • Enhanced git integration with visual diff and merge tools
+   • Windmill integration for advanced workflow/data management automation
+   • Advanced search with regex, file content search, and cross-project search
+   • Real-time collaboration features and shared workspaces
+   • Semantic search and vector DB integration for intelligent code discovery
+   • Plugin system for custom extensions and third-party integrations
    • All changes and new features must be reflected in documentation and SOP
+    ▶ CURRENT SYSTEM STATE (June 24, 2025):
+   • Directory: ADE (formerly workspace_manager) - Artifact Development Engine
+   • Entry Script: ./run.sh (starts Ollama + background services + ADE Studio IDE)
+   • Main Server: ADE/webchat.py (Flask server with file API and AVA chat)
+   • Configuration: ADE/config.json (all settings and model configuration)
+   • Interface: studio_enhanced.html (Monaco Editor + AVA + File Explorer + Search + Animations)
+   • Theme: True AMOLED black theme with subtle professional animations
+   • Status: Fully operational with polished UI, smooth animations, and complete IDE functionality
 
 ╚════════════════════════════════════════════════════════════════════════════╝
