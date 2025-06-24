@@ -17,7 +17,7 @@ def start_flask_server():
     from ADE import webchat
     try:
         # Start the Flask app
-        webchat.app.run(host='0.0.0.0', port=8080, debug=False, use_reloader=False)
+        webchat.app.run(host='0.0.0.0', port=9000, debug=False, use_reloader=False)
     except Exception as e:
         print(f"Flask server error: {e}")
 
@@ -26,7 +26,7 @@ def wait_for_server():
     max_attempts = 30
     for i in range(max_attempts):
         try:
-            response = requests.get('http://localhost:8080', timeout=1)
+            response = requests.get('http://localhost:9000', timeout=1)
             if response.status_code == 200:
                 return True
         except:
@@ -53,7 +53,7 @@ def main():
     # Create the webview window
     webview.create_window(
         title='ADE Studio - Artifact Development Engine',
-        url='http://localhost:8080',
+        url='http://localhost:9000',
         width=1400,
         height=900,
         min_size=(1200, 800),

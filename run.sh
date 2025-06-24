@@ -1,14 +1,11 @@
 #!/bin/bash
-# Entrypoint for Artifact Lab workspace manager (cross-platform)
+# Entrypoint for ADE Desktop - starts all services and launches Electron app
 
 # Cleanup background processes on exit
 cleanup() {
     echo "Cleaning up background processes..."
-    if [ ! -z "$MAIN_PID" ]; then
-        kill $MAIN_PID 2>/dev/null || true
-    fi
-    if [ ! -z "$VIZ_PID" ]; then
-        kill $VIZ_PID 2>/dev/null || true
+    if [ ! -z "$WEBCHAT_PID" ]; then
+        kill $WEBCHAT_PID 2>/dev/null || true
     fi
     if [ ! -z "$OLLAMA_PID" ]; then
         kill $OLLAMA_PID 2>/dev/null || true
@@ -16,30 +13,38 @@ cleanup() {
 }
 trap cleanup EXIT
 
-echo "Starting Artifact Lab Workspace Manager..."
+echo "Starting ADE (Artifact Development Engine) Desktop..."
 
-# Cross-platform Ollama port check (works in Git Bash, WSL, and Windows with netstat)
+# Check if Ollama is running on dedicated port 11500
+echo "Checking for Ollama on port 11500..."
 if command -v lsof &> /dev/null; then
-    OLLAMA_RUNNING=$(lsof -i:11434 | grep LISTEN)
+    OLLAMA_RUNNING=$(lsof -i:11500 | grep LISTEN)
 else
-    OLLAMA_RUNNING=$(netstat -ano | grep 11434)
+    OLLAMA_RUNNING=$(netstat -ano | grep 11500)
 fi
 
 if [ -n "$OLLAMA_RUNNING" ]; then
-    echo "Ollama server is already running on port 11434"
+    echo "Ollama server is already running on port 11500"
 else
-    echo "Starting Ollama server..."
-    ollama serve &
-    OLLAMA_PID=$!
-    # Wait for Ollama to be ready
-    echo "Waiting for Ollama to be ready..."
-    for i in {1..30}; do
-        if curl -s http://localhost:11434/api/version > /dev/null 2>&1; then
-            echo "Ollama server is ready!"
-            break
-        fi
-        sleep 1
-    done
+    # Check if Ollama is running on any port
+    if pgrep -x "ollama" > /dev/null; then
+        echo "Ollama is running on a different port. Will use existing instance."    else
+        echo "Starting Ollama server on dedicated port 11500..."
+        OLLAMA_HOST=127.0.0.1:11500 ollama serve &
+        OLLAMA_PID=$!
+        # Wait for Ollama to be ready
+        echo "Waiting for Ollama to be ready..."
+        for i in {1..30}; do
+            if curl -s http://localhost:11500/api/version > /dev/null 2>&1; then
+                echo "Ollama server is ready!"
+                break
+            fi
+            sleep 2
+            if [ $i -eq 30 ]; then
+                echo "Warning: Ollama may not be fully ready yet, continuing..."
+            fi
+        done
+    fi
 fi
 
 # Detect python command (python, python3, or py)
@@ -55,25 +60,51 @@ if ! command -v python &> /dev/null; then
     fi
 fi
 
-# Start all components
-cd ADE
+# Determine workspace root directory
+if [ -d "ADE" ]; then
+    # Already in workspace root
+    WORKSPACE_ROOT=$(pwd)
+elif [ -d "../ADE" ]; then
+    # In ADE-Desktop subdirectory
+    cd ..
+    WORKSPACE_ROOT=$(pwd)
+else
+    echo "ERROR: Cannot find ADE directory. Please run from workspace root or ADE-Desktop."
+    exit 1
+fi
 
-echo "Starting background services (watcher, summarizer, dependency indexer)..."
-$PYTHON_CMD main.py &
-MAIN_PID=$!
+# Start ONLY the ADE webchat service on port 9000 for Electron integration
+echo "Starting ADE webchat service on port 9000..."
+$PYTHON_CMD ADE-Desktop/ade_core/webchat.py &
+WEBCHAT_PID=$!
 
-sleep 2
+# Give the service a moment to start
+sleep 3
 
-echo "Launching Enhanced Metrics Visualizer in background..."
-$PYTHON_CMD enhanced_visualizer.py &
-VIZ_PID=$!
+# Wait for ADE service to be ready
+echo "Waiting for ADE service to be ready..."
+for i in {1..30}; do
+    if curl -s http://localhost:9000/status > /dev/null 2>&1; then
+        echo "ADE service is ready!"
+        break
+    fi
+    sleep 2
+    if [ $i -eq 30 ]; then
+        echo "Warning: ADE service may not be fully ready, but launching desktop app anyway..."
+    fi
+done
 
-sleep 2
+# Launch the Electron desktop app
+echo "Launching ADE Desktop application..."
+cd ADE-Desktop
 
-echo "Starting ADE Studio IDE (Monaco editor, file manager, AVA chat)..."
-echo "ADE Studio will be available at: http://localhost:8080"
-echo "Press Ctrl+C to stop all services"
-$PYTHON_CMD webchat.py
-
-# Cleanup will run on exit
+if [ -d "node_modules" ]; then
+    echo "Starting ADE Desktop..."
+    npm start
+else
+    echo "Installing dependencies first..."
+    npm install
+    echo "Starting ADE Desktop..."
+    npm start
+fi
 

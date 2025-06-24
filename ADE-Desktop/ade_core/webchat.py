@@ -4,9 +4,21 @@ import json
 import requests
 from flask import Flask, request, jsonify  # removed render_template_string (unused)
 
-# Add DevCore to path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'DevCore')))
-from ollama_interface import query_model
+# Add the correct path to find ollama_interface
+current_dir = os.path.dirname(__file__)
+workspace_root = os.path.abspath(os.path.join(current_dir, '..', '..'))
+devcore_path = os.path.join(workspace_root, 'DevCore')
+ade_path = os.path.join(workspace_root, 'ADE')
+
+sys.path.insert(0, devcore_path)
+sys.path.insert(0, ade_path)
+
+try:
+    from ollama_interface import query_model
+except ImportError:
+    # If DevCore import fails, create a dummy function
+    def query_model(message):
+        return "Error: LLM service not available. Please ensure Ollama is running and ollama_interface.py is accessible."
 
 app = Flask(__name__)
 
@@ -151,7 +163,8 @@ def log_llm_interaction(message, response, context=None, file_operations=None):
         print(f"Warning: Could not write to LLM audit log: {e}")
 
 def get_workspace_root():
-    return os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    # From ADE-Desktop/ade_core, go up two levels to reach workspace root
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 
 def is_safe_path(path):
     try:

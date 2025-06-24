@@ -7,19 +7,18 @@
 ------------------------------------------------------------------------------
 ╔════════════════════════════════════════════════════════════════════════════╗
 ║                  STANDARD OPERATING PROCEDURES (SOP)                       ║
-╠════════════════════════════════════════════════════════════════════════════╣
-    1. ▶ Always run `./run.sh` from root when you login to the workspace.
-    2. ▶ Use `python ADE/webchat.py` to start the ADE system.
-    3. ▶ Access the Studio interface at http://localhost:8080 for development.
-    4. ▶ Access AI chat interface at http://localhost:8080 for AVA assistance.
-    5. ▶ Use the Studio interface (`studio_enhanced.html`) for Monaco+AI+search workflows.
+╠════════════════════════════════════════════════════════════════════════════╣    1. ▶ Always run `./run.sh` (Linux/macOS) or `./run.ps1` (Windows) from root to start ADE Desktop.
+    2. ▶ The startup script handles all service orchestration automatically (Ollama + ADE services + Electron UI).
+    3. ▶ ADE webchat service runs on http://localhost:9000 for desktop integration.
+    4. ▶ Ollama runs on dedicated port 11500 for ADE Desktop (isolated from other Ollama instances).
+    5. ▶ Use the Desktop IDE for Monaco+AI+search workflows with native app experience.
     6. ▶ Follow PEP8 guidelines for Python code.
     7. ▶ Always update this file. ALWAYS. No exceptions.
     8. ▶ Perform a full codebase review periodically to ensure no errors exist.
                 ▸ Fix all issues, big or small, without workarounds or cutting corners.
     9. ▶ Always validate and fix JSON config files for strict compliance
                 ▸ (no trailing commas, valid syntax).
-   10. ▶ Ensure all model/provider logic is routed through a single config file (`config.json`).
+   10. ▶ Ensure all model/provider logic is routed through config files (config.json and ade_core/config.json).
    11. ▶ Standardize import paths and config resolution for all entry-point scripts.
    12. ▶ ALWAYS UPDATE ADE\config.json with latest updated SOPs (this file).
    13. ▶ LLM must have secure, auditable read/write access to the codebase via backend API.
@@ -59,31 +58,31 @@
  ✅ Updated all file paths and config references
  ✅ Consistent naming: ADE = platform, AVA = AI assistant
  ✅ Fixed all import paths and configuration loading
- ✅ Updated documentation and interface naming ✅ Studio interface (Monaco+AI+search+chat) fully operational
- ✅ PHASE 6 COMPLETE: UI Polish & Animation Enhancement
- ✅ Fixed chat toggle functionality with smooth slide animations
- ✅ Added subtle, professional animations throughout IDE (0.15s transitions)
- ✅ Enhanced responsiveness with hover effects, focus animations, and visual feedback
- ✅ Improved file sorting (directories first, alphabetical)
- ✅ Updated run.sh script with clear ADE Studio IDE startup messaging
- 🔄 PHASE 7 PENDING: Advanced integrations (Windmill, workflow automation)
- 🔄 PHASE 8 PENDING: Multi-file/project operations, advanced search, git, and collaboration
+ ✅ Updated documentation and interface naming ✅ Studio interface (Monaco+AI+search+chat) fully operational ✅ PHASE 7 COMPLETE: Desktop Application Architecture
+ ✅ Created Electron-based ADE Desktop with native app experience and bezelless design
+ ✅ Separated service orchestration: run.sh/run.ps1 manage all backend services
+ ✅ Electron app is pure UI wrapper - no service management conflicts
+ ✅ Port isolation: Ollama on 11500, ADE webchat on 9000, no conflicts with existing services
+ ✅ Robust startup: services start first, then Electron UI connects when ready
+ ✅ Simplified troubleshooting: single entry point (run.sh/run.ps1) manages everything
+ 🔄 PHASE 8 PENDING: Advanced integrations (Windmill, workflow automation)
+ 🔄 PHASE 9 PENDING: Multi-file/project operations, advanced search, git, and collaboration
 
 ╠════════════════════════════════════════════════════════════════════════════╣
 ║              ADE STUDIO & AVA OPERATIONAL PROCEDURES (2025-06-24)          ║
 ╠════════════════════════════════════════════════════════════════════════════╣ ▶ DAILY STARTUP CHECKLIST:
-   1. Verify Ollama service: `ollama list` (confirm models available)
-   2. Start complete ADE system: `./run.sh` from root (RECOMMENDED - starts everything)
-      OR manually: `cd ADE && python webchat.py` (IDE only)
-   3. Access ADE Studio IDE: http://localhost:8080 (automatically opens after run.sh)
+   1. Verify Ollama is available: `ollama list` (optional - ADE will work without it)
+   2. Start complete ADE Desktop system: `./run.sh` (Linux/macOS) or `./run.ps1` (Windows) from root
+      → This starts: Ollama (port 11500) + ADE services + Desktop UI automatically
+   3. ADE Desktop app will launch automatically after services are ready
    4. Test AVA chat integration: Use AVA button in toolbar or chat panel
    5. Verify file operations: open, edit, save functionality with smooth animations
-   6. Confirm AMOLED theme: pure black backgrounds, white text, subtle animations ▶ ADE STUDIO OPERATIONS:
-   • Primary Interface: http://localhost:8080 (ADE Studio Enhanced - default)
-   • Startup Command: `./run.sh` (starts Ollama + background services + ADE Studio IDE)
-   • Alternative Access: http://localhost:8080/studio (same interface)
-   • Platform: ADE (Artifact Development Engine)
-   • AI Assistant: AVA (Artifact Virtual Assistant) - integrated in chat panel
+   6. Confirm AMOLED theme: pure black backgrounds, white text, subtle animations ▶ ADE DESKTOP OPERATIONS:
+   • Primary Interface: Native Electron Desktop Application (ADE Desktop)
+   • Startup Command: `./run.sh` (Linux/macOS) or `./run.ps1` (Windows) - starts all services + UI
+   • Service Architecture: Ollama (port 11500) + ADE webchat (port 9000) + Desktop UI wrapper
+   • Platform: ADE (Artifact Development Engine) with native desktop experience
+   • AI Assistant: AVA (Artifact Virtual Assistant) - integrated in desktop chat panel
    • Theme: True AMOLED black - pure black (#000000) background, white (#ffffff) text
    • Animations: Subtle 0.15s transitions, hover effects, focus animations for professional feel
    • Supported Languages: 180+ with full syntax highlighting via Monaco Editor
@@ -95,24 +94,31 @@
    • Chat Panel: AVA with file context, direct code modifications, toggle via toolbar
    • Context Menus: Right-click for file operations (copy, cut, paste, rename, delete)
    • Tabs: Multi-file editing with modified indicators, close buttons, and hover animations
-   • Toolbar: Save, format, find/replace, AVA toggle, theme toggle, word wrap, minimap controls
- ▶ TROUBLESHOOTING PROCEDURES:
+   • Toolbar: Save, format, find/replace, AVA toggle, theme toggle, word wrap, minimap controls ▶ TROUBLESHOOTING PROCEDURES:
+   • ADE Desktop won't start:
+     → Ensure Node.js is installed (v16+)
+     → Check if ports 9000 or 11500 are in use by other processes
+     → Try running `./run.ps1` or `./run.sh` as administrator/sudo if needed
+   • Services not connecting:
+     → Services are started automatically by startup scripts
+     → Check console output during startup for error messages
+     → Verify Python is installed and accessible
    • Monaco Editor not loading:
      → Check internet connection (CDN dependency)
-     → Verify browser compatibility (Chrome 90+, Firefox 88+, Safari 14+)
+     → Verify browser compatibility in Electron (automatic)
    • File operations failing:
      → Check API endpoints: /api/files/list, /api/files/read, /api/files/write
      → Verify file permissions and path validity
-     → Ensure ADE/config.json exists and is properly formatted
+     → Ensure ADE-Desktop/ade_core/config.json exists and is properly formatted
    • AVA chat not responding:
-     → Check Ollama status: `ollama list` and `ollama serve`
+     → Check if Ollama is running: startup script handles this automatically
      → Verify model availability (codellama:7b default)
-     → Check ADE/config.json for correct Ollama endpoint
-     → Restart ADE server if needed: `python ADE/webchat.py`
+     → Check ADE-Desktop/ade_core/config.json for correct Ollama endpoint (port 11500)
+     → Restart entire system: close ADE Desktop and run startup script again
    • AMOLED theme issues:
-     → Verify CSS consistency in studio_enhanced.html
+     → Verify CSS consistency in renderer files
      → Check for gray backgrounds - should be pure black (#000000)
-     → Ensure text is white (#ffffff) for maximum contrast ▶ ROADMAP & FUTURE PLANS:
+     → Ensure text is white (#ffffff) for maximum contrast▶ ROADMAP & FUTURE PLANS:
    • Multi-project workspace management and project templates
    • Enhanced git integration with visual diff and merge tools
    • Windmill integration for advanced workflow/data management automation
@@ -120,14 +126,14 @@
    • Real-time collaboration features and shared workspaces
    • Semantic search and vector DB integration for intelligent code discovery
    • Plugin system for custom extensions and third-party integrations
-   • All changes and new features must be reflected in documentation and SOP
-    ▶ CURRENT SYSTEM STATE (June 24, 2025):
-   • Directory: ADE (formerly workspace_manager) - Artifact Development Engine
-   • Entry Script: ./run.sh (starts Ollama + background services + ADE Studio IDE)
-   • Main Server: ADE/webchat.py (Flask server with file API and AVA chat)
-   • Configuration: ADE/config.json (all settings and model configuration)
-   • Interface: studio_enhanced.html (Monaco Editor + AVA + File Explorer + Search + Animations)
+   • All changes and new features must be reflected in documentation and SOP    ▶ CURRENT SYSTEM STATE (June 24, 2025):
+   • Architecture: ADE Desktop - Native Electron application with backend service orchestration
+   • Entry Point: ./run.sh (Linux/macOS) or ./run.ps1 (Windows) - handles all service startup + UI launch
+   • Backend Services: Ollama (port 11500) + ADE webchat (port 9000) + background services
+   • Main UI: ADE-Desktop/renderer/ (Electron-based Monaco Editor + AVA + File Explorer)
+   • Configuration: ADE-Desktop/ade_core/config.json (isolated config for desktop app)
+   • Service Architecture: External service management (no Electron/Node service conflicts)
    • Theme: True AMOLED black theme with subtle professional animations
-   • Status: Fully operational with polished UI, smooth animations, and complete IDE functionality
+   • Status: Fully operational desktop IDE with robust service orchestration and native app experience
 
 ╚════════════════════════════════════════════════════════════════════════════╝

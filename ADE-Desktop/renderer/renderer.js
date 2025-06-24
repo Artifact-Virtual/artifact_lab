@@ -339,9 +339,10 @@ class ADEStudioRenderer {
         if (progressFill) progressFill.style.width = `${percentage}%`;
         if (progressText) progressText.textContent = `${percentage}%`;
         if (loadingStatus) loadingStatus.textContent = message;
-    }
-
-    updateServiceStatus(status) {
+    }    updateServiceStatus(status) {
+        console.log('Service status update:', status);
+        
+        // Update title bar status
         const statusIndicator = document.getElementById('status-indicator');
         const statusDot = statusIndicator?.querySelector('.status-dot');
         const statusText = statusIndicator?.querySelector('.status-text');
@@ -350,20 +351,67 @@ class ADEStudioRenderer {
             statusDot.className = 'status-dot';
             
             switch (status.type) {
+                case 'checking':
+                    statusText.textContent = 'Checking services...';
+                    statusDot.classList.add('checking');
+                    break;
                 case 'starting':
-                    statusText.textContent = 'Starting...';
+                    statusText.textContent = 'Starting services...';
+                    statusDot.classList.add('starting');
                     break;
                 case 'running':
                     statusDot.classList.add('connected');
-                    statusText.textContent = 'Running';
+                    statusText.textContent = 'Services ready';
+                    break;
+                case 'waiting':
+                    statusText.textContent = 'Waiting for services...';
+                    statusDot.classList.add('waiting');
+                    break;
+                case 'optional':
+                    statusText.textContent = 'Ready (some services optional)';
+                    statusDot.classList.add('optional');
                     break;
                 case 'error':
                     statusDot.classList.add('error');
-                    statusText.textContent = 'Error';
+                    statusText.textContent = 'Service error';
                     break;
                 default:
-                    statusText.textContent = 'Unknown';
+                    statusText.textContent = 'Unknown status';
             }
+        }
+
+        // Update individual service indicators
+        if (status.service === 'ollama' || status.service === 'both') {
+            this.updateIndividualServiceStatus('ollama', status.type);
+        }
+        if (status.service === 'ade' || status.service === 'both') {
+            this.updateIndividualServiceStatus('ade', status.type);
+        }
+    }
+
+    updateIndividualServiceStatus(service, type) {
+        const statusDot = document.getElementById(`${service}-status-dot`);
+        if (!statusDot) return;
+
+        // Reset classes
+        statusDot.className = 'service-status-dot';
+
+        switch (type) {
+            case 'running':
+                statusDot.classList.add('ready');
+                break;
+            case 'optional':
+                statusDot.classList.add('optional');
+                break;
+            case 'error':
+                statusDot.classList.add('error');
+                break;
+            case 'checking':
+            case 'starting':
+            case 'waiting':
+            default:
+                // Default pulsing animation for loading states
+                break;
         }
     }
 

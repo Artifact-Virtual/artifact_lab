@@ -41,13 +41,13 @@ A comprehensive development studio featuring a clean, professional Monaco Editor
 ├── .pt_models/             # PyTorch model storage
 ├── _thoughtprocess/        # Drafts, notes, SOPs
 ├── system/                 # BlackNet, DevCore, and related system modules
-├── ADE/                    # Main analytics, visualization, and orchestration code
+├── ADE/                    # Webchat service and core configuration
 │   ├── __init__.py
 │   ├── config.json
-│   ├── dependency_index.json
-│   ├── dependency_indexer.py
-│   ├── enhanced_visualizer.py
-│   ├── main.py
+│   ├── ollama_interface.py
+│   ├── studio_enhanced.html
+│   ├── webchat.py
+│   └── themes.css
 │   ├── ollama_client.py
 │   ├── summarizer.py
 │   ├── visualizer.py
@@ -210,7 +210,8 @@ python -m ADE.main              # Main orchestrator (no Ollama auto-start)
 ## Commands & Modules
 
 - `run.sh` — Entrypoint script (starts Ollama and the lab)
-- `ADE/main.py` — Main orchestrator
+- `ADE/webchat.py` — Web interface and API server
+- `ADE-Desktop/` — Electron-based desktop IDE application
 - `ADE/watcher.py` — Watches for file changes
 - `ADE/dependency_indexer.py` — Builds/updates dependency index
 - `ADE/summarizer.py` — Summarizes codebase using Ollama

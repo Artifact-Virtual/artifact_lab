@@ -112,6 +112,26 @@ body {
     animation: none;
 }
 
+.status-dot.checking {
+    background: var(--primary-accent);
+    animation: pulse 1.5s infinite;
+}
+
+.status-dot.starting {
+    background: var(--warning-color);
+    animation: pulse 1s infinite;
+}
+
+.status-dot.waiting {
+    background: var(--warning-color);
+    animation: pulse 2s infinite;
+}
+
+.status-dot.optional {
+    background: var(--secondary-text);
+    animation: none;
+}
+
 @keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.5; }
@@ -246,16 +266,72 @@ body {
 
 .loading-spinner {
     margin: 30px 0;
+    position: relative;
 }
 
 .spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid var(--tertiary-bg);
-    border-top: 3px solid var(--primary-accent);
+    width: 48px;
+    height: 48px;
+    border: 4px solid var(--tertiary-bg);
+    border-top: 4px solid var(--primary-accent);
     border-radius: 50%;
-    animation: spin 1s linear infinite;
+    animation: spin 1.2s linear infinite;
     margin: 0 auto;
+    position: relative;
+}
+
+.spinner::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    border-top: 2px solid var(--success-color);
+    animation: spin 2s linear infinite reverse;
+}
+
+.service-status-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 24px 0;
+    max-width: 300px;
+}
+
+.service-status-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--secondary-bg);
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+.service-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--warning-color);
+    animation: pulse 2s infinite;
+}
+
+.service-status-dot.ready {
+    background: var(--success-color);
+    animation: none;
+}
+
+.service-status-dot.optional {
+    background: var(--secondary-text);
+    animation: none;
+}
+
+.service-status-dot.error {
+    background: var(--error-color);
+    animation: none;
 }
 
 .loading-status {

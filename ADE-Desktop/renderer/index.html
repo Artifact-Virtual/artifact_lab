@@ -71,9 +71,18 @@
                     </svg>
                 </div>
                 <h1 class="loading-title">ADE Studio</h1>
-                <p class="loading-subtitle">Artifact Development Engine</p>
-                <div class="loading-spinner">
+                <p class="loading-subtitle">Artifact Development Engine</p>                <div class="loading-spinner">
                     <div class="spinner"></div>
+                </div>
+                <div class="service-status-grid" id="service-status-grid">
+                    <div class="service-status-item">
+                        <div class="service-status-dot" id="ollama-status-dot"></div>
+                        <span>Ollama LLM</span>
+                    </div>
+                    <div class="service-status-item">
+                        <div class="service-status-dot" id="ade-status-dot"></div>
+                        <span>ADE Service</span>
+                    </div>
                 </div>
                 <p class="loading-status" id="loading-status">Starting services...</p>
                 <div class="loading-progress">

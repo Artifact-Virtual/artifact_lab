@@ -1,5 +1,5 @@
 {
-  "ollama_endpoint": "http://localhost:11434/api/generate",
+  "ollama_endpoint": "http://localhost:11500/api/generate",
   "ollama_model": "codellama:7b",
   "ollama_host": "localhost",
   "ollama_port": 11500,
