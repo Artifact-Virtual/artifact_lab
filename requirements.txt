@@ -139,4 +139,11 @@ requests>=2.31.0
 # **Installation Requirements**
 # All Python packages above are required for the Artifact Virtual Stack. For non-Python components, see documentation above.
 
+# For Go-based tooling (amneziawg-go, etc.), install Go from https://go.dev/dl/ or use:
+# Windows: winget install -e --id Golang.Go
+# Linux:   sudo apt-get install golang
+# macOS:   brew install go
+#
+# This is a Python requirements file. Go is a system dependency.
+
 
