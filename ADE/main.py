@@ -6,7 +6,6 @@ import threading
 from watcher import start_watcher
 from dependency_indexer import build_dependency_index
 from summarizer import summarize_codebase
-from enhanced_visualizer import launch_enhanced_visualizer
 
 
 def run_summarizer():
@@ -17,7 +16,7 @@ def run_summarizer():
 
 
 if __name__ == "__main__":
-    print("Starting ARTIFACT VIRTUAL Workspace Manager...")
+    print("Starting ARTIFACT VIRTUAL Workspace Manager background services...")
     
     # Start background services
     watcher_thread = threading.Thread(target=start_watcher, daemon=True)
@@ -27,7 +26,3 @@ if __name__ == "__main__":
     
     summarizer_thread = threading.Thread(target=run_summarizer, daemon=True)
     summarizer_thread.start()
-    
-    # Launch Enhanced Metrics Visualizer directly (default)
-    print("Launching Enhanced Metrics Visualizer...")
-    launch_enhanced_visualizer()

@@ -1,6 +1,21 @@
 #!/bin/bash
 # Entrypoint for Artifact Lab workspace manager (cross-platform)
 
+# Cleanup background processes on exit
+cleanup() {
+    echo "Cleaning up background processes..."
+    if [ ! -z "$MAIN_PID" ]; then
+        kill $MAIN_PID 2>/dev/null || true
+    fi
+    if [ ! -z "$VIZ_PID" ]; then
+        kill $VIZ_PID 2>/dev/null || true
+    fi
+    if [ ! -z "$OLLAMA_PID" ]; then
+        kill $OLLAMA_PID 2>/dev/null || true
+    fi
+}
+trap cleanup EXIT
+
 echo "Starting Artifact Lab Workspace Manager..."
 
 # Cross-platform Ollama port check (works in Git Bash, WSL, and Windows with netstat)
@@ -41,27 +56,22 @@ if ! command -v python &> /dev/null; then
 fi
 
 # Start all components
-echo "Starting workspace manager components..."
-cd workspace_manager
+cd ADE
 
-# Start main.py (watcher, summarizer, visualizer) in background
-echo "Starting background services (watcher, summarizer, visualizer)..."
+echo "Starting background services (watcher, summarizer, dependency indexer)..."
 $PYTHON_CMD main.py &
 MAIN_PID=$!
 
-# Wait a moment for services to initialize
-sleep 3
+sleep 2
 
-# Start the web chat interface (this will run in foreground)
-echo "Starting web chat interface..."
+echo "Launching Enhanced Metrics Visualizer in background..."
+$PYTHON_CMD enhanced_visualizer.py &
+VIZ_PID=$!
+
+sleep 2
+
+echo "Starting web chat interface (Monaco editor, file manager, chat)..."
 $PYTHON_CMD webchat.py
 
-# If webchat exits, clean up background processes
-echo "Cleaning up background processes..."
-if [ ! -z "$MAIN_PID" ]; then
-    kill $MAIN_PID 2>/dev/null
-fi
-if [ ! -z "$OLLAMA_PID" ]; then
-    kill $OLLAMA_PID 2>/dev/null
-fi
+# Cleanup will run on exit
 

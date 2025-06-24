@@ -4,101 +4,115 @@
       ".gitignore": {
         "hash": "f11d702a2f0b54b917138c3e3f030c6dfedd2b41c0302a773d3ea9ea030bc7ea",
         "size": 437,
-        "modified": 1750731467.1786282,
+        "modified": 1750743235.0048318,
         "type": "no_extension",
         "is_dotfile": true
+      },
+      ".prettierrc": {
+        "hash": "b90a2d062e9a3cb7c7e9cca9b74684c4e906456954909e2fc15d0a616b964993",
+        "size": 40,
+        "modified": 1750748463.8622532,
+        "type": "no_extension",
+        "is_dotfile": true
+      },
+      "backup_strategy.md": {
+        "hash": "4d6e71a3710f47d2c3db5004b2d8e832c5f2f387fef51a24a178a18fe3d071b5",
+        "size": 2604,
+        "modified": 1750749489.612006,
+        "type": ".md",
+        "is_dotfile": false
+      },
+      "COMPREHENSIVE_REFACTORING_PLAN.md": {
+        "hash": "8bf539ebd1091826961ead4ab9bd8f12d5db91789e1e20ad67246bc0d826039f",
+        "size": 8130,
+        "modified": 1750753546.4196024,
+        "type": ".md",
+        "is_dotfile": false
       },
       "license.txt": {
         "hash": "28fffb165c6cc004ba7fb6f09b3c2749a79866ee345e67f019e45ba65c6fed50",
         "size": 1094,
-        "modified": 1750731468.746628,
+        "modified": 1750743236.532949,
         "type": ".txt",
+        "is_dotfile": false
+      },
+      "MISSION_ACCOMPLISHED.md": {
+        "hash": "1edc657c46b1553513b1b5573eaff98b1fa042859f1926d5831a748822fccdd8",
+        "size": 2314,
+        "modified": 1750753546.4217076,
+        "type": ".md",
         "is_dotfile": false
       },
       "package-lock.json": {
         "hash": "f6fbac28ce4e3f7be129f843cd752b1579739a35c26b250ec0844acac7c9094e",
         "size": 1662,
-        "modified": 1750731468.8262959,
+        "modified": 1750743236.6144087,
         "type": ".json",
         "is_dotfile": false
       },
       "package.json": {
         "hash": "5dc3d7ed8dcd98f0c1d3a35d41f93a27b4d282d2548ab8286ca3976cc464faf9",
         "size": 62,
-        "modified": 1750731468.8262959,
+        "modified": 1750743236.6144087,
         "type": ".json",
         "is_dotfile": false
       },
       "README.md": {
-        "hash": "ef23ba0c442ba0433d65c014918ef464cac541878bc65b073340f36f6f07c2d0",
-        "size": 10093,
-        "modified": 1750731468.7455528,
+        "hash": "258abee6c6ef883916724576e8b2e738b5d23353db32e04d9818e45c73135c05",
+        "size": 10022,
+        "modified": 1750753646.2378688,
         "type": ".md",
         "is_dotfile": false
       },
       "requirements.lock.txt": {
-        "hash": "f223aa863c7ae16fec190b071d28ed5c62840a2983d76c7cd26c3dc98f8f7388",
-        "size": 23004,
-        "modified": 1750731468.8262959,
+        "hash": "6f1fcb7fc3647500dc805d6ca4422c016c3074b7f9e59613f1ca79b54a50ca41",
+        "size": 23208,
+        "modified": 1750747193.0757134,
         "type": ".txt",
         "is_dotfile": false
       },
       "requirements.txt": {
-        "hash": "dc72581c4bd3a97586e6fdce9db9954b316d164568cea483f3684b2a9afabba3",
-        "size": 4292,
-        "modified": 1750731468.8262959,
+        "hash": "20c2ec11cbaf458748da416bb8a90e8aee3b148c0ae7af450737a67189ae42ab",
+        "size": 4714,
+        "modified": 1750747191.2958033,
         "type": ".txt",
         "is_dotfile": false
       },
       "run.ps1": {
         "hash": "ef1511dd7eacc65be24ae8858eba6ff2610bc1ac9e6ead9890592cd4d5df01a8",
         "size": 1414,
-        "modified": 1750731468.8262959,
+        "modified": 1750743236.6144087,
         "type": ".ps1",
         "is_dotfile": false
       },
       "run.sh": {
-        "hash": "314e7f20b0d03bca572443a6b4d2f4a442157d196cdf5da02d6fa010711b4e3d",
-        "size": 1881,
-        "modified": 1750731468.8262959,
+        "hash": "786dff3e6b79b2b0b6ced9875746e283017ba1292c7978b2480ef038383ae3b6",
+        "size": 2000,
+        "modified": 1750754471.7371838,
         "type": ".sh",
-        "is_dotfile": false
-      },
-      "test_api.txt": {
-        "hash": "2a422674fedafbc68e7e5193a48ff5eeb11b8a0b207e221e449872b5a1766615",
-        "size": 15,
-        "modified": 1750731468.8262959,
-        "type": ".txt",
-        "is_dotfile": false
-      },
-      "test_llm_integration.md": {
-        "hash": "c937b712a09200d9a795bc4b019a575e3832e842d39533df0cc5740997084624",
-        "size": 215,
-        "modified": 1750731468.8262959,
-        "type": ".md",
         "is_dotfile": false
       },
       "test_system.bat": {
         "hash": "98ee900666044906770c12d0b2c4d4bfada24534462ece8237f03954ce9ea0ce",
         "size": 367,
-        "modified": 1750731468.8262959,
+        "modified": 1750743236.6144087,
         "type": ".bat",
         "is_dotfile": false
       }
     },
     "stats": {
-      "total_files": 12,
-      "total_size": 44536,
+      "total_files": 14,
+      "total_size": 58068,
       "file_types": [
         ".json",
-        ".bat",
-        ".txt",
+        ".sh",
         ".ps1",
-        "no_extension",
         ".md",
-        ".sh"
+        "no_extension",
+        ".bat",
+        ".txt"
       ],
-      "dotfiles_count": 1,
+      "dotfiles_count": 2,
       "largest_file": "requirements.lock.txt"
     }
   },
@@ -138,15 +152,71 @@
     "files": {},
     "stats": {}
   },
-  ".git\\objects\\09": {
+  ".git\\objects\\01": {
     "files": {},
     "stats": {}
   },
-  ".git\\objects\\36": {
+  ".git\\objects\\06": {
     "files": {},
     "stats": {}
   },
-  ".git\\objects\\41": {
+  ".git\\objects\\0a": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\0d": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\12": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\13": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\16": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\18": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\1a": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\22": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\23": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\24": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\26": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\2a": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\2d": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\31": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\39": {
     "files": {},
     "stats": {}
   },
@@ -154,7 +224,31 @@
     "files": {},
     "stats": {}
   },
+  ".git\\objects\\52": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\56": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\57": {
+    "files": {},
+    "stats": {}
+  },
   ".git\\objects\\5a": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\5f": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\68": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\6a": {
     "files": {},
     "stats": {}
   },
@@ -162,27 +256,163 @@
     "files": {},
     "stats": {}
   },
-  ".git\\objects\\80": {
+  ".git\\objects\\75": {
     "files": {},
     "stats": {}
   },
-  ".git\\objects\\86": {
+  ".git\\objects\\77": {
     "files": {},
     "stats": {}
   },
-  ".git\\objects\\ae": {
+  ".git\\objects\\7a": {
     "files": {},
     "stats": {}
   },
-  ".git\\objects\\c2": {
+  ".git\\objects\\7d": {
     "files": {},
     "stats": {}
   },
-  ".git\\objects\\ca": {
+  ".git\\objects\\7f": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\82": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\83": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\84": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\85": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\8c": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\8d": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\96": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\97": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\99": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\9a": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\9f": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\a2": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\a3": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\a7": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\b3": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\b7": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\b9": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\bb": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\bd": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\c3": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\c9": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\cb": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\ce": {
     "files": {},
     "stats": {}
   },
   ".git\\objects\\d2": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\d4": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\d8": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\d9": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\dc": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\e8": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\ec": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\ef": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\f4": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\f6": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\fa": {
+    "files": {},
+    "stats": {}
+  },
+  ".git\\objects\\fe": {
     "files": {},
     "stats": {}
   },
@@ -214,19 +444,202 @@
     "files": {},
     "stats": {}
   },
+  "ADE": {
+    "files": {
+      "ADE.md": {
+        "hash": "82298b4511cc46794fe0d3785c7a453ef2ce028a27a763cfe335f829b07c6b46",
+        "size": 10532,
+        "modified": 1750753826.3903863,
+        "type": ".md",
+        "is_dotfile": false
+      },
+      "audit_log.json": {
+        "hash": "88d7ab357f83719921c3995a0a6b238204fe9dbc75842851f2d8bc162b7a21a1",
+        "size": 17639,
+        "modified": 1750753975.3987215,
+        "type": ".json",
+        "is_dotfile": false
+      },
+      "config.json": {
+        "hash": "5101190a43c392ad89072b52df1e561e855279984a66a54f0698859d599be1cc",
+        "size": 2119,
+        "modified": 1750743236.6144087,
+        "type": ".json",
+        "is_dotfile": false
+      },
+      "dependency_index.json": {
+        "hash": "8ca583397c91a62912c6452392054d68687f74249edd15886f34ecdd7b085bd3",
+        "size": 43129,
+        "modified": 1750755507.0360367,
+        "type": ".json",
+        "is_dotfile": false
+      },
+      "dependency_indexer.py": {
+        "hash": "02dc0d7261b0ad2b747b55612a06c7797ff73aa3321bc791750cf4026d985f1a",
+        "size": 4052,
+        "modified": 1750743236.6144087,
+        "type": ".py",
+        "is_dotfile": false
+      },
+      "enhanced_visualizer.py": {
+        "hash": "feee9b4e4eeb968efd025a2f4a24ea0ae06c4274cf9b7b8c6259289f97272015",
+        "size": 12260,
+        "modified": 1750755562.6400247,
+        "type": ".py",
+        "is_dotfile": false
+      },
+      "file_manager.html": {
+        "hash": "889859fc2c4acbd85e6058e1c5810850842bb889cca67f715c12757c68911d41",
+        "size": 33458,
+        "modified": 1750743236.6144087,
+        "type": ".html",
+        "is_dotfile": false
+      },
+      "file_manager_clean.html": {
+        "hash": "0ea4fb23031795d69f87dde2ef2eff7560b93061015d32b1b5435193cb635de0",
+        "size": 16168,
+        "modified": 1750743236.6144087,
+        "type": ".html",
+        "is_dotfile": false
+      },
+      "llm_audit_log.json": {
+        "hash": "c0a6f9cf8c4c4e6b0c5277e6a3bb4b2cb4e15698471d74f54fe793eea7c1576f",
+        "size": 3278,
+        "modified": 1750753989.3335035,
+        "type": ".json",
+        "is_dotfile": false
+      },
+      "llm_file_operations.py": {
+        "hash": "e584ac18ebf528d76ca521b2e74983fe9c7774cd77e50799ad8df17ddeca0dcf",
+        "size": 7155,
+        "modified": 1750743236.6144087,
+        "type": ".py",
+        "is_dotfile": false
+      },
+      "main.py": {
+        "hash": "a097aaaed6eaffa18f2df0aeb17e5bd29a1fe7bd0fc9f3d0e0005af46fdbb427",
+        "size": 762,
+        "modified": 1750754459.7852144,
+        "type": ".py",
+        "is_dotfile": false
+      },
+      "ollama_client.py": {
+        "hash": "9fd1fd718d6ee1f5dfdb4c84c79e36c8a45d5d8f3c36a5e09f23d540594e0180",
+        "size": 416,
+        "modified": 1750743236.6144087,
+        "type": ".py",
+        "is_dotfile": false
+      },
+      "ollama_interface.py": {
+        "hash": "e92c17960897b3499bf932645e7c799e74bf8fb1bfdce6d42ab8cad5735ed27e",
+        "size": 1478,
+        "modified": 1750743236.6144087,
+        "type": ".py",
+        "is_dotfile": false
+      },
+      "run_output.txt": {
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "modified": 1750743236.6144087,
+        "type": ".txt",
+        "is_dotfile": false
+      },
+      "starmap.py": {
+        "hash": "ef76734467f1e11627a1ee95b6c59edfc32f40808b1a3a83fa4bd65cc733261a",
+        "size": 23295,
+        "modified": 1750743236.6144087,
+        "type": ".py",
+        "is_dotfile": false
+      },
+      "studio.html": {
+        "hash": "abb4224bf42e19938ec0328e86865b56e05c3b92e098bc588e86e97eebc96ee7",
+        "size": 33482,
+        "modified": 1750743236.6144087,
+        "type": ".html",
+        "is_dotfile": false
+      },
+      "studio_enhanced.html": {
+        "hash": "2a690db8482e137532ce44de917f72619339cc922f53f1475343441ff845b865",
+        "size": 59719,
+        "modified": 1750743236.6144087,
+        "type": ".html",
+        "is_dotfile": false
+      },
+      "summarizer.py": {
+        "hash": "e69592d0e663e9a0a3a20dbc2cc7e15d7536f593997750872d81a082cdbedfe0",
+        "size": 859,
+        "modified": 1750743236.6144087,
+        "type": ".py",
+        "is_dotfile": false
+      },
+      "system_summary.json": {
+        "hash": "593b5f61d2a0f104ea066a239eabdfded1f3f0b133225a827da52cb956d947fe",
+        "size": 2674,
+        "modified": 1750743236.6144087,
+        "type": ".json",
+        "is_dotfile": false
+      },
+      "themes.css": {
+        "hash": "acae91d9a5d1e0913d7ed20cd226513978c659cadcb52a9c003cf89f2415adae",
+        "size": 9103,
+        "modified": 1750743236.6144087,
+        "type": ".css",
+        "is_dotfile": false
+      },
+      "watcher.py": {
+        "hash": "56fd31e8268678a26fc96430cd9403428411698678948e3a197f0f0fd97fa3d6",
+        "size": 748,
+        "modified": 1750743236.6144087,
+        "type": ".py",
+        "is_dotfile": false
+      },
+      "webchat.py": {
+        "hash": "2ef998035543001ea9c0a59780946d9a0c86e2d269a11b939b7b7c369a2300ba",
+        "size": 36361,
+        "modified": 1750743236.6144087,
+        "type": ".py",
+        "is_dotfile": false
+      },
+      "__init__.py": {
+        "hash": "85a7e40306e7fbf6dff838e5c378962bdf9acdfac41b46e2368e17a0af1154e7",
+        "size": 37,
+        "modified": 1750743236.6144087,
+        "type": ".py",
+        "is_dotfile": false
+      }
+    },
+    "stats": {
+      "total_files": 23,
+      "total_size": 318724,
+      "file_types": [
+        ".json",
+        ".html",
+        ".css",
+        ".md",
+        ".py",
+        ".txt"
+      ],
+      "dotfiles_count": 0,
+      "largest_file": "studio_enhanced.html"
+    }
+  },
+  "ADE\\static": {
+    "files": {},
+    "stats": {}
+  },
   "BlackNet": {
     "files": {
       "Cargo.toml": {
         "hash": "80cf9c5dd386842ec908a4c382ce1885836c4ba5861b9e0c957e2fe8e2a6399f",
         "size": 206,
-        "modified": 1750731467.1786282,
+        "modified": 1750743235.0048318,
         "type": ".toml",
         "is_dotfile": false
       },
       "README.md": {
         "hash": "348ae72de03b2aa5eb8d390f38ee974fecdf8c0dc49bce080bdb912165f353fc",
         "size": 1786,
-        "modified": 1750731467.1786282,
+        "modified": 1750743235.0048318,
         "type": ".md",
         "is_dotfile": false
       }
@@ -242,12 +655,80 @@
       "largest_file": "README.md"
     }
   },
+  "BlackNet\\cert-nginx": {
+    "files": {
+      ".gitignore": {
+        "hash": "303ec60996a179bdecdd4de63c341f023668b3ab12551dcbc0a4300148d1d2c4",
+        "size": 14,
+        "modified": 1750747001.4771233,
+        "type": "no_extension",
+        "is_dotfile": true
+      },
+      "docker-compose.yml": {
+        "hash": "547ea0b982be553d079ec5fcdf925a441a894c30b3bc1375b95de5d6d49b36fe",
+        "size": 660,
+        "modified": 1750747001.4888616,
+        "type": ".yml",
+        "is_dotfile": false
+      },
+      "init-letsencrypt.sh": {
+        "hash": "a53478818de7029d2a5bb0d7eb42fe6dd21e35e5b158141fcaf83dce58410608",
+        "size": 2491,
+        "modified": 1750747001.4888616,
+        "type": ".sh",
+        "is_dotfile": false
+      },
+      "README.md": {
+        "hash": "e4ff8c1c62afe0bb045e4a4a39106bbd6d1a0e34fa5ac5a25c48880ec40bac4d",
+        "size": 1376,
+        "modified": 1750747001.483747,
+        "type": ".md",
+        "is_dotfile": false
+      }
+    },
+    "stats": {
+      "total_files": 4,
+      "total_size": 4541,
+      "file_types": [
+        ".sh",
+        ".md",
+        ".yml",
+        "no_extension"
+      ],
+      "dotfiles_count": 1,
+      "largest_file": "init-letsencrypt.sh"
+    }
+  },
+  "BlackNet\\cert-nginx\\data": {
+    "files": {},
+    "stats": {}
+  },
+  "BlackNet\\cert-nginx\\data\\nginx": {
+    "files": {
+      "app.conf": {
+        "hash": "fee6cc89cd2b29b2623d730fad9a6599a821bcdfbe2a2cc680c126174c14b926",
+        "size": 821,
+        "modified": 1750747001.4998102,
+        "type": ".conf",
+        "is_dotfile": false
+      }
+    },
+    "stats": {
+      "total_files": 1,
+      "total_size": 821,
+      "file_types": [
+        ".conf"
+      ],
+      "dotfiles_count": 0,
+      "largest_file": "app.conf"
+    }
+  },
   "BlackNet\\client": {
     "files": {
       "Cargo.toml": {
         "hash": "a6628fd50bf9bb0a61331cd5108b6af05d595ea90809ff871708c7e776c5cdff",
         "size": 310,
-        "modified": 1750731467.1786282,
+        "modified": 1750743235.0048318,
         "type": ".toml",
         "is_dotfile": false
       }
@@ -271,14 +752,14 @@
       "client.yaml": {
         "hash": "322bafff02237c6d7a042b86e6228487b23b576b58e1ed614a2fe5eb8f3dd144",
         "size": 889,
-        "modified": 1750731467.1786282,
+        "modified": 1750743235.0048318,
         "type": ".yaml",
         "is_dotfile": false
       },
       "node.yaml": {
         "hash": "984ec823ea303bcadba9c92990879a356ade4c6a6671b64a9a18e6fae4dd1c23",
         "size": 853,
-        "modified": 1750731467.1786282,
+        "modified": 1750743235.0048318,
         "type": ".yaml",
         "is_dotfile": false
       }
@@ -298,7 +779,7 @@
       "Cargo.toml": {
         "hash": "78c32a03d0e0176dd9232254d82fb65d3d039a2a007c3b223a9607137668aaa1",
         "size": 281,
-        "modified": 1750731467.1786282,
+        "modified": 1750743235.0048318,
         "type": ".toml",
         "is_dotfile": false
       }
@@ -334,7 +815,7 @@
       "install_node.yml": {
         "hash": "f6bd0fb2a3ad1dee48c9ff1a4ea79549ee95df1c84591cc12094064a4a7124f7",
         "size": 1183,
-        "modified": 1750731467.1786282,
+        "modified": 1750743235.0089512,
         "type": ".yml",
         "is_dotfile": false
       }
@@ -362,7 +843,7 @@
       "values.yaml": {
         "hash": "876cf64f6cac362c1eda3b40e01721c83b98394d4994882a9ae6ed399fdec60e",
         "size": 418,
-        "modified": 1750731467.1786282,
+        "modified": 1750743235.0099802,
         "type": ".yaml",
         "is_dotfile": false
       }
@@ -382,21 +863,21 @@
       "architecture.md": {
         "hash": "edb2f810cf6974aef944a28afc5dc3c1a213957d807d4214742cc3ce902ef0cb",
         "size": 3150,
-        "modified": 1750731467.1786282,
+        "modified": 1750743235.0099802,
         "type": ".md",
         "is_dotfile": false
       },
       "routing.md": {
         "hash": "95247deb1aee2e4e620b5ec26bc896c75258229235a7f4cbc989be3e00875b19",
         "size": 1665,
-        "modified": 1750731467.1786282,
+        "modified": 1750743235.0107336,
         "type": ".md",
         "is_dotfile": false
       },
       "zk_identity.md": {
         "hash": "67b94ee488f8eedcf8d47e5e24ca23e41775365a4e7fe1409287e1f20e744bbb",
         "size": 1905,
-        "modified": 1750731467.1786282,
+        "modified": 1750743235.0107336,
         "type": ".md",
         "is_dotfile": false
       }
@@ -420,7 +901,7 @@
       "Cargo.toml": {
         "hash": "f34dea80d42667321f2dd0f065035c4c86b3f9cbada31bd376d7d60a2af8a246",
         "size": 286,
-        "modified": 1750731467.1786282,
+        "modified": 1750743235.0107336,
         "type": ".toml",
         "is_dotfile": false
       }
@@ -456,14 +937,14 @@
       "build_all.sh": {
         "hash": "4192a9f3f188d2d52c95ffc405a4d46cf0f51beb820540866fd83687bb36b9c3",
         "size": 1210,
-        "modified": 1750731467.1851332,
+        "modified": 1750743235.0107336,
         "type": ".sh",
         "is_dotfile": false
       },
       "init_node.sh": {
         "hash": "b6d1170e77079d6aa2974bf38611a4b6ab1458957df0aaf78fda355826550845",
         "size": 627,
-        "modified": 1750731467.1851332,
+        "modified": 1750743235.0107336,
         "type": ".sh",
         "is_dotfile": false
       }
@@ -483,7 +964,7 @@
       "Cargo.toml": {
         "hash": "db43688746587ae742c4826d3170b613976394befce1109f445529f60179615b",
         "size": 323,
-        "modified": 1750731467.1851332,
+        "modified": 1750743235.0107336,
         "type": ".toml",
         "is_dotfile": false
       }
@@ -531,14 +1012,14 @@
       "bootstrap.sh": {
         "hash": "6febc0e60d3e661620b281313d61c3c0fa7e3a3b4622dfb6f429c3489a9a95db",
         "size": 544,
-        "modified": 1750731467.1870773,
+        "modified": 1750743235.0107336,
         "type": ".sh",
         "is_dotfile": false
       },
       "test_config.yaml": {
         "hash": "c248e8d69caa5567a73cafa5f138c83ba0935fc84b209638c5100523cacb7046",
         "size": 886,
-        "modified": 1750731467.1870773,
+        "modified": 1750743235.0107336,
         "type": ".yaml",
         "is_dotfile": false
       }
@@ -566,68 +1047,120 @@
     "files": {},
     "stats": {}
   },
+  "BlackNet\\wireguard-nt": {
+    "files": {
+      "LICENSE.txt": {
+        "hash": "899d95154986f755d02fea5da6781c6054c83f8b1d32bf28eadeb9fbce0e9003",
+        "size": 5445,
+        "modified": 1750748140.5788834,
+        "type": ".txt",
+        "is_dotfile": false
+      },
+      "README.md": {
+        "hash": "eff9380162c2557b00579841b227ca20f629bc879c18a28fd6259252b10baddd",
+        "size": 17208,
+        "modified": 1750748140.5788834,
+        "type": ".md",
+        "is_dotfile": false
+      }
+    },
+    "stats": {
+      "total_files": 2,
+      "total_size": 22653,
+      "file_types": [
+        ".md",
+        ".txt"
+      ],
+      "dotfiles_count": 0,
+      "largest_file": "README.md"
+    }
+  },
+  "BlackNet\\wireguard-nt\\bin": {
+    "files": {},
+    "stats": {}
+  },
+  "BlackNet\\wireguard-nt\\bin\\amd64": {
+    "files": {},
+    "stats": {}
+  },
+  "BlackNet\\wireguard-nt\\bin\\arm": {
+    "files": {},
+    "stats": {}
+  },
+  "BlackNet\\wireguard-nt\\bin\\arm64": {
+    "files": {},
+    "stats": {}
+  },
+  "BlackNet\\wireguard-nt\\bin\\x86": {
+    "files": {},
+    "stats": {}
+  },
+  "BlackNet\\wireguard-nt\\include": {
+    "files": {},
+    "stats": {}
+  },
   "DevCore": {
     "files": {
       "jest.config.js": {
         "hash": "0729058a9bd7900abbafd73e05758a997f3cb611c9f5ce019e84c281145dc584",
         "size": 365,
-        "modified": 1750731467.1927512,
+        "modified": 1750743235.0177138,
         "type": ".js",
         "is_dotfile": false
       },
       "ollama_interface.py": {
         "hash": "e92c17960897b3499bf932645e7c799e74bf8fb1bfdce6d42ab8cad5735ed27e",
         "size": 1478,
-        "modified": 1750731468.7418258,
+        "modified": 1750743236.532949,
         "type": ".py",
         "is_dotfile": false
       },
       "package-lock.json": {
         "hash": "4d7d832fc21934844cb8bd2784182d61762f036d92830c5aca57931cb7df30c0",
         "size": 205268,
-        "modified": 1750731468.7423558,
+        "modified": 1750743236.532949,
         "type": ".json",
         "is_dotfile": false
       },
       "package.json": {
         "hash": "354be5a5aafd25c6ccc44b27237148b7ed0bcc4f7a4e141c7c0651bc62c1c4bd",
         "size": 1179,
-        "modified": 1750731468.7423558,
+        "modified": 1750743236.532949,
         "type": ".json",
         "is_dotfile": false
       },
       "README.md": {
         "hash": "761ff65fc58829c15afa864eb6e7a87bb4ea965858c81cedc4e6462deed14476",
         "size": 3200,
-        "modified": 1750731467.1870773,
+        "modified": 1750743235.0107336,
         "type": ".md",
         "is_dotfile": false
       },
       "run.py": {
         "hash": "0a42ef87ae7fc8e0e304495077e79b9ca16b1562906b3762f2b67fa25e2971ce",
         "size": 1580,
-        "modified": 1750731468.7428846,
+        "modified": 1750743236.532949,
         "type": ".py",
         "is_dotfile": false
       },
       "spinner.py": {
         "hash": "a06ce4c71bc1c69d6b182cb9c99f63d78756f2d3e6d72862c202527d1017d576",
         "size": 790,
-        "modified": 1750731468.7428846,
+        "modified": 1750743236.532949,
         "type": ".py",
         "is_dotfile": false
       },
       "tsconfig.json": {
         "hash": "c68fde5bdbd1216d670a2c10afd9994315620495c2e730b792c0104af2e3b365",
         "size": 428,
-        "modified": 1750731468.7450123,
+        "modified": 1750743236.532949,
         "type": ".json",
         "is_dotfile": false
       },
       "__init__.py": {
         "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "size": 0,
-        "modified": 1750731467.1870773,
+        "modified": 1750743235.0107336,
         "type": ".py",
         "is_dotfile": false
       }
@@ -636,10 +1169,10 @@
       "total_files": 9,
       "total_size": 214288,
       "file_types": [
+        ".json",
         ".js",
-        ".md",
         ".py",
-        ".json"
+        ".md"
       ],
       "dotfiles_count": 0,
       "largest_file": "package-lock.json"
@@ -650,14 +1183,14 @@
       "codegen_agent.py": {
         "hash": "3e138d26be2db55b07ea6fe9acc6147a2177883d809c6ea94ecbf9c2a68836e8",
         "size": 856,
-        "modified": 1750731467.1870773,
+        "modified": 1750743235.0107336,
         "type": ".py",
         "is_dotfile": false
       },
       "scaffolder_agent.py": {
         "hash": "2fc4bb7aa5e14577e1658e85973c34f0ec22fe2ee2ae04c6df4f710ef83b7eb5",
         "size": 2242,
-        "modified": 1750731467.1870773,
+        "modified": 1750743235.0107336,
         "type": ".py",
         "is_dotfile": false
       }
@@ -677,14 +1210,14 @@
       "default.json": {
         "hash": "965382f44ee61590ccd26e71326787a5b41beff93a3a3800ae32311a857a92d0",
         "size": 422,
-        "modified": 1750731467.1870773,
+        "modified": 1750743235.0158992,
         "type": ".json",
         "is_dotfile": false
       },
       "settings.yaml": {
         "hash": "6117c503627cea08b7a08d890880485972edda8db1f4b42d904078a63e9dfcc9",
         "size": 76,
-        "modified": 1750731467.1870773,
+        "modified": 1750743235.0158992,
         "type": ".yaml",
         "is_dotfile": false
       }
@@ -693,8 +1226,8 @@
       "total_files": 2,
       "total_size": 498,
       "file_types": [
-        ".yaml",
-        ".json"
+        ".json",
+        ".yaml"
       ],
       "dotfiles_count": 0,
       "largest_file": "default.json"
@@ -705,28 +1238,28 @@
       "agent_runner.py": {
         "hash": "2a15b361b6d36c5d955e7700b0d14526dba3a3530068a30fa573c60402e2ee46",
         "size": 1189,
-        "modified": 1750731467.1870773,
+        "modified": 1750743235.0158992,
         "type": ".py",
         "is_dotfile": false
       },
       "base_agent.py": {
         "hash": "837bf59b7e33d005456e18c30534aa4c47211dc9cba49695068f03efa82acfd5",
         "size": 277,
-        "modified": 1750731467.1870773,
+        "modified": 1750743235.0158992,
         "type": ".py",
         "is_dotfile": false
       },
       "task_parser.py": {
         "hash": "ac4ac6627bcd98bd9fbee15918069bab29290451f9e59b1a4ebf3a45ba2ca80e",
         "size": 59,
-        "modified": 1750731467.1870773,
+        "modified": 1750743235.0169284,
         "type": ".py",
         "is_dotfile": false
       },
       "__init__.py": {
         "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "size": 0,
-        "modified": 1750731467.1870773,
+        "modified": 1750743235.0158992,
         "type": ".py",
         "is_dotfile": false
       }
@@ -750,21 +1283,21 @@
       "indexer.js": {
         "hash": "1d539864048f60a0cf6af2fb760008e79c93dc6e2726f9f8fb8407a4bf0e49c1",
         "size": 593,
-        "modified": 1750731467.1910424,
+        "modified": 1750743235.0169284,
         "type": ".js",
         "is_dotfile": false
       },
       "visualizer.js": {
         "hash": "aeba7bb789baab39212177572cdbbf28880b666d21ec960f127f3be1942b5e6e",
         "size": 405,
-        "modified": 1750731467.1910424,
+        "modified": 1750743235.0169284,
         "type": ".js",
         "is_dotfile": false
       },
       "watcher.js": {
         "hash": "70c8b638fcb4e9726205dde6388e6720d9f60e99a47287eaa65a9a9e58bfe046",
         "size": 844,
-        "modified": 1750731467.1910424,
+        "modified": 1750743235.0169284,
         "type": ".js",
         "is_dotfile": false
       }
@@ -784,21 +1317,21 @@
       "index.js": {
         "hash": "f39cff62636be6afc57bd966b6450ec86283920b32d884b9f678f3267cc41b99",
         "size": 991,
-        "modified": 1750731467.1910424,
+        "modified": 1750743235.0169284,
         "type": ".js",
         "is_dotfile": false
       },
       "manager.js": {
         "hash": "bb264857848fcc2938d91f3257fde9bd68f12200dd3d93f069483198b27baa91",
         "size": 726,
-        "modified": 1750731467.1910424,
+        "modified": 1750743235.0177138,
         "type": ".js",
         "is_dotfile": false
       },
       "types.js": {
         "hash": "3fe16a663d9f742dfecc152314275602de7b1220bde3dc4f11f800c94c9915cc",
         "size": 101,
-        "modified": 1750731467.1910424,
+        "modified": 1750743235.0177138,
         "type": ".js",
         "is_dotfile": false
       }
@@ -818,7 +1351,7 @@
       "index.js": {
         "hash": "b18d76a615f9060bb9800c81dcaeece716ee55d8c7366d05dfe707de732b89f7",
         "size": 183,
-        "modified": 1750731467.1920712,
+        "modified": 1750743235.0177138,
         "type": ".js",
         "is_dotfile": false
       }
@@ -838,21 +1371,21 @@
       "config.js": {
         "hash": "0438f54fc4c8d2388b3032672ca53b457c6fcbb25b6aa92dafe7f6cfeda8c8cc",
         "size": 610,
-        "modified": 1750731467.1920712,
+        "modified": 1750743235.0177138,
         "type": ".js",
         "is_dotfile": false
       },
       "helpers.js": {
         "hash": "8bd66c2fe60bc48ce29c90dbb5c3dac7d9853b5ef6c75bc7da13fc6d023c8018",
         "size": 882,
-        "modified": 1750731467.1920712,
+        "modified": 1750743235.0177138,
         "type": ".js",
         "is_dotfile": false
       },
       "logger.js": {
         "hash": "6ef6f3fd275d0e6d77f0814363fcce3c036435ff25d095f5b7010ce6e0095fdc",
         "size": 720,
-        "modified": 1750731467.1920712,
+        "modified": 1750743235.0177138,
         "type": ".js",
         "is_dotfile": false
       }
@@ -872,7 +1405,7 @@
       "api.md": {
         "hash": "a16e79252c3b29ade43f4349563c2168de292eaf0a7d72194880319e49079872",
         "size": 2245,
-        "modified": 1750731467.1927512,
+        "modified": 1750743235.0177138,
         "type": ".md",
         "is_dotfile": false
       }
@@ -892,7 +1425,7 @@
       "legion.md": {
         "hash": "535271b1309a7b27cb44182b3d4eda00155b209db43b7083d9736452a86f0cb0",
         "size": 30096,
-        "modified": 1750731468.7428846,
+        "modified": 1750743236.532949,
         "type": ".md",
         "is_dotfile": false
       }
@@ -916,21 +1449,21 @@
       "indexer.ts": {
         "hash": "f0ffe0f6983ddbc3f155bbfe2368212f6374fc687ad92a60786be1a027e17c9a",
         "size": 689,
-        "modified": 1750731468.7428846,
+        "modified": 1750743236.532949,
         "type": ".ts",
         "is_dotfile": false
       },
       "visualizer.ts": {
         "hash": "f73fc3d4298cec1a18611bce1a3e8f1348750c22ff850898b7870283db7aaf35",
         "size": 497,
-        "modified": 1750731468.743426,
+        "modified": 1750743236.532949,
         "type": ".ts",
         "is_dotfile": false
       },
       "watcher.ts": {
         "hash": "667620f36d49950de6aaccad35605b4bd88792e15122efdce4f0bb6f3081f141",
         "size": 965,
-        "modified": 1750731468.743426,
+        "modified": 1750743236.532949,
         "type": ".ts",
         "is_dotfile": false
       }
@@ -950,21 +1483,21 @@
       "index.ts": {
         "hash": "386c36910f3fda84689bd6f34e8c1fd74c04a2679ca04ebd7f7ea5275aa1ff48",
         "size": 182,
-        "modified": 1750731468.743426,
+        "modified": 1750743236.532949,
         "type": ".ts",
         "is_dotfile": false
       },
       "manager.ts": {
         "hash": "e6fb959e3ddeeaea4b24bfb6106d649dc1b3ff9b5f681a04ca77dfe0a6445e0a",
         "size": 699,
-        "modified": 1750731468.743952,
+        "modified": 1750743236.532949,
         "type": ".ts",
         "is_dotfile": false
       },
       "types.ts": {
         "hash": "78557af5934065c7d8d83c44f693678d22e2f72a467a63b65f007954e24457b4",
         "size": 417,
-        "modified": 1750731468.743952,
+        "modified": 1750743236.532949,
         "type": ".ts",
         "is_dotfile": false
       }
@@ -984,7 +1517,7 @@
       "index.ts": {
         "hash": "981d4f696f1b6fa3725e51d792996a5a890dadc6934181d0bce09e739cf38bfa",
         "size": 363,
-        "modified": 1750731468.743952,
+        "modified": 1750743236.532949,
         "type": ".ts",
         "is_dotfile": false
       }
@@ -1004,21 +1537,21 @@
       "config.ts": {
         "hash": "3d6bc9d15fbd57c69ae55fe7f6dfc21c336f4d1dcb54dc026c86acbc3f113d7a",
         "size": 484,
-        "modified": 1750731468.7444792,
+        "modified": 1750743236.532949,
         "type": ".ts",
         "is_dotfile": false
       },
       "helpers.ts": {
         "hash": "7a4b3bee159a43b0a29a375deb5a899d1655ff9bb8643c340bf5a3d890920f72",
         "size": 703,
-        "modified": 1750731468.7444792,
+        "modified": 1750743236.532949,
         "type": ".ts",
         "is_dotfile": false
       },
       "logger.ts": {
         "hash": "d2b4311987e7a18e6d3d88e00498c05accc84bd769cd575ce5da5a6c81bf7d83",
         "size": 777,
-        "modified": 1750731468.7444792,
+        "modified": 1750743236.532949,
         "type": ".ts",
         "is_dotfile": false
       }
@@ -1042,7 +1575,7 @@
       "watcher.test.ts": {
         "hash": "3cc6f5b1554632a789c31917da197e37eaa5914ee63549a97c1a403881a2de80",
         "size": 971,
-        "modified": 1750731468.7444792,
+        "modified": 1750743236.532949,
         "type": ".ts",
         "is_dotfile": false
       }
@@ -1062,7 +1595,7 @@
       "manager.test.ts": {
         "hash": "93b897939127d3e641582954b3f5e62d1d4d3354ad656651cbb0b98ec62d9d58",
         "size": 1040,
-        "modified": 1750731468.7450123,
+        "modified": 1750743236.532949,
         "type": ".ts",
         "is_dotfile": false
       }
@@ -1082,7 +1615,7 @@
       "config.test.ts": {
         "hash": "3cbfd5ef1f05b7483dfc28ad5af1d4240163ff9469f2b2dd80c90a0ecbe8d907",
         "size": 869,
-        "modified": 1750731468.7450123,
+        "modified": 1750743236.532949,
         "type": ".ts",
         "is_dotfile": false
       }
@@ -1097,205 +1630,88 @@
       "largest_file": "config.test.ts"
     }
   },
-  "workspace_manager": {
+  "logs": {
     "files": {
-      "audit_log.json": {
-        "hash": "9e92e481ca99dee4fe569b76f01529045b00798bacfd442ab30d42d6ef538f84",
-        "size": 17299,
-        "modified": 1750734203.4699836,
+      "backup_log.json": {
+        "hash": "de2a4cc3b772d127c6e7c35a9ddc8bdc6a3e56674734361fdf65b720704dfcb2",
+        "size": 395,
+        "modified": 1750750071.4902232,
         "type": ".json",
         "is_dotfile": false
       },
-      "AVA.md": {
-        "hash": "e5f6818d01bcc633b7cfc0bfe1d958181e528026d65907b1b513defca2c0af5a",
-        "size": 10643,
-        "modified": 1750731468.8262959,
-        "type": ".md",
-        "is_dotfile": false
-      },
-      "config.json": {
-        "hash": "5101190a43c392ad89072b52df1e561e855279984a66a54f0698859d599be1cc",
-        "size": 2119,
-        "modified": 1750731468.8262959,
+      "file_checksums.json": {
+        "hash": "9cc6cd708982f0de7a8dd402dcf3d5ff1c8d9f4038c7285ab398bedf1100d60b",
+        "size": 2540218,
+        "modified": 1750752654.6888332,
         "type": ".json",
         "is_dotfile": false
-      },
-      "dependency_index.json": {
-        "hash": "cad8959e92c81a0635f84c33924374dde69ab41bccb8cad861f244099b6c2cab",
-        "size": 262346,
-        "modified": 1750731468.8262959,
-        "type": ".json",
+      }
+    },
+    "stats": {
+      "total_files": 2,
+      "total_size": 2540613,
+      "file_types": [
+        ".json"
+      ],
+      "dotfiles_count": 0,
+      "largest_file": "file_checksums.json"
+    }
+  },
+  "scripts": {
+    "files": {
+      "backup_system.ps1": {
+        "hash": "01efa1d27c6238e69d3695de062109f7d1836eacc29625bfa50bd381b7f13c27",
+        "size": 9332,
+        "modified": 1750753546.4262438,
+        "type": ".ps1",
         "is_dotfile": false
       },
-      "dependency_indexer.py": {
-        "hash": "02dc0d7261b0ad2b747b55612a06c7797ff73aa3321bc791750cf4026d985f1a",
-        "size": 4052,
-        "modified": 1750731468.8262959,
+      "refactoring_safety.py": {
+        "hash": "4cca2609ba8bd69de426c42d82cf08a8a48f6e8f06dc314da99d34900d6cb459",
+        "size": 14535,
+        "modified": 1750753546.4273758,
         "type": ".py",
         "is_dotfile": false
       },
-      "enhanced_visualizer.py": {
-        "hash": "ff3c878c3c42c1e1d4049255ebe363735f9a010140e50a5ce9a3092fabf55913",
-        "size": 4583,
-        "modified": 1750734715.4484532,
-        "type": ".py",
-        "is_dotfile": false
-      },
-      "file_manager.html": {
-        "hash": "889859fc2c4acbd85e6058e1c5810850842bb889cca67f715c12757c68911d41",
-        "size": 33458,
-        "modified": 1750731468.8262959,
-        "type": ".html",
-        "is_dotfile": false
-      },
-      "file_manager_clean.html": {
-        "hash": "0ea4fb23031795d69f87dde2ef2eff7560b93061015d32b1b5435193cb635de0",
-        "size": 16168,
-        "modified": 1750731468.8262959,
-        "type": ".html",
-        "is_dotfile": false
-      },
-      "llm_audit_log.json": {
-        "hash": "21c2c83dfa96be0df7ea6eeddd8f867230b78832c5270030bc4b2eb7fa923e27",
-        "size": 2858,
-        "modified": 1750734207.3782625,
-        "type": ".json",
-        "is_dotfile": false
-      },
-      "llm_file_operations.py": {
-        "hash": "e584ac18ebf528d76ca521b2e74983fe9c7774cd77e50799ad8df17ddeca0dcf",
-        "size": 7155,
-        "modified": 1750731468.8262959,
-        "type": ".py",
-        "is_dotfile": false
-      },
-      "main.py": {
-        "hash": "9f775fe542f6125456ba9d212f76521b3a5ab3faedf5af54404a584cfd067f16",
-        "size": 958,
-        "modified": 1750734834.9213493,
-        "type": ".py",
-        "is_dotfile": false
-      },
-      "ollama_client.py": {
-        "hash": "9fd1fd718d6ee1f5dfdb4c84c79e36c8a45d5d8f3c36a5e09f23d540594e0180",
-        "size": 416,
-        "modified": 1750731468.8262959,
-        "type": ".py",
-        "is_dotfile": false
-      },
-      "ollama_interface.py": {
-        "hash": "e92c17960897b3499bf932645e7c799e74bf8fb1bfdce6d42ab8cad5735ed27e",
-        "size": 1478,
-        "modified": 1750731468.7418258,
-        "type": ".py",
-        "is_dotfile": false
-      },
-      "run_output.txt": {
-        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "size": 0,
-        "modified": 1750734604.3856487,
-        "type": ".txt",
-        "is_dotfile": false
-      },
-      "starmap.py": {
-        "hash": "ef76734467f1e11627a1ee95b6c59edfc32f40808b1a3a83fa4bd65cc733261a",
-        "size": 23295,
-        "modified": 1750731468.8262959,
-        "type": ".py",
-        "is_dotfile": false
-      },
-      "studio.html": {
-        "hash": "abb4224bf42e19938ec0328e86865b56e05c3b92e098bc588e86e97eebc96ee7",
-        "size": 33482,
-        "modified": 1750731468.8262959,
-        "type": ".html",
-        "is_dotfile": false
-      },
-      "studio_enhanced.html": {
-        "hash": "2a690db8482e137532ce44de917f72619339cc922f53f1475343441ff845b865",
-        "size": 59719,
-        "modified": 1750731468.8262959,
-        "type": ".html",
-        "is_dotfile": false
-      },
-      "summarizer.py": {
-        "hash": "e69592d0e663e9a0a3a20dbc2cc7e15d7536f593997750872d81a082cdbedfe0",
-        "size": 859,
-        "modified": 1750731468.8262959,
-        "type": ".py",
-        "is_dotfile": false
-      },
-      "system_summary.json": {
-        "hash": "5af5192b1de862111cd3ac0517dabb71639d973c3c092dd6fec0cc266a008a43",
-        "size": 24,
-        "modified": 1750731468.8262959,
-        "type": ".json",
-        "is_dotfile": false
-      },
-      "themes.css": {
-        "hash": "acae91d9a5d1e0913d7ed20cd226513978c659cadcb52a9c003cf89f2415adae",
-        "size": 9103,
-        "modified": 1750731468.8262959,
-        "type": ".css",
-        "is_dotfile": false
-      },
-      "watcher.py": {
-        "hash": "56fd31e8268678a26fc96430cd9403428411698678948e3a197f0f0fd97fa3d6",
-        "size": 748,
-        "modified": 1750731468.8262959,
-        "type": ".py",
-        "is_dotfile": false
-      },
-      "webchat.py": {
-        "hash": "2ef998035543001ea9c0a59780946d9a0c86e2d269a11b939b7b7c369a2300ba",
-        "size": 36361,
-        "modified": 1750731468.8262959,
-        "type": ".py",
-        "is_dotfile": false
-      },
-      "__init__.py": {
-        "hash": "85a7e40306e7fbf6dff838e5c378962bdf9acdfac41b46e2368e17a0af1154e7",
-        "size": 37,
-        "modified": 1750731468.8262959,
+      "simple_backup.py": {
+        "hash": "cd7a9914d57de548802a5155c10cdea042d63268eea5080f3d04d43ce19dc3f0",
+        "size": 8556,
+        "modified": 1750753546.4279346,
         "type": ".py",
         "is_dotfile": false
       }
     },
     "stats": {
-      "total_files": 23,
-      "total_size": 527161,
+      "total_files": 3,
+      "total_size": 32423,
       "file_types": [
-        ".py",
-        ".json",
-        ".txt",
-        ".css",
-        ".html",
-        ".md"
+        ".ps1",
+        ".py"
       ],
       "dotfiles_count": 0,
-      "largest_file": "dependency_index.json"
+      "largest_file": "refactoring_safety.py"
     }
   },
-  "workspace_manager\\static": {
+  "_resources": {
     "files": {},
     "stats": {}
   },
-  "_thoughtprocess": {
+  "__thoughtprocess": {
     "files": {},
     "stats": {}
   },
-  "_thoughtprocess\\drafts": {
+  "__thoughtprocess\\drafts": {
     "files": {},
     "stats": {}
   },
-  "_thoughtprocess\\notes": {
+  "__thoughtprocess\\notes": {
     "files": {},
     "stats": {}
   },
   "_metadata": {
-    "total_files": 94,
-    "total_directories": 87,
-    "generated_at": 1750734887.474058,
+    "total_files": 108,
+    "total_directories": 154,
+    "generated_at": 1750755607.2069044,
     "root_path": "L:\\devops\\artifact_lab"
   }
 }

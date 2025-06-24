@@ -1,8 +1,8 @@
-# AVA Development Studio & Workspace Manager
+# ADE Studio & Workspace Manager
 
 ## 1. Overview
 
-The AVA Development Studio is a comprehensive development environment featuring a professional Monaco Editor-based file manager with amoled display, advanced code analytics, and integrated AI assistant capabilities. The system provides a clean, professional interface with a pure black background, crisp white text, and subtle gray accents for a premium development experience. Built as a Monaco Editor-first platform, it offers VS Code-like functionality with seamless AI integration and advanced workflow automation capabilities.
+The ADE Studio is a comprehensive development environment featuring a professional Monaco Editor-based file manager with AMOLED display, advanced code analytics, and integrated AI assistant capabilities. The system provides a clean, professional interface with a pure black background, crisp white text, and subtle gray accents for a premium development experience. Built as a Monaco Editor-first platform, it offers VS Code-like functionality with seamless AI integration and advanced workflow automation capabilities.
 
 ## 2. Core Features
 
@@ -140,7 +140,7 @@ curl "http://localhost:8080/api/files/read?path=README.md"
 # Write a new file
 curl -X POST http://localhost:8080/api/files/write \
   -H "Content-Type: application/json" \
-  -d '{"path": "test.js", "content": "console.log(\"Hello AVA\");"}'
+  -d '{"path": "test.js", "content": "console.log(\"Hello ADE\");"}'
 ```
 
 ## 8. Supported Languages & Formats

@@ -47,5 +47,17 @@
       "openFiles": []
     },
     "file_operations": []
+  },
+  {
+    "timestamp": "2025-06-24T01:33:09.322683",
+    "type": "llm_interaction",
+    "message": "hello is this working",
+    "response": "Error: Error sending message: [Errno 2] No such file or directory: 'l:\\\\devops\\\\artifact_lab\\\\workspace_manager\\\\config.json'",
+    "context": {
+      "currentFile": null,
+      "fileContent": null,
+      "openFiles": []
+    },
+    "file_operations": null
   }
 ]
