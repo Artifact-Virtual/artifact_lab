@@ -801,8 +801,8 @@ def get_llm_audit_log():
 # Original chat endpoints
 @app.route('/')
 def index():
-    """Serve the Monaco-based file manager as the main interface"""
-    file_path = os.path.join(os.path.dirname(__file__), 'file_manager.html')
+    """Serve the clean Monaco-based file manager as the main interface"""
+    file_path = os.path.join(os.path.dirname(__file__), 'file_manager_clean.html')
     with open(file_path, 'r', encoding='utf-8') as f:
         return f.read()
 
@@ -916,6 +916,13 @@ def run_webchat():
 def test_page():
     """Test page for debugging"""
     with open('test.html', 'r', encoding='utf-8') as f:
+        return f.read()
+
+@app.route('/studio')
+def studio():
+    """Serve the AVA Studio interface with advanced integrations"""
+    file_path = os.path.join(os.path.dirname(__file__), 'studio.html')
+    with open(file_path, 'r', encoding='utf-8') as f:
         return f.read()
 
 if __name__ == "__main__":

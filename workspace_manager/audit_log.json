@@ -494,5 +494,205 @@
     "success": true,
     "error": null,
     "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:48:47.041566",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:48:49.176178",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:48:50.565294",
+    "operation": "list",
+    "path": "_thoughtprocess/",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:48:51.278471",
+    "operation": "list",
+    "path": "_thoughtprocess/drafts/",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:48:53.232137",
+    "operation": "list",
+    "path": "_thoughtprocess/notes/",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:48:53.623801",
+    "operation": "read",
+    "path": "_thoughtprocess/notes/n220625.sop",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:48:55.676477",
+    "operation": "read",
+    "path": "_thoughtprocess/notes/n220625.sop",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:48:55.994699",
+    "operation": "read",
+    "path": "_thoughtprocess/notes/n220625.sop",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:48:58.343379",
+    "operation": "read",
+    "path": "_thoughtprocess/notes/n220625.sop",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:59:15.758794",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T16:59:17.398489",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T17:02:15.186218",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T17:04:17.176222",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T17:06:24.849372",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T17:09:47.273720",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T17:09:48.769289",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T17:13:42.731821",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T17:17:10.095768",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T17:17:17.866254",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T17:22:54.802468",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T17:23:43.565649",
+    "operation": "list",
+    "path": "",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T17:23:45.525093",
+    "operation": "list",
+    "path": "_thoughtprocess/",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T17:23:46.732152",
+    "operation": "list",
+    "path": "_thoughtprocess/",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T17:23:47.457982",
+    "operation": "list",
+    "path": "_thoughtprocess/drafts/",
+    "success": true,
+    "error": null,
+    "user_context": null
+  },
+  {
+    "timestamp": "2025-06-23T17:23:48.175070",
+    "operation": "read",
+    "path": "_thoughtprocess/drafts/info",
+    "success": true,
+    "error": null,
+    "user_context": null
   }
 ]

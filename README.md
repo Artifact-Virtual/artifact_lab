@@ -1,52 +1,35 @@
 # ARTIFACT VIRTUAL LABORATORY
 
-> Advanced AI-powered development environment with Monaco Editor-based file management, intelligent code assistance, and next-generation Studio interface.
+> Professional Monaco Editor-based development environment with ADAM-matching aesthetics, AI-powered assistance, and advanced workflow automation.
 
-A comprehensive development toolkit featuring real-time codebase analysis, professional file management, and AI-powered assistance. Combines Monaco Editor's full IDE capabilities with Ollama LLM integration for intelligent code analysis and generation. Built for extensibility, privacy, and high-performance development workflows—ideal for teams and solo developers seeking professional coding tools with AI assistance.
+A comprehensive development studio featuring a clean, professional Monaco Editor interface with pure black theme matching ADAM's aesthetics. Combines full IDE capabilities with intelligent AI assistance, advanced file management, and planned workflow automation integrations. Built for modern development teams seeking a premium coding experience with AI-powered assistance and seamless workflow integration.
 
 ## Features
 
-### **Core Development Environment**
-- **AVA File Manager**: Monaco Editor-based professional file editing with VS Code experience
-- **AVA Studio**: Next-generation Monaco+AI+search interface (multi-tab, chat, search, git, context menus)
-- **AI-Powered Chat**: Intelligent code assistance with file context and direct modifications
-- **File Management API**: Comprehensive file operations (create, read, write, delete)
-- **Real-time Monitoring**: Live file watching and workspace indexing
-- **Multi-Language Support**: 180+ programming languages with syntax highlighting
+### **Monaco Editor File Manager (Primary Interface)**
+- **Professional Interface**: Clean, Monaco Editor-based file manager at `http://localhost:8080`
+- **ADAM-Matching Theme**: Pure black background (#000000), white text (#ffffff), gray accents
+- **VS Code Experience**: Full IDE capabilities with IntelliSense, syntax highlighting, and 180+ language support
+- **Clean Design**: Minimal, professional interface without visual clutter
+- **File Tree Navigation**: Hierarchical explorer with expand/collapse functionality
+- **Consistent UI**: Monochromatic design with subtle gray hover effects
+- **Real-time Operations**: Instant feedback on file operations and modifications
 
-### **Professional Interface**
-- **Monaco Editor Integration**: Full VS Code editing experience in browser
-- **Dark Theme**: Professional AMOLED-styled interface
-- **File Tree Navigation**: Interactive explorer with file type icons
-- **Status Bar**: Real-time feedback and operation status
-- **Keyboard Shortcuts**: Industry-standard shortcuts (Ctrl+S, Ctrl+R, etc.)
-- **Multi-file Tabs**: Work with multiple files simultaneously
-- **Context Menus**: Right-click actions for files/folders
-
-### **AI Intelligence**
+### **AI Intelligence & Assistance**
 - **Ollama Integration**: Multiple model support (CodeLlama, Qwen2.5-Coder, etc.)
-- **File Context Awareness**: AI can reference and modify open files
+- **File Context Awareness**: AI can reference and modify open files (Phase 5)
 - **Code Analysis**: Intelligent suggestions and error detection
 - **Natural Language Commands**: Convert descriptions to code
 - **Audit Logging**: Track all AI operations and file changes
-- **Chat Panel**: AI chat with file/project context and direct file operations
+- **Chat Integration**: AI chat with file/project context (Phase 5)
 
-### **Analytics & Visualization**
-- **Enhanced Visualizer**: Advanced code analytics and system monitoring
-- **Dependency Analysis**: Real-time codebase structure insights
-- **Performance Metrics**: System resource monitoring
-- **File Statistics**: Comprehensive project analytics
-- **Dotfile Support**: Include configuration files in analysis
-
-### **Development Tools**
-- **Auto-Save Detection**: Track file modifications in real-time
-- **Error Highlighting**: Syntax errors highlighted as you type
-- **IntelliSense**: Auto-completion and code suggestions
-- **Find & Replace**: Powerful search capabilities
-- **Multiple Cursors**: Edit multiple locations simultaneously
-- **Advanced Search**: Fuzzy, symbol, and content search (planned)
-- **Git Integration**: Source control panel (planned)
-- **Airtable/Windmill Integration**: Workflow/data management (planned)
+### **Advanced Workflow Automation (Phase 5)**
+- **Airtable Integration**: Database and workflow management
+- **Windmill Integration**: Workflow automation and data processing
+- **Multi-file Operations**: Bulk operations across project files
+- **Advanced Search**: Semantic search with vector DB integration
+- **Git Integration**: Source control panel and operations
+- **Real-time Collaboration**: Multi-user editing capabilities
 
 ## Directory Structure
 
@@ -136,7 +119,9 @@ A comprehensive development toolkit featuring real-time codebase analysis, profe
 ## What Happens When You Run
 
 1. **Ollama Server** starts automatically (if not already running)
-2. **Web Chat Interface** launches at `http://localhost:8080`
+2. **Monaco File Manager** launches at `http://localhost:8080` (default interface)
+3. **Legacy Chat Interface** available at `http://localhost:8080/chat-old`
+4. **Studio Interface** coming in Phase 5 at `http://localhost:8080/studio`
 3. **Browser opens** automatically to the chat interface
 4. **File Watcher** begins monitoring workspace changes
 5. **Dependency Indexer** scans and indexes the codebase

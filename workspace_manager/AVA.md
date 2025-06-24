@@ -2,16 +2,18 @@
 
 ## 1. Overview
 
-The AVA Development Studio is a comprehensive development environment featuring a professional code editor, advanced code analytics, and an integrated AI assistant. The system combines real-time workspace monitoring with a Monaco Editor-based IDE, intelligent AI integration, and a next-generation Studio interface for advanced development workflows. It provides a secure, user-controlled environment for AI-assisted software development with full codebase access, direct file manipulation capabilities, and meticulous audit trails.
+The AVA Development Studio is a comprehensive development environment featuring a professional Monaco Editor-based file manager with amoled display, advanced code analytics, and integrated AI assistant capabilities. The system provides a clean, professional interface with a pure black background, crisp white text, and subtle gray accents for a premium development experience. Built as a Monaco Editor-first platform, it offers VS Code-like functionality with seamless AI integration and advanced workflow automation capabilities.
 
 ## 2. Core Features
 
-### 2.1. Development Studio & User Interface
-- **Monaco Editor**: A full VS Code-like editing experience with IntelliSense, syntax highlighting, and code completion for over 180 languages.
-- **Multi-Tab Editing**: Open and manage multiple files simultaneously in a tabbed interface.
-- **Professional UI**: A VS Code-inspired dark theme with a file explorer, editor panel, and AI chat panel. The layout is responsive and features resizable panels.
-- **Status Bar**: Provides real-time status updates, file information, and context.
-- **Keyboard Shortcuts**: Standard shortcuts for save (`Ctrl+S`), refresh (`Ctrl+R`), new file (`Ctrl+N`), and all standard Monaco Editor commands.
+### 2.1. Monaco Editor File Manager (Primary Interface)
+- **Default Interface**: Professional file manager at http://localhost:8080 with ADAM-matching color scheme
+- **Pure Black Theme**: Consistent monochromatic design with black background (#000000), white text (#ffffff), and gray accents
+- **Monaco Editor**: Full VS Code-like editing experience with IntelliSense, syntax highlighting, and code completion for 180+ languages
+- **Clean UI**: Minimal, professional interface without visual clutter or unnecessary controls
+- **File Tree Explorer**: Hierarchical navigation with expand/collapse functionality and file-type recognition
+- **Toolbar**: Clean, contextual buttons with consistent gray hover effects
+- **Status Bar**: Real-time feedback on file operations and modifications
 
 ### 2.2. File Management
 - **Full CRUD Operations**: Create, read, write, and delete files and folders through the UI or API.

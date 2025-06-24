@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to the File Manager</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+          body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+            background: #000000;
+            color: #ffffff;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+          .sidebar {
+            width: 250px;
+            background: #000000;
+            border-right: 1px solid #333333;
+            display: flex;
+            flex-direction: column;
+        }
+          .sidebar-header {
+            padding: 16px 20px;
+            background: #1a1a1a;
+            border-bottom: 1px solid #333333;
+            font-weight: 600;
+            font-size: 11px;
+            color: #ffffff;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        
+        .file-tree {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+          .file-item {
+            padding: 8px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            color: #ffffff;
+            transition: background 0.15s ease;
+        }
+        
+        .file-item:hover {
+            background: #2a2a2a;
+            color: #ffffff;
+        }
+        
+        .file-item.selected {
+            background: #444444;
+            color: #ffffff;
+        }
+        
+        .file-item.folder {
+            font-weight: 500;
+        }
+        
+        .file-icon {
+            margin-right: 8px;
+            width: 16px;
+            text-align: center;
+        }
+          .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #000000;
+        }
+          .toolbar {
+            height: 48px;
+            background: #1a1a1a;
+            border-bottom: 1px solid #333333;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 12px;
+        }
+          .file-path {
+            flex: 1;
+            font-size: 12px;
+            color: #ffffff;
+        }
+          .toolbar-button {
+            padding: 8px 16px;
+            background: #2a2a2a;
+            color: #ffffff;
+            border: 1px solid #444444;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 500;
+            transition: all 0.15s ease;
+        }
+          .toolbar-button:hover {
+            background: #444444;
+            border-color: #666666;
+        }
+        
+        .toolbar-button:disabled {
+            background: #1a1a1a;
+            color: #888;
+            border-color: #333;
+            cursor: not-allowed;
+        }
+        
+        .editor-container {
+            flex: 1;
+            position: relative;
+        }
+          .status-bar {
+            height: 28px;
+            background: #1a1a1a;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 10px;
+            justify-content: space-between;
+            border-top: 1px solid #333333;
+        }
+        
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #d4d4d4;
+            font-size: 12px;
+        }
+        
+        .error {
+            color: #ef4444;
+            padding: 16px;
+            font-size: 12px;
+        }
+        
+        .file-subtree {
+            margin-left: 18px;
+        }
+        
+        .expand-arrow {
+            font-size: 10px;
+            margin-left: 4px;
+            color: #888;
+        }
+        
+        #monaco-editor {
+            height: 100%;
+            width: 100%;
+        }
+        
+        /* Clean scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+          ::-webkit-scrollbar-track {
+            background: #000000;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #444444;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #666666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                File Explorer
+            </div>
+            <div class="file-tree" id="fileTree">
+                <div class="loading">Loading files...</div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="toolbar">
+                <div class="file-path" id="filePath">No file selected</div>
+                <button class="toolbar-button" id="saveBtn" onclick="saveFile()" disabled>Save</button>
+                <button class="toolbar-button" id="refreshBtn" onclick="refreshFiles()">Refresh</button>
+                <button class="toolbar-button" onclick="createNewFile()">New File</button>
+            </div>
+            
+            <div class="editor-container">
+                <div id="monaco-editor"></div>
+            </div>
+            
+            <div class="status-bar">
+                <div id="statusLeft">Ready</div>
+                <div id="statusRight">Welcome to the File Manager</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+    <script>
+        let editor = null;
+        let currentFile = null;
+        let originalContent = '';
+        let files = [];
+
+        // Initialize Monaco Editor
+        require.config({ 
+            paths: { 
+                vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' 
+            } 
+        });
+
+        require(['vs/editor/editor.main'], function () {            monaco.editor.defineTheme('clean-dark', {
+                base: 'vs-dark',
+                inherit: true,
+                rules: [],
+                colors: {
+                    'editor.background': '#000000',
+                    'editor.foreground': '#ffffff',
+                    'editorLineNumber.foreground': '#666666',
+                    'editorLineNumber.activeForeground': '#ffffff',
+                    'editor.selectionBackground': '#444444'
+                }
+            });
+
+            editor = monaco.editor.create(document.getElementById('monaco-editor'), {
+                value: '// Welcome to the File Manager\n// Select a file from the explorer to start editing',
+                language: 'javascript',
+                theme: 'clean-dark',
+                automaticLayout: true,
+                minimap: { enabled: true },
+                fontSize: 13,
+                fontFamily: 'JetBrains Mono, SF Mono, Monaco, Consolas, monospace',
+                lineNumbers: 'on',
+                wordWrap: 'on'
+            });
+
+            editor.onDidChangeModelContent(function() {
+                if (currentFile && editor.getValue() !== originalContent) {
+                    document.getElementById('saveBtn').disabled = false;
+                    updateStatus('Modified');
+                } else {
+                    document.getElementById('saveBtn').disabled = true;
+                    updateStatus('Ready');
+                }
+            });
+
+            loadFiles();
+        });
+
+        async function loadFiles() {
+            updateStatus('Loading files...');
+            const tree = document.getElementById('fileTree');
+            tree.innerHTML = '<div class="loading">Loading files...</div>';
+            
+            try {
+                const response = await fetch('/api/files/list');
+                const data = await response.json();
+                
+                if (data.success) {
+                    files = data.items;
+                    renderFileTree(files);
+                    updateStatus('Ready');
+                } else {
+                    tree.innerHTML = '<div class="error">Failed to load files</div>';
+                }
+            } catch (error) {
+                tree.innerHTML = '<div class="error">Error loading files</div>';
+            }
+        }
+
+        function renderFileTree(items, parentPath = '') {
+            const tree = document.getElementById('fileTree');
+            if (!tree) return;
+            
+            if (parentPath === '') {
+                tree.innerHTML = '';
+            }
+            
+            if (!items || items.length === 0) {
+                if (parentPath === '') {
+                    tree.innerHTML = '<div class="loading">No files found</div>';
+                }
+                return;
+            }
+
+            items.sort((a, b) => {
+                if (a.type === 'directory' && b.type === 'file') return -1;
+                if (a.type === 'file' && b.type === 'directory') return 1;
+                return a.name.localeCompare(b.name);
+            });
+
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'file-item';
+                const fullPath = parentPath ? parentPath + '/' + item.name : item.name;
+                
+                if (item.type === 'directory') {
+                    div.className += ' folder';
+                    div.innerHTML = `<span class="file-icon">📁</span><span>${item.name}</span> <span class="expand-arrow">▶</span>`;
+                    div.onclick = async (e) => {
+                        e.stopPropagation();
+                        const arrow = div.querySelector('.expand-arrow');
+                        const expanded = div.getAttribute('data-expanded') === 'true';
+                        
+                        if (expanded) {
+                            div.setAttribute('data-expanded', 'false');
+                            arrow.textContent = '▶';
+                            const subTree = document.getElementById('subtree-' + btoa(fullPath));
+                            if (subTree) subTree.remove();
+                        } else {
+                            div.setAttribute('data-expanded', 'true');
+                            arrow.textContent = '▼';
+                            
+                            const subTree = document.createElement('div');
+                            subTree.className = 'file-subtree';
+                            subTree.id = 'subtree-' + btoa(fullPath);
+                            div.after(subTree);
+                            
+                            try {
+                                const resp = await fetch(`/api/files/list?path=${encodeURIComponent(fullPath + '/')}`);
+                                const data = await resp.json();
+                                if (data.success) {
+                                    subTree.innerHTML = '';
+                                    renderFileTree(data.items, fullPath);
+                                }
+                            } catch {
+                                subTree.innerHTML = '<div class="error">Error loading</div>';
+                            }
+                        }
+                    };
+                } else {
+                    div.innerHTML = `<span class="file-icon">📄</span>${item.name}`;
+                    div.onclick = () => openFile(fullPath);
+                }
+                
+                if (parentPath === '') {
+                    tree.appendChild(div);
+                } else {
+                    const subTree = document.getElementById('subtree-' + btoa(parentPath));
+                    if (subTree) subTree.appendChild(div);
+                }
+            });
+        }
+
+        async function openFile(fileName) {
+            updateStatus('Opening ' + fileName + '...');
+            
+            try {
+                const response = await fetch(`/api/files/read?path=${encodeURIComponent(fileName)}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentFile = fileName;
+                    originalContent = data.content;
+                    editor.setValue(data.content);
+                    
+                    const extension = fileName.split('.').pop().toLowerCase();
+                    const languageMap = {
+                        'js': 'javascript', 'ts': 'typescript', 'py': 'python',
+                        'html': 'html', 'css': 'css', 'json': 'json',
+                        'md': 'markdown', 'yml': 'yaml', 'yaml': 'yaml'
+                    };
+                    
+                    const language = languageMap[extension] || 'plaintext';
+                    monaco.editor.setModelLanguage(editor.getModel(), language);
+                    
+                    document.getElementById('filePath').textContent = fileName;
+                    document.getElementById('saveBtn').disabled = true;
+                    
+                    document.querySelectorAll('.file-item').forEach(item => {
+                        item.classList.remove('selected');
+                    });
+                    event.target.classList.add('selected');
+                    
+                    updateStatus('Opened ' + fileName);
+                }
+            } catch (error) {
+                updateStatus('Error opening file');
+            }
+        }
+
+        async function saveFile() {
+            if (!currentFile || !editor) return;
+
+            updateStatus('Saving ' + currentFile + '...');
+            
+            try {
+                const content = editor.getValue();
+                const response = await fetch('/api/files/write', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ path: currentFile, content: content })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    originalContent = content;
+                    document.getElementById('saveBtn').disabled = true;
+                    updateStatus('Saved ' + currentFile);
+                }
+            } catch (error) {
+                updateStatus('Error saving file');
+            }
+        }
+
+        async function refreshFiles() {
+            await loadFiles();
+        }
+
+        function createNewFile() {
+            const fileName = prompt('Enter new file name:');
+            if (fileName && fileName.trim()) {
+                currentFile = fileName.trim();
+                originalContent = '';
+                editor.setValue('');
+                document.getElementById('filePath').textContent = fileName + ' (new)';
+                document.getElementById('saveBtn').disabled = false;
+                updateStatus('Created new file: ' + fileName);
+            }
+        }
+
+        function updateStatus(message) {
+            document.getElementById('statusLeft').textContent = message;
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                if (e.key === 's') {
+                    e.preventDefault();
+                    saveFile();
+                } else if (e.key === 'r') {
+                    e.preventDefault();
+                    refreshFiles();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
