@@ -1,35 +1,59 @@
 # ARTIFACT DEVELOPMENT ENGINE
 
-[   Studio] version 1.0.0
+[Studio] version 1.0.0
 
 > Professional Monaco Editor-based development environment with ADAM-matching aesthetics, AI-powered assistance, and advanced workflow automation.
 
-A comprehensive development studio featuring a clean, professional Monaco Editor interface with pure black theme matching ADAM's aesthetics. Combines full IDE capabilities with intelligent AI assistance, advanced file management, and planned workflow automation integrations. Built for modern development teams seeking a premium coding experience with AI-powered assistance and seamless workflow integration.
+A comprehensive development studio featuring a clean, professional Monaco Editor interface with a pure black theme inspired by ADAM's aesthetics. Combines full IDE capabilities with intelligent AI assistance, advanced file management, and planned workflow automation integrations. Built for modern development teams seeking a premium coding experience with AI-powered assistance and seamless workflow integration.
+
+---
 
 ## Features
 
-### **Monaco Editor File Manager (Primary Interface)**
-- **Professional Interface**: Clean, Monaco Editor-based file manager at `http://localhost:8080`
-- **IDE Experience**: Full IDE capabilities with IntelliSense, syntax highlighting, and 180+ language support
-- **Clean Design**: Minimal, professional interface without visual clutter
-- **File Tree Navigation**: Hierarchical explorer with expand/collapse functionality
-- **Consistent UI**: Monochromatic design with subtle gray hover effects
-- **Real-time Operations**: Instant feedback on file operations and modifications
+### Completed Features
 
-### **AI Intelligence & Assistance**
-- **Ollama Integration**: Multiple model support (CodeLlama, Qwen2.5-Coder, etc.)
-- **File Context Awareness**: AI can reference and modify open files (Phase 5)
-- **Code Analysis**: Intelligent suggestions and error detection
-- **Natural Language Commands**: Convert descriptions to code
-- **Audit Logging**: Track all AI operations and file changes
-- **Chat Integration**: AI chat with file/project context (Phase 5)
+- **Modern Desktop IDE**: ADE-Desktop now uses a modern, bezelless iframe instead of deprecated webview technology.
+- **Service Integration**: Robust backend service orchestration (Ollama and webchat on ports 11500 and 9000).
+- **Electron App**: Fully functional desktop IDE with AMOLED theme and service status indicators.
+- **Cross-Origin Support**: Iframe properly configured to load ADE Studio interface from localhost.
+- **Connection Management**: Robust connection retry logic and error handling for iframe loading.
+- **Backend Services**: Hardened startup scripts with port detection and path-aware service management.
 
-### **Advanced Workflow Automation (Phase 5)**
-- **Windmill Integration**: Workflow automation and data processing
-- **Multi-file Operations**: Bulk operations across project files
-- **Advanced Search**: Semantic search with vector DB integration
-- **Git Integration**: Source control panel and operations
-- **Real-time Collaboration**: Multi-user editing capabilities
+### Technical Implementation
+
+- **Frontend**: Modern iframe with bezelless design, connection status monitoring, and retry logic.
+- **Backend**: Python services (Ollama interface and webchat) with robust error handling and logging.
+- **Configuration**: Centralized `config.json` with path abstraction and service configuration.
+- **Scripts**: PowerShell and Bash startup scripts with IPv4 detection and service orchestration.
+- **Architecture**: Clean separation between Electron frontend and Python backend services.
+
+### Monaco Editor File Manager (Primary Interface)
+
+- **Professional Interface**: Clean, Monaco Editor-based file manager at `http://localhost:8080`.
+- **IDE Experience**: Full IDE capabilities with IntelliSense, syntax highlighting, and support for over 180 languages.
+- **Clean Design**: Minimal, professional interface without visual clutter.
+- **File Tree Navigation**: Hierarchical explorer with expand/collapse functionality.
+- **Consistent UI**: Monochromatic design with subtle gray hover effects.
+- **Real-Time Operations**: Instant feedback on file operations and modifications.
+
+### AI Intelligence & Assistance
+
+- **Ollama Integration**: Multiple model support (CodeLlama, Qwen2.5-Coder, and more).
+- **File Context Awareness**: AI can reference and modify open files (Phase 5).
+- **Code Analysis**: Intelligent suggestions and error detection.
+- **Natural Language Commands**: Convert descriptions to code.
+- **Audit Logging**: Track all AI operations and file changes.
+- **Chat Integration**: AI chat with file and project context (Phase 5).
+
+### Advanced Workflow Automation (Phase 5)
+
+- **Windmill Integration**: Workflow automation and data processing.
+- **Multi-File Operations**: Bulk operations across project files.
+- **Advanced Search**: Semantic search with vector database integration.
+- **Git Integration**: Source control panel and operations.
+- **Real-Time Collaboration**: Multi-user editing capabilities.
+
+---
 
 ## Directory Structure
 
@@ -66,14 +90,16 @@ A comprehensive development studio featuring a clean, professional Monaco Editor
 ├── test_system.bat
 ```
 
+---
+
 ## Quick Start
 
 ### Prerequisites
 
-- Python 3.9+
-- [Ollama](https://ollama.com/) installed and running locally or remote
+- Python 3.9 or higher
+- [Ollama](https://ollama.com/) installed and running locally or remotely
 - Pygame, Watchdog, Flask, and other dependencies (see `requirements.txt`)
-- (Optional but recommended) [Amenzia VPN](https://amenzia.com/) for invisible, secure workflows
+- (Optional) [Amenzia VPN](https://amenzia.com/) for invisible, secure workflows
 
 ### Installation
 
@@ -101,7 +127,7 @@ A comprehensive development studio featuring a clean, professional Monaco Editor
 
 ### Running the System
 
-**Choose your platform:**
+Choose your platform:
 
 - **Linux/macOS (Bash):**
   ```bash
@@ -116,45 +142,54 @@ A comprehensive development studio featuring a clean, professional Monaco Editor
   .\run.ps1
   ```
 
-## What Happens When You Run
+---
 
-1. **Ollama Server** starts automatically (if not already running)
-2. **Monaco File Manager** launches at `http://localhost:8080` (default interface)
-3. **Legacy Chat Interface** available at `http://localhost:8080/chat-old`
-4. **Studio Interface** coming in Phase 5 at `http://localhost:8080/studio`
-3. **Browser opens** automatically to the chat interface
-4. **File Watcher** begins monitoring workspace changes
-5. **Dependency Indexer** scans and indexes the codebase
-6. **AI Summarizer** analyzes code using Ollama
-7. **Visualizer Selection** prompts you to choose from multiple visualization modes
-8. **Amenzia VPN** (if enabled) ensures all traffic is encrypted and invisible
+## System Workflow Overview
+
+1. **Ollama Server** starts automatically (if not already running).
+2. **Monaco File Manager** launches at `http://localhost:8080` (default interface).
+3. **Legacy Chat Interface** available at `http://localhost:8080/chat-old`.
+4. **Studio Interface** (coming in Phase 5) at `http://localhost:8080/studio`.
+5. **Browser opens** automatically to the chat interface.
+6. **File Watcher** begins monitoring workspace changes.
+7. **Dependency Indexer** scans and indexes the codebase.
+8. **AI Summarizer** analyzes code using Ollama.
+9. **Visualizer Selection** prompts you to choose from multiple visualization modes.
+10. **Amenzia VPN** (if enabled) ensures all traffic is encrypted and invisible.
+
+---
 
 ## Visualization Modes
 
-### 1. Enhanced Visualizer (Recommended)
-- Tree view, heatmaps, file analysis, and system metrics dashboard
-- Interactive and informative
+### Enhanced Visualizer (Recommended)
 
-### 2. Enhanced Starmap Constellation Visualizer
-- 3D starmap: files as stars, directories as constellations
-- Advanced shader effects, smart labeling, particle systems, and real-time metrics
+- Tree view, heatmaps, file analysis, and system metrics dashboard.
+- Interactive and informative.
 
-### 3. Classic 3D Visualizer
-- 3D circular node display
-- System performance graphs
+### Enhanced Starmap Constellation Visualizer
+
+- 3D starmap: files as stars, directories as constellations.
+- Advanced shader effects, smart labeling, particle systems, and real-time metrics.
+
+### Classic 3D Visualizer
+
+- 3D circular node display.
+- System performance graphs.
+
+---
 
 ## Controls
 
 ### Enhanced Visualizer
 
 - **1-4**: Switch between view modes (Tree, Heatmap, File Analysis, Metrics)
-- **Mouse Click**: Select directories/files
+- **Mouse Click**: Select directories or files
 - **Scroll Wheel**: Navigate Tree View
 - **S**: Toggle sidebar
 - **R**: Reload data
 - **ESC**: Exit visualizer
 
-### Starmap Visualizer [optional]
+### Starmap Visualizer
 
 - **Mouse Drag**: Rotate starmap
 - **Scroll Wheel**: Zoom
@@ -167,6 +202,8 @@ A comprehensive development studio featuring a clean, professional Monaco Editor
 - **R**: Reload codebase data
 - **ESC**: Exit starmap
 
+---
+
 ## Components
 
 - **Web Chat Interface** (`ADE/webchat.py`): Modern browser chat with Ollama AI.
@@ -177,10 +214,14 @@ A comprehensive development studio featuring a clean, professional Monaco Editor
 - **Enhanced Visualizer** (`ADE/enhanced_visualizer.py`): Advanced analytics dashboard.
 - **Amenzia VPN Integration**: Provides a secure, invisible network layer for all lab operations.
 
+---
+
 ## Configuration
 
 Edit `ADE/config.json` to customize Ollama and webchat settings.  
 Configure Amenzia VPN as per [Amenzia documentation](https://amenzia.com/docs) for maximum privacy.
+
+---
 
 ## Troubleshooting
 
@@ -193,9 +234,11 @@ Configure Amenzia VPN as per [Amenzia documentation](https://amenzia.com/docs) f
 - **Dependencies**:  
   - Install missing packages: `pip install flask requests pygame psutil watchdog`
 - **Visualization Issues**:  
-  - Ensure display/graphics drivers are properly configured
+  - Ensure display and graphics drivers are properly configured
 - **VPN Issues**:  
   - Verify Amenzia VPN is running and properly configured for your environment
+
+---
 
 ## Development
 
@@ -207,13 +250,15 @@ python ADE/webchat.py           # Just the web chat
 python -m ADE.main              # Main orchestrator (no Ollama auto-start)
 ```
 
+---
+
 ## Commands & Modules
 
 - `run.sh` — Entrypoint script (starts Ollama and the lab)
 - `ADE/webchat.py` — Web interface and API server
 - `ADE-Desktop/` — Electron-based desktop IDE application
 - `ADE/watcher.py` — Watches for file changes
-- `ADE/dependency_indexer.py` — Builds/updates dependency index
+- `ADE/dependency_indexer.py` — Builds and updates dependency index
 - `ADE/summarizer.py` — Summarizes codebase using Ollama
 - `ADE/ollama_client.py` — Abstraction for Ollama LLM API
 - `ADE/visualizer.py` — 3D visualization of codebase
@@ -221,36 +266,48 @@ python -m ADE.main              # Main orchestrator (no Ollama auto-start)
 - `ADE/dependency_index.json` — Directory-wise dependency index
 - `ADE/system_summary.json` — Maintained codebase summary
 
+---
+
 ## Requirements
 
-- Python 3.9+
-- [Ollama](https://ollama.com/) running locally or remote
+- Python 3.9 or higher
+- [Ollama](https://ollama.com/) running locally or remotely
 - Pygame, Watchdog, Flask
 - (Recommended) [Amenzia VPN](https://amenzia.com/) for invisible, secure workflows
 
+---
+
 ## Notes
 
-- All data, config, and outputs are in `ADE/`.
+- All data, configuration, and outputs are in `ADE/`.
 - Designed for extensibility and can be adapted for larger codebases or additional LLMs.
 - For best results, ensure Ollama is installed and the desired model is pulled.
 - For maximum privacy and invisibility, enable Amenzia VPN during all operations.
+
+---
 
 ## License
 
 See [license.txt](license.txt) for details (MIT License).
 
+---
+
 ## Roadmap
 
-- ✅ Monaco-first file manager and studio interface
-- ✅ All documentation and SOPs updated
-- ✅ Enhanced visualizer is now the only analytics/visualization option
-- 🚧 Studio interface with Monaco+AI+search (in progress)
-- 🚧 Windmill integration (planned)
-- 🚧 Advanced chat/file context for AI (planned)
-- 🚧 Multi-file/project operations, search, git, and collaboration (planned)
+- Monaco-first file manager and studio interface
+- All documentation and SOPs updated
+- Enhanced visualizer is now the only analytics and visualization option
+- Studio interface with Monaco, AI, and search (in progress)
+- Windmill integration (planned)
+- Advanced chat and file context for AI (planned)
+- Multi-file and project operations, search, git, and collaboration (planned)
+
+---
 
 ## See Also
+
 - `FILE_MANAGER.md` for file manager help and supported languages
 - `STUDIO_FEATURES.md` for full studio features and API
 - `ADE/ADE.md` for system architecture
 - `_thoughtprocess/notes/n220625.sop` for operational procedures and changelog
+

@@ -50,6 +50,20 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.on('progress-update', (event, progress) => callback(progress));
     return () => ipcRenderer.removeAllListeners('progress-update');
   },
+
+  // Iframe management
+  reloadIframe: () => ipcRenderer.invoke('reload-iframe'),
+  updateIframeUrl: (url) => ipcRenderer.invoke('update-iframe-url', url),
+  
+  onReloadIframe: (callback) => {
+    ipcRenderer.on('reload-iframe', callback);
+    return () => ipcRenderer.removeAllListeners('reload-iframe');
+  },
+  
+  onUpdateIframeUrl: (callback) => {
+    ipcRenderer.on('update-iframe-url', (event, url) => callback(url));
+    return () => ipcRenderer.removeAllListeners('update-iframe-url');
+  },
   
   // Custom events
   onWindowResize: (callback) => {

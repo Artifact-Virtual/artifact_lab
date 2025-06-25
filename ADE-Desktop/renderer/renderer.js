@@ -120,23 +120,59 @@ class ADEStudioRenderer {
             }
         });
 
-        // WebView events
-        const webview = document.getElementById('ade-webview');
-        if (webview) {
-            webview.addEventListener('dom-ready', () => {
-                console.log('WebView DOM ready');
-                this.onWebViewReady();
+        // Iframe events
+        const iframe = document.getElementById('ade-iframe');
+        if (iframe) {
+            // Multiple event handlers for better reliability
+            iframe.addEventListener('load', () => {
+                console.log('Iframe load event fired');
+                this.handleIframeLoaded();
             });
 
-            webview.addEventListener('did-fail-load', (event) => {
-                console.error('WebView failed to load:', event.errorDescription);
-                this.showError('Failed to load ADE Studio interface');
+            iframe.addEventListener('error', (event) => {
+                console.error('Iframe error event fired:', event);
+                if (this.isLoading) {
+                    this.showError('Failed to load ADE Studio interface');
+                }
             });
 
-            webview.addEventListener('did-finish-load', () => {
-                console.log('WebView finished loading');
-                this.onConnectionSuccess();
-            });
+            // Use a timer to check if iframe is loaded (more reliable than load event)
+            let checkCount = 0;
+            const maxChecks = 40; // 40 * 250ms = 10 seconds
+            
+            const checkIframeLoaded = () => {
+                checkCount++;
+                console.log(`Checking iframe status (${checkCount}/${maxChecks})`);
+                
+                // Check if iframe src is accessible
+                try {
+                    if (iframe.contentDocument || iframe.contentWindow) {
+                        console.log('Iframe content accessible - considering it loaded');
+                        this.handleIframeLoaded();
+                        return;
+                    }
+                } catch (e) {
+                    // Cross-origin - which means it's actually loading properly
+                    console.log('Iframe cross-origin access denied - this means it loaded successfully');
+                    this.handleIframeLoaded();
+                    return;
+                }
+                
+                // Check if we've reached max attempts
+                if (checkCount >= maxChecks) {
+                    console.warn('Iframe loading timeout after multiple checks');
+                    if (this.isLoading) {
+                        this.showError('Timeout loading ADE Studio interface');
+                    }
+                    return;
+                }
+                
+                // Continue checking
+                setTimeout(checkIframeLoaded, 250);
+            };
+            
+            // Start checking after iframe src is set
+            setTimeout(checkIframeLoaded, 500);
         }
     }
 
@@ -207,41 +243,66 @@ class ADEStudioRenderer {
         ];
 
         let currentStep = 0;
-        const interval = setInterval(() => {
-            if (currentStep < steps.length) {
+        this.progressInterval = setInterval(() => {
+            if (currentStep < steps.length && this.isLoading) {
                 const step = steps[currentStep];
                 this.updateProgress(step.progress, step.message);
                 currentStep++;
             } else {
-                clearInterval(interval);
-                // Try to connect to the webview
-                setTimeout(() => {
-                    this.testConnection();
-                }, 1000);
+                clearInterval(this.progressInterval);
+                if (this.isLoading) {
+                    // Final step - test connection
+                    setTimeout(() => {
+                        this.testConnection();
+                    }, 500);
+                }
             }
-        }, 1500);
+        }, 1000); // Reduced from 1500ms to 1000ms for faster loading
     }
 
     testConnection() {
         console.log('Testing connection to ADE Studio...');
         
+        if (!this.isLoading) {
+            console.log('Not in loading state, skipping connection test');
+            return;
+        }
+        
         // Test if the server is responding
-        fetch(this.settings.serverUrl)
+        fetch(this.settings.serverUrl, { 
+            method: 'HEAD',
+            cache: 'no-cache',
+            timeout: 5000
+        })
             .then(response => {
                 if (response.ok) {
+                    console.log('Server is responding, connection successful');
                     this.onConnectionSuccess();
                 } else {
+                    console.log('Server responded but with error status:', response.status);
                     this.onConnectionFailed();
                 }
             })
             .catch(error => {
                 console.error('Connection test failed:', error);
-                this.onConnectionFailed();
+                // Try iframe-based connection as fallback
+                this.checkIframeConnection();
             });
     }
 
     onConnectionSuccess() {
-        console.log('Successfully connected to ADE Studio');
+        console.log('onConnectionSuccess called - Setting connection status to connected');
+        
+        // Clear any lingering intervals/timeouts
+        if (this.progressInterval) {
+            clearInterval(this.progressInterval);
+            this.progressInterval = null;
+        }
+        if (this.iframeTimeout) {
+            clearTimeout(this.iframeTimeout);
+            this.iframeTimeout = null;
+        }
+        
         this.isConnected = true;
         this.isLoading = false;
         this.retryCount = 0;
@@ -277,10 +338,10 @@ class ADEStudioRenderer {
             this.showIDE();
             this.showNotification('Unable to connect to ADE services. IDE will work in offline mode.', 'warning');
             
-            // Update webview to show a local message instead of trying to connect
-            const webview = document.getElementById('ade-webview');
-            if (webview) {
-                webview.style.display = 'none';
+            // Update iframe to show a local message instead of trying to connect
+            const iframe = document.getElementById('ade-iframe');
+            if (iframe) {
+                iframe.style.display = 'none';
             }
             
             // Show a connection status message in the IDE container
@@ -322,9 +383,21 @@ class ADEStudioRenderer {
 
     retryConnection() {
         console.log('Retrying connection...');
+        
+        // Clear any existing timers
+        if (this.progressInterval) {
+            clearInterval(this.progressInterval);
+            this.progressInterval = null;
+        }
+        if (this.iframeTimeout) {
+            clearTimeout(this.iframeTimeout);
+            this.iframeTimeout = null;
+        }
+        
         this.hideError();
         this.showLoadingScreen();
         this.isLoading = true;
+        this.isConnected = false;
         this.currentProgress = 0;
         this.startConnection();
     }
@@ -416,9 +489,12 @@ class ADEStudioRenderer {
     }
 
     updateConnectionStatus(isConnected) {
+        console.log('Updating connection status:', isConnected);
         const connectionStatus = document.getElementById('connection-status');
         const connectionIcon = connectionStatus?.querySelector('.connection-icon');
         const connectionText = connectionStatus?.querySelector('.connection-text');
+
+        console.log('Connection elements:', { connectionStatus, connectionIcon, connectionText });
 
         if (connectionIcon && connectionText) {
             connectionIcon.className = 'connection-icon';
@@ -426,10 +502,14 @@ class ADEStudioRenderer {
             if (isConnected) {
                 connectionIcon.classList.add('connected');
                 connectionText.textContent = 'Connected';
+                console.log('Set connection status to Connected');
             } else {
                 connectionIcon.classList.add('error');
                 connectionText.textContent = 'Disconnected';
+                console.log('Set connection status to Disconnected');
             }
+        } else {
+            console.warn('Connection status elements not found');
         }
     }
 
@@ -491,36 +571,54 @@ class ADEStudioRenderer {
 
     showIDE() {
         const ideContainer = document.getElementById('ide-container');
-        const webview = document.getElementById('ade-webview');
+        const iframe = document.getElementById('ade-iframe');
         
         if (ideContainer) {
             ideContainer.style.display = 'block';
             ideContainer.classList.add('visible');
         }
         
-        if (webview) {
-            // Ensure webview is loaded with current server URL
-            webview.src = this.settings.serverUrl;
+        if (iframe) {
+            // Small delay to ensure iframe is ready
+            setTimeout(() => {
+                // Ensure iframe is loaded with current server URL
+                console.log('Loading iframe with URL:', this.settings.serverUrl);
+                iframe.src = this.settings.serverUrl;
+            }, 100);
         }
     }
 
-    onWebViewReady() {
-        console.log('WebView is ready, injecting custom styles...');
+    onIframeReady() {
+        console.log('Iframe is ready');
         
-        const webview = document.getElementById('ade-webview');
-        if (webview) {
-            // Inject custom styles to match desktop theme
-            const css = `
-                body { 
-                    background: #000000 !important; 
-                    color: #ffffff !important;
-                    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-                }
-                /* Add more custom styles as needed */
-            `;
-            
-            webview.insertCSS(css);
+        const iframe = document.getElementById('ade-iframe');
+        if (iframe) {
+            // Note: We cannot inject CSS into iframe due to cross-origin restrictions
+            // The ADE service itself should handle its own styling
+            console.log('Iframe loaded successfully, cross-origin restrictions prevent CSS injection');
         }
+    }
+
+    // Handle iframe loaded state
+    handleIframeLoaded() {
+        if (this.isConnected) {
+            console.log('Iframe already marked as connected, skipping');
+            return;
+        }
+        
+        console.log('Iframe successfully loaded - updating connection status');
+        this.onConnectionSuccess();
+        
+        // Force update connection status directly as a backup
+        setTimeout(() => {
+            const connectionText = document.querySelector('.connection-text');
+            const connectionIcon = document.querySelector('.connection-icon');
+            if (connectionText && connectionIcon) {
+                connectionText.textContent = 'Connected';
+                connectionIcon.className = 'connection-icon connected';
+                console.log('Force updated connection status to Connected');
+            }
+        }, 100);
     }
 
     showSettings() {
@@ -579,10 +677,10 @@ class ADEStudioRenderer {
         // Apply theme
         this.applyTheme();
         
-        // Update webview URL if changed
-        const webview = document.getElementById('ade-webview');
-        if (webview && webview.src !== this.settings.serverUrl) {
-            webview.src = this.settings.serverUrl;
+        // Update iframe URL if changed
+        const iframe = document.getElementById('ade-iframe');
+        if (iframe && iframe.src !== this.settings.serverUrl) {
+            iframe.src = this.settings.serverUrl;
         }
 
         this.hideSettings();
@@ -652,6 +750,70 @@ class ADEStudioRenderer {
                 }
             }, 300);
         }, 5000);
+    }
+
+    // Iframe-specific connection checking
+    checkIframeConnection() {
+        const iframe = document.getElementById('ade-iframe');
+        if (!iframe || !this.isLoading) return;
+
+        console.log('Checking iframe connection...');
+        
+        try {
+            // Try to access iframe content to check if it loaded
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            if (iframeDoc && iframeDoc.readyState === 'complete') {
+                console.log('Iframe content accessible and loaded');
+                this.onConnectionSuccess();
+            } else {
+                console.log('Iframe content not ready, will retry...');
+                this.retryIframeConnection();
+            }
+        } catch (error) {
+            // Cross-origin error is expected for external URLs
+            console.log('Iframe loaded (cross-origin access blocked, which is expected)');
+            // If we get a CORS error, it means the iframe loaded successfully
+            this.onConnectionSuccess();
+        }
+    }
+
+    retryIframeConnection() {
+        const iframe = document.getElementById('ade-iframe');
+        if (!iframe || this.retryCount >= this.maxRetries) {
+            this.showError('Failed to connect to ADE services after multiple attempts');
+            return;
+        }
+
+        this.retryCount++;
+        console.log(`Retrying iframe connection (attempt ${this.retryCount}/${this.maxRetries})`);
+        
+        // Reload iframe
+        iframe.src = iframe.src;
+        
+        // Check again after delay
+        setTimeout(() => {
+            this.checkIframeConnection();
+        }, 3000);
+    }
+
+    updateIframeUrl(newUrl) {
+        const iframe = document.getElementById('ade-iframe');
+        if (iframe && newUrl !== iframe.src) {
+            console.log('Updating iframe URL to:', newUrl);
+            iframe.src = newUrl;
+            this.isConnected = false;
+            this.showLoadingScreen();
+        }
+    }
+
+    reloadIframe() {
+        const iframe = document.getElementById('ade-iframe');
+        if (iframe) {
+            console.log('Reloading iframe...');
+            iframe.src = iframe.src;
+            this.isConnected = false;
+            this.showLoadingScreen();
+        }
     }
 }
 

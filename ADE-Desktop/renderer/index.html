@@ -112,14 +112,15 @@
         </div>
 
         <!-- Main IDE Container -->
-        <div class="ide-container" id="ide-container">            <webview 
-                id="ade-webview" 
-                src="http://localhost:9000"
-                partition="persist:ade"
-                allowpopups
-                disablewebsecurity="false"
-                preload="../preload.js">
-            </webview>
+        <div class="ide-container" id="ide-container">
+            <iframe 
+                id="ade-iframe" 
+                src="http://127.0.0.1:9000"
+                frameborder="0"
+                allowfullscreen
+                allow="clipboard-read; clipboard-write"
+                title="ADE Development Environment">
+            </iframe>
         </div>
     </div>    <!-- Settings Panel -->
     <div class="settings-panel" id="settings-panel">

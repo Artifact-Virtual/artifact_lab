@@ -75,6 +75,19 @@ function setupIPC() {
     return app.getVersion();
   });
 
+  // Iframe management
+  ipcMain.handle('reload-iframe', () => {
+    if (mainWindow) {
+      mainWindow.webContents.send('reload-iframe');
+    }
+  });
+
+  ipcMain.handle('update-iframe-url', (event, url) => {
+    if (mainWindow) {
+      mainWindow.webContents.send('update-iframe-url', url);
+    }
+  });
+
   // File dialogs
   ipcMain.handle('show-save-dialog', async () => {
     const result = await dialog.showSaveDialog(mainWindow, {
@@ -165,8 +178,12 @@ const createWindow = () => {
   });
 
   // Security: prevent navigation to external sites
-  mainWindow.webContents.on('will-navigate', (event, navigationUrl) => {    const parsedUrl = new URL(navigationUrl);
-    if (parsedUrl.origin !== 'http://localhost:9000') {
+  mainWindow.webContents.on('will-navigate', (event, navigationUrl) => {
+    const parsedUrl = new URL(navigationUrl);
+    // Allow navigation to local renderer files and local services
+    if (!navigationUrl.startsWith('file://') && 
+        parsedUrl.origin !== 'http://127.0.0.1:9000' && 
+        parsedUrl.origin !== 'http://localhost:9000') {
       event.preventDefault();
     }
   });  // Load the renderer HTML file instead of external URL initially
