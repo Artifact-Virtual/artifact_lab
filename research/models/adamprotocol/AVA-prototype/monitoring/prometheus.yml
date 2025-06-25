@@ -1,0 +1,77 @@
+# AVA Constitutional Intelligence System - Prometheus Monitoring Configuration
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - "ava_rules.yml"
+
+scrape_configs:
+  # AVA Core container metrics
+  - job_name: 'ava-core'
+    static_configs:
+      - targets: ['ava_constitutional_core:3000']
+    metrics_path: /metrics
+    scrape_interval: 10s
+    scrape_timeout: 10s
+
+  # Memory Core metrics
+  - job_name: 'memory-core'
+    static_configs:
+      - targets: ['ava_memory_core:3000']
+    metrics_path: /metrics
+    scrape_interval: 15s
+
+  # Perception Layer metrics
+  - job_name: 'perception-layer'
+    static_configs:
+      - targets: ['ava_perception_layer:3000']
+    metrics_path: /metrics
+    scrape_interval: 30s
+
+  # Action Layer metrics
+  - job_name: 'action-layer'
+    static_configs:
+      - targets: ['ava_action_layer:3000']
+    metrics_path: /metrics
+    scrape_interval: 30s
+
+  # Vault metrics
+  - job_name: 'vault'
+    static_configs:
+      - targets: ['ava_vault_system:3000']
+    metrics_path: /metrics
+    scrape_interval: 60s
+
+  # Evolver metrics
+  - job_name: 'evolver'
+    static_configs:
+      - targets: ['ava_evolver_module:3000']
+    metrics_path: /metrics
+    scrape_interval: 30s
+
+  # Infrastructure metrics
+  - job_name: 'nginx'
+    static_configs:
+      - targets: ['ava_gateway:80']
+    metrics_path: /metrics
+    scrape_interval: 30s
+
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['ava_redis:6379']
+    metrics_path: /metrics
+    scrape_interval: 30s
+
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['ava_postgres:5432']
+    metrics_path: /metrics
+    scrape_interval: 60s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093

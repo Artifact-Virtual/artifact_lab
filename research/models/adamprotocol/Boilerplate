@@ -1,0 +1,59 @@
+use sha2::{Sha256, Digest};
+use chrono::Utc;
+
+#[derive(Debug, Clone)]
+pub enum Rule {
+StartsWith(char),     // Next block's data must start with this char
+MinLength(usize),     // Next block's data must be at least this long
+}
+
+#[derive(Debug, Clone)]
+pub struct MetaBlock {
+pub index: u64,
+pub timestamp: i64,
+pub data: String,
+pub previous_hash: String,
+pub hash: String,
+pub nonce: u64,
+pub rule: Rule,
+}
+
+impl MetaBlock {
+pub fn new(index: u64, data: String, previous_hash: String, rule: Rule) -> Self {
+let timestamp = Utc::now().timestamp();
+let mut nonce = 0;
+let mut hash = String::new();
+
+loop {  
+        let input = format!("{}{}{}{}{}{:?}", index, timestamp, &data, &previous_hash, nonce, &rule);  
+        let mut hasher = Sha256::new();  
+        hasher.update(input.as_bytes());  
+        let result = hasher.finalize();  
+        hash = format!("{:x}", result);  
+
+        if hash.starts_with("00") {  
+            break;  
+        } else {  
+            nonce += 1;  
+        }  
+    }  
+
+    MetaBlock {  
+        index,  
+        timestamp,  
+        data,  
+        previous_hash,  
+        hash,  
+        nonce,  
+        rule,  
+    }  
+}  
+
+pub fn validate_next(&self, next_data: &String) -> bool {  
+    match self.rule {  
+        Rule::StartsWith(c) => next_data.starts_with(c),  
+        Rule::MinLength(len) => next_data.len() >= len,  
+    }  
+}
+
+}

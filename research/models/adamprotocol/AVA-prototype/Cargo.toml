@@ -1,0 +1,28 @@
+[package]
+name = "artifact-virtual-intelligence"
+version = "0.1.0"
+edition = "2021"
+description = "Artifact Virtual Intelligence - Constitutional AI Blockchain System"
+authors = ["Artifact Virtual Intelligence <admin@artifact-virtualintelligence.com>"]
+license = "MIT"
+repository = "https://github.com/artifact-virtualintelligence/avi"
+
+[dependencies]
+sha2 = "0.10.8"
+chrono = { version = "0.4.31", features = ["serde"] }
+serde = { version = "1.0.193", features = ["derive"] }
+serde_json = "1.0.108"
+tokio = { version = "1.35.0", features = ["full"] }
+uuid = { version = "1.6.1", features = ["v4", "serde"] }
+hex = "0.4.3"
+
+[dev-dependencies]
+tokio-test = "0.4.3"
+
+[[bin]]
+name = "avi-deploy"
+path = "src/main.rs"
+
+[lib]
+name = "artifact_virtual_intelligence"
+path = "src/lib.rs"

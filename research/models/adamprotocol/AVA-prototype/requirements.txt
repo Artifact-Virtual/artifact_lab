@@ -1,0 +1,90 @@
+# AVA (Artifact Virtual Assistant) Dependencies
+# Constitutional Intelligence with Self-Governing Blockchain Architecture
+
+# Core Blockchain and Cryptography
+sha2>=0.10.0                    # SHA-256 hashing for MetaBlocks
+chrono>=0.4.0                   # Timestamp handling
+serde>=1.0.0                    # Serialization for block data
+serde_json>=1.0.0               # JSON handling for proposals and governance
+uuid>=1.0.0                     # Unique identifiers for blocks and entities
+tokio>=1.0.0                    # Async runtime for perception layer
+hex>=0.4.0                      # Hex encoding/decoding
+
+# Blockchain Integration (inherited from ADAM)
+web3>=0.20.0                    # Ethereum integration
+ethers-py>=0.2.0                # Ethereum SDK
+solana-py>=0.31.0               # Solana integration
+eth-account>=0.9.0              # Ethereum account management
+eth-keys>=0.4.0                 # Ethereum cryptography
+
+# AI/ML Integration (for AI-validated governance rules)
+torch>=2.0.0                    # PyTorch for AI validation
+transformers>=4.35.0            # Hugging Face transformers
+sentence-transformers>=2.6.0    # Embeddings for identity vectors
+ollama>=0.2.0                   # Local LLM integration
+
+# Database and Storage
+sqlalchemy>=2.0.0               # Database ORM for memory core
+alembic>=1.12.0                 # Database migrations
+redis>=5.0.0                    # Caching and pub/sub for perception layer
+aiofiles>=23.0.0                # Async file I/O
+
+# API and Networking
+fastapi>=0.104.0                # REST API framework
+uvicorn>=0.24.0                 # ASGI server
+websockets>=12.0.0              # WebSocket support for real-time governance
+httpx>=0.25.0                   # HTTP client for oracle integration
+aiohttp>=3.9.0                  # Alternative HTTP client
+
+# Governance and Consensus
+py-merkle-tree>=1.0.0           # Merkle tree implementation
+cryptography>=41.0.0            # Additional cryptographic primitives
+ecdsa>=0.18.0                   # ECDSA signatures for multi-party auth
+coincurve>=18.0.0               # Secp256k1 operations
+
+# Configuration and Environment
+python-dotenv>=1.0.0            # Environment variable management
+pydantic>=2.5.0                 # Data validation and settings
+pydantic-settings>=2.1.0        # Settings management
+dynaconf>=3.2.0                 # Dynamic configuration
+
+# Development and Testing
+pytest>=7.4.0                   # Testing framework
+pytest-asyncio>=0.21.0          # Async testing support
+pytest-cov>=4.1.0               # Coverage reporting
+black>=23.10.0                  # Code formatting
+isort>=5.12.0                   # Import sorting
+mypy>=1.7.0                     # Type checking
+pre-commit>=3.5.0               # Git hooks
+
+# Monitoring and Logging
+loguru>=0.7.0                   # Advanced logging
+prometheus-client>=0.19.0       # Metrics collection
+structlog>=23.2.0               # Structured logging
+sentry-sdk>=1.38.0              # Error tracking
+
+# CLI and Interface
+typer>=0.9.0                    # CLI framework
+rich>=13.7.0                    # Rich terminal output
+click>=8.1.0                    # Alternative CLI framework
+
+# Container and Orchestration Support
+docker>=6.1.0                   # Docker SDK
+kubernetes>=28.1.0              # Kubernetes integration
+
+# Model Context Protocol (MCP) for agent integration
+mcp>=0.1.0                      # MCP SDK for agent coordination
+
+# Optional: For local development and testing
+ipython>=8.17.0                 # Interactive Python shell
+jupyter>=1.0.0                  # Notebook support for experimentation
+
+# Performance and Optimization
+psutil>=5.9.0                   # System monitoring
+memory-profiler>=0.61.0         # Memory profiling
+line-profiler>=4.1.0            # Line-by-line profiling
+
+# Security
+bcrypt>=4.1.0                   # Password hashing
+pynacl>=1.5.0                   # NaCl cryptography
+authlib>=1.2.0                  # OAuth and JWT handling

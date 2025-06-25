@@ -1,0 +1,82 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  scrape_timeout: 10s
+
+# Alerting configuration
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+        # - alertmanager:9093
+
+        # Rule files for alerting and recording rules
+rule_files:
+  # - "alerts.yml"
+  # - "recording_rules.yml"
+
+scrape_configs:
+- job_name: 'prometheus'
+  scrape_interval: 15s
+  static_configs:
+  - targets: [ 'localhost:9090' ]
+    labels:
+      env: 'research'
+
+- job_name: 'node_exporter'
+  scrape_interval: 15s
+  metrics_path: /metrics
+  static_configs:
+  - targets: [ 'node-exporter:9100' ]
+    labels:
+      instance: 'container-1'
+      env: 'research'
+  relabel_configs:
+  - source_labels: [ __address__ ]
+    regex: '.*'
+    target_label: 'hardware'
+    replacement: 'physical'
+
+- job_name: 'node_exporter_2'
+  scrape_interval: 15s
+  metrics_path: /metrics
+  static_configs:
+  - targets: [ 'node-exporter-2:9100' ]
+    labels:
+      instance: 'container-2'
+      env: 'research'
+  relabel_configs:
+  - source_labels: [ __address__ ]
+    regex: '.*'
+    target_label: 'hardware'
+    replacement: 'physical'
+
+- job_name: 'cadvisor'
+  scrape_interval: 15s
+  metrics_path: /metrics
+  static_configs:
+  - targets: [ 'cadvisor:8080' ]
+    labels:
+      env: 'research'
+
+- job_name: 'research_container_1'
+  scrape_interval: 15s
+  metrics_path: /metrics
+  static_configs:
+  - targets: [ 'host.docker.internal:8888' ]
+    labels:
+      container: 'research-1'
+      env: 'research'
+  tls_config:
+    insecure_skip_verify: true
+
+- job_name: 'research_container_2'
+  scrape_interval: 15s
+  metrics_path: /metrics
+  static_configs:
+  - targets: [ 'host.docker.internal:8889' ]
+    labels:
+      container: 'research-2'
+      env: 'research'
+  tls_config:
+    insecure_skip_verify: true

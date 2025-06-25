@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+sentence-transformers
+Pillow
+faiss-cpu
+qdrant-client
+psycopg2-binary
+langdetect
+torch
+transformers

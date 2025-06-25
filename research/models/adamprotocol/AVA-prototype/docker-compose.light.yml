@@ -1,0 +1,161 @@
+# AVA Constitutional Intelligence System - Lightweight Deployment
+# Fast deployment without heavy ML dependencies
+version: '3.9'
+
+services:
+  # Core Constitutional Identity Service
+  ava-core:
+    build:
+      context: ./containers/ava-core
+      dockerfile: Dockerfile.light
+    container_name: ava-core
+    ports:
+      - "3001:3000"
+    environment:
+      - AVA_MODE=constitutional
+      - AVA_GOVERNANCE=democratic
+      - NODE_ENV=production
+      - PORT=3000
+    networks:
+      - ava_constitutional_net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Memory Core - Immutable Logs
+  memory-core:
+    build:
+      context: ./containers/memory-core
+      dockerfile: Dockerfile.light
+    container_name: memory-core
+    ports:
+      - "3002:3000"
+    environment:
+      - AVA_MODULE=memory
+      - NODE_ENV=production
+      - PORT=3000
+    volumes:
+      - memory_data:/data/memory
+    networks:
+      - ava_constitutional_net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Perception Layer - Lightweight Sensors
+  perception-layer:
+    build:
+      context: ./containers/perception-layer
+      dockerfile: Dockerfile.light
+    container_name: perception-layer
+    ports:
+      - "3003:3000"
+    environment:
+      - AVA_MODULE=perception
+      - NODE_ENV=production
+      - PORT=3000
+    networks:
+      - ava_constitutional_net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Action Layer - Constitutional Execution
+  action-layer:
+    build:
+      context: ./containers/action-layer
+      dockerfile: Dockerfile.light
+    container_name: action-layer
+    ports:
+      - "3004:3000"
+    environment:
+      - AVA_MODULE=action
+      - NODE_ENV=production
+      - PORT=3000
+    networks:
+      - ava_constitutional_net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Vault - Secure Storage
+  vault:
+    build:
+      context: ./containers/vault
+      dockerfile: Dockerfile.light
+    container_name: vault
+    ports:
+      - "3005:3000"
+    environment:
+      - AVA_MODULE=vault
+      - NODE_ENV=production
+      - PORT=3000
+    volumes:
+      - vault_data:/data/vault
+    networks:
+      - ava_constitutional_net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Evolver - Self-Improvement
+  evolver:
+    build:
+      context: ./containers/evolver
+      dockerfile: Dockerfile.light
+    container_name: evolver
+    ports:
+      - "3006:3000"
+    environment:
+      - AVA_MODULE=evolver
+      - NODE_ENV=production
+      - PORT=3000
+    networks:
+      - ava_constitutional_net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis for inter-container communication
+  redis:
+    image: redis:7-alpine
+    container_name: ava-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - ava_constitutional_net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  ava_constitutional_net:
+    driver: bridge
+
+volumes:
+  memory_data:
+  vault_data:
+  redis_data:

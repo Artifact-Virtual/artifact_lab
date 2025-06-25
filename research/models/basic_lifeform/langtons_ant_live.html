@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Langton's Ant Live Simulation</title>
+    <style>
+        body { font-family: monospace; background: #181818; color: #eee; }
+        #grid { line-height: 1; font-size: 18px; }
+        .cell { display: inline-block; width: 18px; height: 18px; text-align: center; }
+        .white { background: #222; color: #888; }
+        .black { background: #eee; color: #222; }
+        .ant { background: #e74c3c; color: #fff; font-weight: bold; }
+        .special { background: #f1c40f; color: #222; }
+        .visited { border: 1px solid #3498db; }
+        #controls { margin: 10px 0; }
+        button { margin-right: 8px; }
+    </style>
+</head>
+<body>
+    <h2>Langton's Ant Live Simulation</h2>
+    <div id="controls">
+        <button onclick="step()">Step</button>
+        <button onclick="run()">Run</button>
+        <button onclick="pause()">Pause</button>
+        <button onclick="reset()">Reset</button>
+        <span>Step: <span id="step">0</span></span>
+    </div>
+    <div id="grid"></div>
+    <pre id="log"></pre>
+    <script>
+        // --- Simulation Parameters ---
+        const gridSize = 51;
+        let grid = [];
+        let ant = { x: Math.floor(gridSize/2), y: Math.floor(gridSize/2), dir: 0 };
+        let stepCount = 0;
+        let memory = [];
+        let running = false;
+        let interval = null;
+        let ws = null;
+        let speed = 1; // ms per step
+        let lastState = null;
+
+        function connectWS() {
+            ws = new WebSocket(`ws://${location.host}/ws`);
+            ws.onopen = () => {
+                ws.send(JSON.stringify({cmd: "get_state"}));
+            };
+            ws.onmessage = (event) => {
+                const state = JSON.parse(event.data);
+                lastState = state;
+                grid = state.grid;
+                ant = { x: state.x, y: state.y, dir: state.direction };
+                stepCount = state.step;
+                memory = state.memory;
+                renderGrid();
+                logMemory();
+            };
+        }
+
+        function sendWS(cmd, extra={}) {
+            if (ws && ws.readyState === 1) {
+                ws.send(JSON.stringify(Object.assign({cmd}, extra)));
+            }
+        }
+
+        function renderGrid() {
+            let html = '';
+            let visited = new Set((lastState && lastState.visited) ? lastState.visited.map(([x,y])=>`${x},${y}`) : []);
+            for (let y = 0; y < gridSize; y++) {
+                for (let x = 0; x < gridSize; x++) {
+                    let cls = grid[y][x] === 0 ? 'cell white' : 'cell black';
+                    if (ant.x === x && ant.y === y) cls = 'cell ant';
+                    else if (lastState && lastState.special_cells.some(([sx,sy])=>sx===x&&sy===y)) cls = 'cell special';
+                    else if (visited.has(`${x},${y}`)) cls += ' visited';
+                    html += `<span class="${cls}">${ant.x === x && ant.y === y ? 'A' : (lastState && lastState.special_cells.some(([sx,sy])=>sx===x&&sy===y) ? '*' : (grid[y][x] === 0 ? '.' : '#'))}</span>`;
+                }
+                html += '<br>';
+            }
+            document.getElementById('grid').innerHTML = html;
+            document.getElementById('step').textContent = stepCount;
+        }
+
+        function step() { sendWS("step"); }
+        function run() {
+            if (running) return;
+            running = true;
+            sendWS("run", {steps: 100000});
+        }
+        function pause() { running = false; sendWS("get_state"); }
+        function reset() { running = false; sendWS("reset"); }
+        function logMemory() {
+            let last = memory[memory.length-1];
+            document.getElementById('log').textContent = last ? `Step ${last.step}: (${last.x},${last.y}) dir=${last.direction} | ${last.action}` : '';
+        }
+        function downloadMemory() {
+            fetch('/memory.json').then(r=>r.json()).then(mem=>{
+                const blob = new Blob([JSON.stringify(mem,null,2)], {type:'application/json'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'ant_memory.json';
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+        }
+        window.onload = connectWS;
+    </script>
+    <div style="margin-top:10px;">
+        <button onclick="downloadMemory()">Download Memory Log</button>
+        <label>Speed (ms/step): <input type="number" min="1" max="1000" value="1" onchange="speed=this.value;sendWS('run',{steps:100000})"></label>
+    </div>
+</body>
+</html>

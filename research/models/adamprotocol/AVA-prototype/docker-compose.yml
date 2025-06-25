@@ -1,0 +1,254 @@
+# AVA Constitutional Intelligence System
+# Docker Compose configuration for the 6-container AVA architecture
+
+version: '3.9'
+
+networks:
+  ava_constitutional_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  ava_memory_core:
+    driver: local
+  ava_vault_data:
+    driver: local
+  ava_perception_logs:
+    driver: local
+
+services:
+  # Container 1: AVA Core (Identity & Constitutional Metadata)
+  ava-core:
+    build: 
+      context: ./ava-core
+      dockerfile: Dockerfile
+    container_name: ava_constitutional_core
+    environment:
+      - AVA_GENESIS_MODE=true
+      - ARTIFACT_VIRTUAL_REFERENCE=self
+      - CONSTITUTIONAL_CHAIN_ENABLED=true
+      - LOG_LEVEL=info
+    volumes:
+      - ./ava-core:/app
+      - ava_memory_core:/data/memory
+    ports:
+      - "3001:3000"
+    networks:
+      ava_constitutional_net:
+        ipv4_address: 172.20.0.10
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Container 2: Memory Core (Immutable Logs & Merkle Structure)
+  memory-core:
+    build:
+      context: ./memory-core
+      dockerfile: Dockerfile
+    container_name: ava_memory_core
+    environment:
+      - MERKLE_TREE_ENABLED=true
+      - APPEND_ONLY_MODE=true
+      - BLOCKCHAIN_SYNC=true
+    volumes:
+      - ./memory-core:/app
+      - ava_memory_core:/data/merkle
+    depends_on:
+      - ava-core
+    networks:
+      ava_constitutional_net:
+        ipv4_address: 172.20.0.20
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import requests; requests.get(\"http://localhost:3000/merkle/status\")' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Container 3: Perception Layer (Oracles, Triggers, Sensory Input)
+  perception-layer:
+    build:
+      context: ./perception-layer
+      dockerfile: Dockerfile
+    container_name: ava_perception_layer
+    environment:
+      - ORACLE_FEEDS=time,price,blockchain_events
+      - TRIGGER_SYSTEM=enabled
+      - CHAIN_MONITORING=ethereum,polygon,solana
+      - NEWS_API_KEY=${NEWS_API_KEY:-}
+      - PRICE_ORACLE_KEY=${PRICE_ORACLE_KEY:-}
+    volumes:
+      - ./perception-layer:/app
+      - ava_perception_logs:/data/logs
+    depends_on:
+      - memory-core
+    networks:
+      ava_constitutional_net:
+        ipv4_address: 172.20.0.30
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import requests; requests.get(\"http://localhost:3000/perception/status\")' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Container 4: Action Layer (Executes Validated Actions)
+  action-layer:
+    build:
+      context: ./action-layer
+      dockerfile: Dockerfile
+    container_name: ava_action_layer
+    environment:
+      - MULTISIG_REQUIRED=true
+      - EXECUTION_DELAY=300
+      - ALLOWED_ACTIONS=mint_nft,write_logs,send_funds,execute_proposals
+      - ETHEREUM_RPC_URL=${ETHEREUM_RPC_URL:-}
+      - POLYGON_RPC_URL=${POLYGON_RPC_URL:-}
+      - SOLANA_RPC_URL=${SOLANA_RPC_URL:-}
+    volumes:
+      - ./action-layer:/app
+    depends_on:
+      - perception-layer
+      - vault
+    networks:
+      ava_constitutional_net:
+        ipv4_address: 172.20.0.40
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import requests; requests.get(\"http://localhost:3000/actions/status\")' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Container 5: Vault (Funds Intake, Dispatch, Security)
+  vault:
+    build:
+      context: ./vault
+      dockerfile: Dockerfile
+    container_name: ava_vault_system
+    environment:
+      - VAULT_SECURITY_LEVEL=high
+      - MULTISIG_THRESHOLD=2
+      - SUPPORTED_TOKENS=ETH,MATIC,SOL,USDC
+      - COLD_STORAGE_ENABLED=true
+      - TREASURY_MANAGEMENT=enabled
+    volumes:
+      - ./vault:/app
+      - ava_vault_data:/data/vault
+    depends_on:
+      - ava-core
+    networks:
+      ava_constitutional_net:
+        ipv4_address: 172.20.0.50
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import requests; requests.get(\"http://localhost:3000/vault/health\")' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Container 6: Evolver (Governance & Proposal Analysis)
+  evolver:
+    build:
+      context: ./evolver
+      dockerfile: Dockerfile
+    container_name: ava_evolver_module
+    environment:
+      - PROPOSAL_SYSTEM=enabled
+      - AI_VALIDATION=true
+      - GOVERNANCE_CONSENSUS=required
+      - UPGRADE_CAPABILITY=enabled
+      - ARTIFACT_VIRTUAL_INTEGRATION=true
+    volumes:
+      - ./evolver:/app
+    depends_on:
+      - memory-core
+      - ava-core
+    networks:
+      ava_constitutional_net:
+        ipv4_address: 172.20.0.60
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import requests; requests.get(\"http://localhost:3000/evolver/status\")' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Supporting Services
+  redis:
+    image: redis:7-alpine
+    container_name: ava_redis
+    command: redis-server --requirepass ${REDIS_PASSWORD:-ava_redis_pass}
+    networks:
+      ava_constitutional_net:
+        ipv4_address: 172.20.0.100
+    volumes:
+      - ./data/redis:/data
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: ava_postgres
+    environment:
+      - POSTGRES_DB=ava_governance
+      - POSTGRES_USER=${POSTGRES_USER:-ava_user}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-ava_postgres_pass}
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    networks:
+      ava_constitutional_net:
+        ipv4_address: 172.20.0.101
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    container_name: ava_gateway
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+    depends_on:
+      - ava-core
+      - memory-core
+      - perception-layer
+      - action-layer
+      - vault
+      - evolver
+    networks:
+      ava_constitutional_net:
+        ipv4_address: 172.20.0.200
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: ava_prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    networks:
+      ava_constitutional_net:
+        ipv4_address: 172.20.0.210
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: ava_grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+    volumes:
+      - ./monitoring/grafana:/etc/grafana:ro
+      - ./data/grafana:/var/lib/grafana
+    networks:
+      ava_constitutional_net:
+        ipv4_address: 172.20.0.211
+    restart: unless-stopped

@@ -1,0 +1,44 @@
+version: '3.9'
+
+services:
+
+  qdrant:
+    image: qdrant/qdrant
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+  postgres:
+    image: ankane/pgvector
+    environment:
+      POSTGRES_DB: vectors
+      POSTGRES_USER: vector_user
+      POSTGRES_PASSWORD: vector_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    build: ./server
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - qdrant
+    volumes:
+      - ./app:/app
+      - ./vector_store:/vector_store
+      - ./data:/data
+    environment:
+      VECTOR_BACKEND: qdrant  # Change to 'pgvector' or 'faiss'
+      PG_HOST: postgres
+      PG_DB: vectors
+      PG_USER: vector_user
+      PG_PASS: vector_pass
+      QDRANT_URL: http://qdrant:6333
+
+volumes:
+  qdrant_data:
+  pgdata:

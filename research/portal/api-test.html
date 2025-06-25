@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Portal API Test</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ff88;
+            padding: 2rem;
+        }
+        .status {
+            margin: 1rem 0;
+            padding: 1rem;
+            border: 1px solid #333;
+            border-radius: 8px;
+        }
+        .success { border-color: #00ff88; }
+        .error { border-color: #ff6b6b; color: #ff6b6b; }
+        .loading { border-color: #4ecdc4; color: #4ecdc4; }
+        pre {
+            background: #1a1a1a;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            max-height: 300px;
+        }
+        button {
+            background: #00ff88;
+            color: #0a0a0a;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+        button:hover {
+            background: #00cc6a;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔬 Research Portal API Connection Test</h1>
+    
+    <div id="api-status" class="status">
+        <h3>API Connection Status</h3>
+        <p id="status-text">Checking connection...</p>
+    </div>
+    
+    <div class="controls">
+        <button onclick="testConnection()">Test Connection</button>
+        <button onclick="loadDirectory()">Load Directory</button>
+        <button onclick="getSystemStatus()">System Status</button>
+        <button onclick="startAnalysis()">Start Analysis</button>
+    </div>
+    
+    <div id="results" class="status">
+        <h3>API Response</h3>
+        <pre id="response-data">No data loaded yet...</pre>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000/api';
+        
+        async function testConnection() {
+            const statusEl = document.getElementById('api-status');
+            const textEl = document.getElementById('status-text');
+            
+            statusEl.className = 'status loading';
+            textEl.textContent = 'Testing connection...';
+            
+            try {
+                const response = await fetch('http://localhost:8000/');
+                if (response.ok) {
+                    const data = await response.json();
+                    statusEl.className = 'status success';
+                    textEl.textContent = `✅ Connected! API Version: ${data.version}`;
+                    updateResults(data);
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                statusEl.className = 'status error';
+                textEl.textContent = `❌ Connection failed: ${error.message}`;
+                updateResults({ error: error.message });
+            }
+        }
+        
+        async function loadDirectory() {
+            try {
+                const response = await fetch(`${API_BASE}/directory-structure`);
+                const data = await response.json();
+                updateResults(data);
+                console.log('Directory structure loaded:', data);
+            } catch (error) {
+                updateResults({ error: error.message });
+            }
+        }
+        
+        async function getSystemStatus() {
+            try {
+                const response = await fetch(`${API_BASE}/system-status`);
+                const data = await response.json();
+                updateResults(data);
+                console.log('System status:', data);
+            } catch (error) {
+                updateResults({ error: error.message });
+            }
+        }
+        
+        async function startAnalysis() {
+            try {
+                const response = await fetch(`${API_BASE}/analysis/start`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        type: 'statistical',
+                        data_source: 'research/head_1',
+                        parameters: { sample_size: 100 }
+                    })
+                });
+                const data = await response.json();
+                updateResults(data);
+                console.log('Analysis started:', data);
+            } catch (error) {
+                updateResults({ error: error.message });
+            }
+        }
+        
+        function updateResults(data) {
+            const resultsEl = document.getElementById('response-data');
+            resultsEl.textContent = JSON.stringify(data, null, 2);
+        }
+        
+        // Test connection on page load
+        window.addEventListener('load', testConnection);
+    </script>
+</body>
+</html>
