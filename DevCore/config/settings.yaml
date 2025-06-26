@@ -1,3 +1,9 @@
 model: codellama:7b
-workspace_path: workspace/example_project
+model_provider: ollama
+workspace_path: workspace/
 retries: 5
+max_retries: 5
+retry_delay: 2
+timeout: 30
+debug: false
+auto_fix: true

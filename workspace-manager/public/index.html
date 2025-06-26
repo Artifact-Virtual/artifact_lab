@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workspace Manager Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border-radius: 10px;
+            border: 1px solid #333;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #4A90E2, #5BC0DE);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .status-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        
+        .status-card:hover {
+            transform: translateY(-2px);
+            border-color: #4A90E2;
+        }
+        
+        .status-card h3 {
+            color: #4A90E2;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        
+        .status-indicator.running {
+            background: #28a745;
+            box-shadow: 0 0 10px #28a745;
+        }
+        
+        .status-indicator.stopped {
+            background: #dc3545;
+            box-shadow: 0 0 10px #dc3545;
+        }
+        
+        .status-indicator.warning {
+            background: #ffc107;
+            box-shadow: 0 0 10px #ffc107;
+        }
+        
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            padding: 5px 0;
+            border-bottom: 1px solid #333;
+        }
+        
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+        
+        .metric-value {
+            font-weight: bold;
+            color: #5BC0DE;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: #4A90E2;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #357ABD;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .main-actions {
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        .main-actions .btn {
+            font-size: 16px;
+            padding: 12px 24px;
+            margin: 0 10px;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            border-top: 1px solid #333;
+            color: #888;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+        }
+        
+        .error {
+            background: #dc3545;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+        
+        .pulsing {
+            animation: pulse 2s infinite;
+        }
+        
+        .workspace-info {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .workspace-info h3 {
+            color: #4A90E2;
+            margin-bottom: 10px;
+        }
+        
+        .workspace-path {
+            font-family: monospace;
+            background: #333;
+            padding: 10px;
+            border-radius: 5px;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Workspace Manager</h1>
+            <p>Advanced workspace monitoring and dependency analysis system</p>
+        </div>
+        
+        <div id="workspace-info" class="workspace-info">
+            <h3>📁 Current Workspace</h3>
+            <div class="workspace-path" id="workspace-path">Loading...</div>
+        </div>
+        
+        <div class="main-actions">
+            <a href="/topology" class="btn btn-primary">🎨 View Topology</a>
+            <a href="/api/analysis" class="btn btn-secondary" target="_blank">📊 Analysis Report</a>
+            <a href="/api/metrics" class="btn btn-secondary" target="_blank">📈 System Metrics</a>
+        </div>
+        
+        <div id="status-container">
+            <div class="loading pulsing">
+                <p>Loading system status...</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Workspace Manager v2.0.0 | Last updated: <span id="last-updated">--</span></p>
+        </div>
+    </div>
+
+    <script>
+        let ws;
+        let statusData = {};
+        
+        function connectWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            ws = new WebSocket(`${protocol}//${window.location.host}`);
+            
+            ws.onopen = function() {
+                console.log('WebSocket connected');
+            };
+            
+            ws.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                handleWebSocketMessage(data);
+            };
+            
+            ws.onclose = function() {
+                console.log('WebSocket disconnected, reconnecting...');
+                setTimeout(connectWebSocket, 3000);
+            };
+            
+            ws.onerror = function(error) {
+                console.error('WebSocket error:', error);
+            };
+        }
+        
+        function handleWebSocketMessage(data) {
+            switch(data.type) {
+                case 'initialState':
+                    statusData = data.data;
+                    updateUI();
+                    break;
+                case 'metricsUpdate':
+                    if (statusData.metrics) {
+                        statusData.metrics = data.data;
+                        updateMetrics();
+                    }
+                    break;
+                case 'fileChanged':
+                case 'fileAdded':
+                    updateLastActivity();
+                    break;
+                default:
+                    console.log('Received:', data.type, data.data);
+            }
+        }
+        
+        async function loadStatus() {
+            try {
+                const response = await fetch('/api/status');
+                const data = await response.json();
+                statusData = data;
+                updateUI();
+            } catch (error) {
+                showError('Failed to load system status: ' + error.message);
+            }
+        }
+        
+        function updateUI() {
+            document.getElementById('workspace-path').textContent = statusData.workspace || 'Unknown';
+            updateComponentStatus();
+            updateMetrics();
+            updateLastUpdated();
+        }
+        
+        function updateComponentStatus() {
+            const container = document.getElementById('status-container');
+            
+            if (!statusData.components) {
+                container.innerHTML = '<div class="error">No component data available</div>';
+                return;
+            }
+            
+            const components = statusData.components;
+            
+            container.innerHTML = `
+                <div class="status-grid">
+                    ${Object.entries(components).map(([name, comp]) => `
+                        <div class="status-card">
+                            <h3>
+                                <span class="status-indicator ${comp.running && comp.healthy ? 'running' : comp.running ? 'warning' : 'stopped'}"></span>
+                                ${getComponentIcon(name)} ${name.charAt(0).toUpperCase() + name.slice(1)}
+                            </h3>
+                            <div class="metric-row">
+                                <span>Status:</span>
+                                <span class="metric-value">${comp.running ? (comp.healthy ? 'Running' : 'Warning') : 'Stopped'}</span>
+                            </div>
+                            <div class="metric-row">
+                                <span>Restarts:</span>
+                                <span class="metric-value">${comp.restarts || 0}</span>
+                            </div>
+                            <div class="metric-row">
+                                <span>Last Check:</span>
+                                <span class="metric-value">${comp.lastCheck ? new Date(comp.lastCheck).toLocaleTimeString() : 'Never'}</span>
+                            </div>
+                            ${getComponentStats(name, comp.stats)}
+                            <div class="actions">
+                                <button class="btn btn-secondary" onclick="restartComponent('${name}')">🔄 Restart</button>
+                                ${getComponentActions(name)}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+        
+        function getComponentIcon(name) {
+            const icons = {
+                watcher: '👁️',
+                indexer: '🔍',
+                monitor: '📊',
+                visualizer: '🎨'
+            };
+            return icons[name] || '⚙️';
+        }
+        
+        function getComponentStats(name, stats) {
+            if (!stats) return '';
+            
+            let html = '';
+            
+            switch(name) {
+                case 'watcher':
+                    html += `
+                        <div class="metric-row">
+                            <span>Files Watched:</span>
+                            <span class="metric-value">${stats.filesWatched || 0}</span>
+                        </div>
+                        <div class="metric-row">
+                            <span>Changes:</span>
+                            <span class="metric-value">${stats.changesDetected || 0}</span>
+                        </div>
+                    `;
+                    break;
+                case 'indexer':
+                    html += `
+                        <div class="metric-row">
+                            <span>Files Analyzed:</span>
+                            <span class="metric-value">${stats.filesAnalyzed || 0}</span>
+                        </div>
+                        <div class="metric-row">
+                            <span>Dependencies:</span>
+                            <span class="metric-value">${stats.totalDependencies || 0}</span>
+                        </div>
+                    `;
+                    break;
+                case 'monitor':
+                    html += `
+                        <div class="metric-row">
+                            <span>CPU Usage:</span>
+                            <span class="metric-value">${statusData.metrics?.current?.cpu?.usage?.toFixed(1) || 0}%</span>
+                        </div>
+                        <div class="metric-row">
+                            <span>Memory Usage:</span>
+                            <span class="metric-value">${statusData.metrics?.current?.memory?.usage?.toFixed(1) || 0}%</span>
+                        </div>
+                    `;
+                    break;
+                case 'visualizer':
+                    html += `
+                        <div class="metric-row">
+                            <span>Nodes:</span>
+                            <span class="metric-value">${stats.nodeCount || 0}</span>
+                        </div>
+                        <div class="metric-row">
+                            <span>Edges:</span>
+                            <span class="metric-value">${stats.edgeCount || 0}</span>
+                        </div>
+                    `;
+                    break;
+            }
+            
+            return html;
+        }
+        
+        function getComponentActions(name) {
+            switch(name) {
+                case 'visualizer':
+                    return '<a href="/topology" class="btn btn-primary">View</a>';
+                case 'indexer':
+                    return '<a href="/api/analysis" class="btn btn-primary" target="_blank">Report</a>';
+                case 'monitor':
+                    return '<a href="/api/metrics" class="btn btn-primary" target="_blank">Metrics</a>';
+                default:
+                    return '';
+            }
+        }
+        
+        function updateMetrics() {
+            // Real-time metrics updates would go here
+            // This is handled by WebSocket messages
+        }
+        
+        function updateLastActivity() {
+            updateLastUpdated();
+        }
+        
+        function updateLastUpdated() {
+            document.getElementById('last-updated').textContent = new Date().toLocaleTimeString();
+        }
+        
+        async function restartComponent(componentName) {
+            try {
+                const response = await fetch(`/api/components/${componentName}/restart`, {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    showSuccess(`${componentName} restart initiated`);
+                    setTimeout(loadStatus, 2000);
+                } else {
+                    showError(`Failed to restart ${componentName}`);
+                }
+            } catch (error) {
+                showError('Restart failed: ' + error.message);
+            }
+        }
+        
+        function showError(message) {
+            const container = document.getElementById('status-container');
+            container.innerHTML = `<div class="error">${message}</div>` + container.innerHTML;
+        }
+        
+        function showSuccess(message) {
+            // You could implement a toast notification here
+            console.log('Success:', message);
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStatus();
+            connectWebSocket();
+            
+            // Refresh status every 30 seconds
+            setInterval(loadStatus, 30000);
+        });
+    </script>
+</body>
+</html>

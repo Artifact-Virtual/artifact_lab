@@ -1,0 +1,20 @@
+{
+  "apps": [
+    {
+      "name": "workspace-manager",
+      "script": "L:\\devops\\artifact_lab\\workspace-manager\\src\\index.js",
+      "cwd": "L:\\devops\\artifact_lab\\workspace-manager",
+      "instances": 1,
+      "autorestart": true,
+      "watch": false,
+      "max_memory_restart": "500M",
+      "env": {
+        "NODE_ENV": "production"
+      },
+      "log_file": "L:\\devops\\artifact_lab\\workspace-manager\\logs\\workspace-manager.log",
+      "error_file": "L:\\devops\\artifact_lab\\workspace-manager\\logs\\workspace-manager-error.log",
+      "out_file": "L:\\devops\\artifact_lab\\workspace-manager\\logs\\workspace-manager-out.log",
+      "time": true
+    }
+  ]
+}

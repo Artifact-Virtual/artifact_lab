@@ -1,0 +1,29 @@
+# Core DevCore dependencies
+requests>=2.31.0
+pyyaml>=6.0.1
+python-dotenv>=1.0.0
+
+# Natural Language Processing (optional)
+spacy>=3.7.0
+textblob>=0.17.1
+nltk>=3.8.1
+
+# AI/ML models (optional, for local inference)
+torch>=2.0.0
+transformers>=4.30.0
+
+# Development and testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.5.0
+
+# File processing
+watchdog>=3.0.0
+glob2>=0.7
+
+# Utilities  
+colorama>=0.4.6
+click>=8.1.0
+tqdm>=4.65.0

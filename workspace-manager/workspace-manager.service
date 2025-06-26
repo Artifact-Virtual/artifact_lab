@@ -1,0 +1,17 @@
+[Unit]
+Description=Workspace Manager - Real-time workspace monitoring
+After=network.target
+
+[Service]
+Type=simple
+User=alish
+WorkingDirectory=L:\devops\artifact_lab\workspace-manager
+ExecStart=C:\nodejs\node.exe L:\devops\artifact_lab\workspace-manager\src\index.js
+Restart=always
+RestartSec=10
+Environment=NODE_ENV=production
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

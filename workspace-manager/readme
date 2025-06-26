@@ -1,0 +1,353 @@
+# Workspace Manager
+
+Real-time file system monitoring, dependency analysis, and topology visualization with **always-on service support**.
+
+## Architecture
+
+```
+workspace-manager/
+├── src/
+│   ├── index.js          # Entry point, HTTP server
+│   ├── manager.js        # Orchestrates all components
+│   ├── watcher.js        # chokidar filesystem monitoring
+│   ├── indexer.js        # AST-based dependency analysis
+│   ├── monitor.js        # System metrics collection
+│   └── visualizer.js     # D3.js topology rendering
+├── language_model_abstraction/
+│   ├── config.json       # LLM provider configuration
+│   └── llm_provider.js   # Universal LLM interface
+├── public/
+│   └── index.html        # Dashboard interface
+├── start.js              # Enhanced startup with diagnostics
+├── ecosystem.config.json # PM2 process configuration
+└── workspace-manager.service # systemd service unit
+```
+
+## Components
+
+### File Watcher
+- **Engine**: chokidar
+- **Detection**: MD5 hash comparison, character-level
+- **Debouncing**: 100ms stability threshold
+- **Metadata**: size, mtime, line count, file type
+- **Patterns**: configurable watch/ignore globs
+
+### Dependency Indexer
+- **JavaScript/TypeScript**: Babel AST parser
+- **Python**: regex import extraction
+- **JSON**: package.json dependency mapping
+- **Graph**: bidirectional dependency tree
+- **Algorithms**: DFS circular dependency detection
+- **Processing**: configurable batch size
+
+### System Monitor
+- **Source**: systeminformation package
+- **Polling**: 1000ms default interval
+- **Metrics**: CPU, memory, disk I/O, network
+- **History**: 60-point rolling buffer
+- **Alerts**: CPU >80%, memory >85%, disk >90%
+
+### Topology Visualizer
+- **Engine**: D3.js force-directed layout
+- **Nodes**: file, directory, dependency types
+- **Edges**: dependency, containment relationships
+- **Styling**: file extension color coding
+- **Updates**: WebSocket real-time sync
+
+### LLM Provider
+- **Providers**: Ollama, OpenAI, Claude, Gemini, LLM Studio
+- **Interface**: unified query/response abstraction
+- **Logging**: query audit trail
+- **Configuration**: per-provider model parameters
+
+## Installation & Usage
+
+```bash
+cd workspace-manager
+npm install
+npm start [workspace-path]
+```
+
+**Service Management:**
+
+```bash
+# Create PM2 configuration (Windows/Linux)
+npm run service:pm2
+
+# Create systemd service (Linux only)
+npm run service:systemd
+
+# Create both service configurations
+npm run service:all
+```
+
+**Interfaces:**
+
+- Dashboard: `http://localhost:8081`
+- Topology: `http://localhost:8081/topology`
+- API Status: `http://localhost:8081/api/status`
+
+## Service Deployment
+
+### PM2 (Process Manager)
+
+```bash
+# Install PM2 globally
+npm install -g pm2
+
+# Generate PM2 configuration
+npm run service:pm2
+
+# Start service
+pm2 start ecosystem.config.json
+
+# Monitor
+pm2 monit
+
+# Auto-start on boot
+pm2 startup
+pm2 save
+```
+
+### Systemd (Linux)
+
+```bash
+# Generate systemd service
+npm run service:systemd
+
+# Install service
+sudo cp workspace-manager.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable workspace-manager
+sudo systemctl start workspace-manager
+
+# Check status
+sudo systemctl status workspace-manager
+```
+
+### Windows Service
+
+```powershell
+# Using PM2 with Windows Service Wrapper
+npm install -g pm2-windows-service
+pm2-service-install -n workspace-manager
+```
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/status` | System health status |
+| GET | `/api/metrics` | Real-time system metrics |
+| GET | `/api/analysis` | File analysis report |
+| GET | `/api/topology` | Topology graph data |
+| POST | `/api/query` | LLM query interface |
+
+## Configuration
+
+**LLM Provider** (`language_model_abstraction/config.json`):
+
+```json
+{
+  "model_provider": "ollama",
+  "ollama_endpoint": "http://localhost:11434/api/generate",
+  "ollama_model": "codellama:7b"
+}
+```
+
+**Monitoring** (package.json workspace-manager config):
+
+```json
+{
+  "monitoring": {
+    "watch_patterns": ["**/*.{js,ts,py}"],
+    "ignore_patterns": ["node_modules/**", "*.log"],
+    "scan_depth": 10,
+    "analysis_batch_size": 50
+  },
+  "visualization": {
+    "refresh_rate": 1000,
+    "max_nodes": 1000
+  }
+}
+```
+
+## Provider Configuration
+
+### Ollama (Local)
+
+```json
+{
+  "model_provider": "ollama",
+  "ollama_endpoint": "http://localhost:11434/api/generate",
+  "ollama_model": "codellama:7b"
+}
+```
+
+### OpenAI
+
+```json
+{
+  "model_provider": "openai",
+  "openai_api_key": "your-api-key",
+  "openai_model": "gpt-4"
+}
+```
+
+### Claude
+
+```json
+{
+  "model_provider": "claude",
+  "claude_api_key": "your-api-key",
+  "claude_model": "claude-3-sonnet-20240229"
+}
+```
+
+### Gemini
+
+```json
+{
+  "model_provider": "gemini",
+  "gemini_api_key": "your-api-key",
+  "gemini_model": "gemini-pro"
+}
+```
+
+## Technical Details
+
+### File Change Detection
+
+- **Hash Algorithm**: MD5 checksum comparison
+- **Debouncing**: 100ms file stability window
+- **Metadata Tracking**: size, mtime, line count, MIME type
+- **Event Types**: add, change, unlink, addDir, unlinkDir
+
+### Dependency Analysis
+
+- **JavaScript/TypeScript**:
+  - Babel parser with @babel/preset-env
+  - ESM/CommonJS import detection
+  - Dynamic import resolution
+- **Python**:
+  - Regex patterns for import/from statements
+  - Relative import path resolution
+- **JSON**:
+  - package.json dependencies/devDependencies
+  - Semantic versioning parsing
+
+### Graph Algorithms
+
+- **Circular Detection**: Depth-first search with visited tracking
+- **Topology Sorting**: Kahn's algorithm for dependency ordering
+- **Path Finding**: Dijkstra for shortest dependency paths
+- **Clustering**: Connected components analysis
+
+### System Metrics
+
+- **CPU**: Usage percentage, core count, load average
+- **Memory**: Used/total RAM, swap usage, buffer/cache
+- **Disk**: Read/write IOPS, throughput, queue depth
+- **Network**: Bytes in/out, packets, errors, interface stats
+
+## Performance
+
+- **File Watching**: ~1ms response time for changes
+- **Dependency Analysis**: ~50ms per file (JS/TS), ~5ms (Python)
+- **System Monitoring**: 1-second polling interval
+- **Memory Usage**: ~50MB baseline, +2MB per 1000 files
+- **WebSocket Updates**: <10ms latency for real-time sync
+
+## Troubleshooting
+
+### Startup Diagnostics
+
+The startup script automatically checks for common issues:
+
+| Check | Error | Solution |
+|-------|-------|----------|
+| Node.js version | Node.js 16+ required | Install Node.js from nodejs.org |
+| Port availability | Port 8081 in use | Change `workspace_port` in config |
+| NPM availability | npm command not found | Reinstall Node.js or fix PATH |
+| Configuration | Config file missing | Auto-created on first run |
+| Dependencies | node_modules missing | Run `npm install` |
+| LLM connection | Ollama not responding | Start Ollama or change provider |
+| System resources | High memory/disk usage | Close applications or adjust config |
+
+### Common Startup Errors
+
+**npm ENOENT Error (Windows)**
+```bash
+# Problem: npm.cmd not found in PATH
+# Solution: Reinstall Node.js or add to PATH
+where npm
+# Should return: C:\Program Files\nodejs\npm.cmd
+```
+
+**Port Already in Use**
+```json
+// Edit language_model_abstraction/config.json
+{
+  "workspace_port": 8082
+}
+```
+
+**High Memory Usage**
+```json
+// Reduce analysis batch size
+{
+  "monitoring": {
+    "analysis_batch_size": 25,
+    "watch_patterns": ["**/*.{js,py}"]
+  }
+}
+```
+
+**LLM Connection Failed**
+```bash
+# For Ollama (check if running)
+ollama serve
+ollama pull codellama:7b
+
+# Or switch provider in config
+{
+  "model_provider": "openai",
+  "openai_api_key": "your-key"
+}
+```
+
+### Service Issues
+
+**PM2 Service Won't Start**
+```bash
+# Check PM2 logs
+pm2 logs workspace-manager
+
+# Restart service
+pm2 restart workspace-manager
+
+# Check PM2 status
+pm2 list
+```
+
+**Systemd Service Failed**
+```bash
+# Check service logs
+sudo journalctl -u workspace-manager -f
+
+# Check service status
+sudo systemctl status workspace-manager
+
+# Restart service
+sudo systemctl restart workspace-manager
+```
+
+### Performance Issues
+
+| Issue | Symptom | Solution |
+|-------|---------|----------|
+| High CPU usage | >80% CPU constantly | Reduce `watch_patterns` scope |
+| Memory leaks | Memory usage growing | Restart service, check batch size |
+| Slow file scanning | Long startup times | Increase `analysis_batch_size` |
+| WebSocket disconnects | Dashboard not updating | Check network/firewall settings |
+| File watching stops | Changes not detected | Check disk space and permissions |

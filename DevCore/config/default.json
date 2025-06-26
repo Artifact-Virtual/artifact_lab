@@ -2,11 +2,13 @@
   "paths": {
     "src": "./src",
     "tests": "./tests",
-    "docs": "./docs"
+    "docs": "./docs",
+    "workspace": "./workspace"
   },
   "modelSettings": {
-    "defaultModel": "qwen2.5-coder:latest",
-    "modelEndpoint": "http://localhost:11434/api/generate"
+    "defaultModel": "codellama:7b",
+    "modelEndpoint": "http://localhost:11434/api/generate",
+    "provider": "ollama"
   },
   "logging": {
     "level": "info",
@@ -18,5 +20,9 @@
   },
   "fileWatcher": {
     "debounceTime": 300
+  },
+  "agents": {
+    "maxRetries": 5,
+    "timeout": 30
   }
 }

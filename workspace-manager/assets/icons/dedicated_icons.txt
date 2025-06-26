@@ -1,0 +1,400 @@
+# Comprehensive Unicode Icons, Special Characters and Glyphs
+
+A comprehensive collection of Unicode special characters, symbols, and glyphs organized by category.
+
+## Geometric Shapes
+
+| Character | Unicode | Description |
+| ■         | U+25A0  | Black Square |
+| □         | U+25A1  | White Square |
+| ▢         | U+25A2  | White Square With Rounded Corners |
+| ▣         | U+25A3  | White Square Containing Black Small Square |
+| ▤         | U+25A4  | Square With Horizontal Fill |
+| ▥         | U+25A5  | Square With Vertical Fill |
+| ▦         | U+25A6  | Square With Orthogonal Crosshatch Fill |
+| ▧         | U+25A7  | Square With Upper Left To Lower Right Fill |
+| ▨         | U+25A8  | Square With Upper Right To Lower Left Fill |
+| ▩         | U+25A9  | Square With Diagonal Crosshatch Fill |
+| ▪         | U+25AA  | Black Small Square |
+| ▫         | U+25AB  | White Small Square |
+| ▬         | U+25AC  | Black Rectangle |
+| ▭         | U+25AD  | White Rectangle |
+| ▮         | U+25AE  | Black Vertical Rectangle |
+| ▯         | U+25AF  | White Vertical Rectangle |
+| ▰         | U+25B0  | Black Parallelogram |
+| ▱         | U+25B1  | White Parallelogram |
+| ▲         | U+25B2  | Black Up-Pointing Triangle |
+| △         | U+25B3  | White Up-Pointing Triangle |
+| ▴         | U+25B4  | Black Up-Pointing Small Triangle |
+| ▵         | U+25B5  | White Up-Pointing Small Triangle |
+| ▶         | U+25B6  | Black Right-Pointing Triangle |
+| ▷         | U+25B7  | White Right-Pointing Triangle |
+| ▸         | U+25B8  | Black Right-Pointing Small Triangle |
+| ▹         | U+25B9  | White Right-Pointing Small Triangle |
+| ►         | U+25BA  | Black Right-Pointing Pointer |
+| ▻         | U+25BB  | White Right-Pointing Pointer |
+| ▼         | U+25BC  | Black Down-Pointing Triangle |
+| ▽         | U+25BD  | White Down-Pointing Triangle |
+| ▾         | U+25BE  | Black Down-Pointing Small Triangle |
+| ▿         | U+25BF  | White Down-Pointing Small Triangle |
+| ◀         | U+25C0  | Black Left-Pointing Triangle |
+| ◁         | U+25C1  | White Left-Pointing Triangle |
+| ◂         | U+25C2  | Black Left-Pointing Small Triangle |
+| ◃         | U+25C3  | White Left-Pointing Small Triangle |
+| ◄         | U+25C4  | Black Left-Pointing Pointer |
+| ◅         | U+25C5  | White Left-Pointing Pointer |
+| ◆         | U+25C6  | Black Diamond |
+| ◇         | U+25C7  | White Diamond |
+| ◈         | U+25C8  | White Diamond Containing Black Small Diamond |
+| ◉         | U+25C9  | Fisheye |
+| ◊         | U+25CA  | Lozenge |
+| ○         | U+25CB  | White Circle |
+| ◌         | U+25CC  | Dotted Circle |
+| ◍         | U+25CD  | Circle With Vertical Fill |
+| ◎         | U+25CE  | Bullseye |
+| ●         | U+25CF  | Black Circle |
+| ◐         | U+25D0  | Circle With Left Half Black |
+| ◑         | U+25D1  | Circle With Right Half Black |
+| ◒         | U+25D2  | Circle With Lower Half Black |
+| ◓         | U+25D3  | Circle With Upper Half Black |
+| ◔         | U+25D4  | Circle With Upper Right Quadrant Black |
+| ◕         | U+25D5  | Circle With All But Upper Left Quadrant Black |
+| ◖         | U+25D6  | Left Half Black Circle |
+| ◗         | U+25D7  | Right Half Black Circle |
+| ◦         | U+25E6  | White Bullet |
+| ▲         | U+25B2  | Black Triangle Up |
+| △         | U+25B3  | White Triangle Up |
+| ▼         | U+25BC  | Black Triangle Down |
+| ▽         | U+25BD  | White Triangle Down |
+| ◆         | U+25C6  | Black Diamond |
+| ◇         | U+25C7  | White Diamond |
+| ●         | U+25CF  | Black Circle |
+| ○         | U+25CB  | White Circle |
+| ◉         | U+25C9  | Fisheye |
+| ◎         | U+25CE  | Bullseye |
+| ◊         | U+25CA  | Lozenge |
+| ◘         | U+25D8  | Inverse Bullet |
+| ◙         | U+25D9  | Inverse White Circle |
+
+## Stars and Asterisks
+
+| Character | Unicode | Description |
+|-----------|---------|-------------|
+| ★         | U+2605  | Black Star |
+| ☆         | U+2606  | White Star |
+| ✦         | U+2726  | Black Four Pointed Star |
+| ✧         | U+2727  | White Four Pointed Star |
+| ✩         | U+2729  | Stress Outlined White Star |
+| ✪         | U+272A  | Circled White Star |
+| ✫         | U+272B  | Open Centre Black Star |
+| ✬         | U+272C  | Black Centre White Star |
+| ✭         | U+272D  | Outlined Black Star |
+| ✮         | U+272E  | Heavy Outlined Black Star |
+| ✯         | U+272F  | Pinwheel Star |
+| ✰         | U+2730  | Shadowed White Star |
+
+## Weather and Nature
+
+| Character | Unicode | Description |
+|-----------|---------|-------------|
+| ☀         | U+2600  | Sun |
+| ☁         | U+2601  | Cloud |
+| ☂         | U+2602  | Umbrella |
+| ☃         | U+2603  | Snowman |
+| ☄         | U+2604  | Comet |
+| ⛅         | U+26C5  | Sun Behind Cloud |
+| ⛈         | U+26C8  | Thunder Cloud and Rain |
+| ⛄         | U+26C4  | Snowman Without Snow |
+| ❄         | U+2744  | Snowflake |
+| ❅         | U+2745  | Tight Trifoliate Snowflake |
+| ❆         | U+2746  | Heavy Chevron Snowflake |
+
+## Technology and Electronics
+
+| Character | Unicode | Description |
+|-----------|---------|-------------|
+| ☎         | U+260E  | Telephone |
+| ☏         | U+260F  | White Telephone |
+| ⌂         | U+2302  | House |
+| ⌘         | U+2318  | Command Key |
+| ⌚         | U+231A  | Watch |
+| ⌛         | U+231B  | Hourglass |
+| ⏰         | U+23F0  | Alarm Clock |
+| ⏱         | U+23F1  | Stopwatch |
+| ⏲         | U+23F2  | Timer Clock |
+| ⏳         | U+23F3  | Hourglass With Flowing Sand |
+
+## Music and Audio
+
+| Character | Unicode | Description |
+|-----------|---------|-------------|
+| ♩         | U+2669  | Quarter Note |
+| ♪         | U+266A  | Eighth Note |
+| ♫         | U+266B  | Beamed Eighth Notes |
+| ♬         | U+266C  | Beamed Sixteenth Notes |
+| ♭         | U+266D  | Music Flat Sign |
+| ♮         | U+266E  | Music Natural Sign |
+| ♯         | U+266F  | Music Sharp Sign |
+
+## Symbols and Signs
+
+| Character | Unicode | Description |
+|-----------|---------|-------------|
+| ☑         | U+2611  | Ballot Box with Check |
+| ☒         | U+2612  | Ballot Box with X |
+| ☓         | U+2613  | Saltire |
+| ☔         | U+2614  | Umbrella with Rain Drops |
+| ☕         | U+2615  | Hot Beverage |
+| ☖         | U+2616  | White Shogi Piece |
+| ☗         | U+2617  | Black Shogi Piece |
+| ☘         | U+2618  | Shamrock |
+| ☙         | U+2619  | Reversed Rotated Floral Heart Bullet |
+| ☚         | U+261A  | Black Left Pointing Index |
+| ☛         | U+261B  | Black Right Pointing Index |
+
+## Warning and Hazard
+
+| Character | Unicode | Description |
+|-----------|---------|-------------|
+| ☠         | U+2620  | Skull and Crossbones |
+| ☡         | U+2621  | Caution Sign |
+| ☢         | U+2622  | Radioactive |
+| ☣         | U+2623  | Biohazard |
+| ⚠         | U+26A0  | Warning Sign |
+| ⚡         | U+26A1  | High Voltage |
+| ⛔         | U+26D4  | No Entry |
+| ⛑         | U+26D1  | Rescue Worker's Helmet |
+
+## Faces and Emotions (Basic)
+
+| Character | Unicode | Description |
+|-----------|---------|-------------|
+| ☹         | U+2639  | Frowning Face |
+| ☺         | U+263A  | Smiling Face |
+| ☻         | U+263B  | Black Smiling Face |
+
+## Religious and Cultural
+
+| Character | Unicode | Description |
+|-----------|---------|-------------|
+| ☩         | U+2629  | Cross of Jerusalem |
+| ☪         | U+262A  | Star and Crescent |
+| ☫         | U+262B  | Farsi Symbol |
+| ☬         | U+262C  | Adi Shakti |
+| ☭         | U+262D  | Hammer and Sickle |
+| ☮         | U+262E  | Peace Symbol |
+| ☯         | U+262F  | Yin Yang |
+| ⛩         | U+26E9  | Shinto Shrine |
+| ✝         | U+271D  | Latin Cross |
+| ✞         | U+271E  | Shadowed White Latin Cross |
+| ✟         | U+271F  | Outlined Latin Cross |
+
+## Sports and Recreation
+
+| Character | Unicode | Description |
+|-----------|---------|-------------|
+| ⚽         | U+26BD  | Soccer Ball |
+| ⚾         | U+26BE  | Baseball |
+
+## Transportation
+
+| Character | Unicode | Description |
+|-----------|---------|-------------|
+| ✈         | U+2708  | Airplane |
+
+## Environmental and Recycling
+
+| Character | Unicode | Description |
+|-----------|---------|-------------|
+| ♻         | U+267B  | Recycling Symbol |
+| ♲         | U+2672  | Universal Recycling Symbol |
+| ♳         | U+2673  | Recycling Symbol for Type-1 Plastics |
+| ♴         | U+2674  | Recycling Symbol for Type-2 Plastics |
+| ♵         | U+2675  | Recycling Symbol for Type-3 Plastics |
+| ♶         | U+2676  | Recycling Symbol for Type-4 Plastics |
+| ♷         | U+2677  | Recycling Symbol for Type-5 Plastics |
+| ♸         | U+2678  | Recycling Symbol for Type-6 Plastics |
+| ♹         | U+2679  | Recycling Symbol for Type-7 Plastics |
+
+## Mathematical Symbols
+
+| Character | Unicode | Description |
+|-----------|---------|-------------|
+| ∞         | U+221E  | Infinity |
+| ±         | U+00B1  | Plus-Minus Sign |
+| ∑         | U+2211  | N-Ary Summation |
+| ∏         | U+220F  | N-Ary Product |
+| ∫         | U+222B  | Integral |
+| ∂         | U+2202  | Partial Differential |
+| ∆         | U+2206  | Increment |
+| ∇         | U+2207  | Nabla |
+| √         | U+221A  | Square Root |
+| ∝         | U+221D  | Proportional To |
+
+## Currency Symbols
+
+| Character | Unicode | Description |
+|-----------|---------|-------------|
+| $         | U+0024  | Dollar Sign |
+| €         | U+20AC  | Euro Sign |
+| £         | U+00A3  | Pound Sign |
+| ¥         | U+00A5  | Yen Sign |
+| ¢         | U+00A2  | Cent Sign |
+| ₹         | U+20B9  | Indian Rupee Sign |
+| ₽         | U+20BD  | Ruble Sign |
+| ¤         | U+00A4  | Generic Currency Symbol |
+| ₿         | U+20BF  | Bitcoin Sign |
+
+## Arrows and Directions
+
+| Character | Unicode | Description |
+|-----------|---------|-------------|
+| ←         | U+2190  | Leftwards Arrow |
+| →         | U+2192  | Rightwards Arrow |
+| ↑         | U+2191  | Upwards Arrow |
+| ↓         | U+2193  | Downwards Arrow |
+| ↔         | U+2194  | Left Right Arrow |
+| ↕         | U+2195  | Up Down Arrow |
+| ↖         | U+2196  | North West Arrow |
+| ↗         | U+2197  | North East Arrow |
+| ↘         | U+2198  | South East Arrow |
+| ↙         | U+2199  | South West Arrow |
+| ⇐         | U+21D0  | Leftwards Double Arrow |
+| ⇒         | U+21D2  | Rightwards Double Arrow |
+
+## Card Suits
+
+| Character | Unicode | Description |
+|-----------|---------|-------------|
+| ♠         | U+2660  | Black Spade Suit |
+| ♡         | U+2661  | White Heart Suit |
+| ♢         | U+2662  | White Diamond Suit |
+| ♣         | U+2663  | Black Club Suit |
+| ♤         | U+2664  | White Spade Suit |
+| ♥         | U+2665  | Black Heart Suit |
+| ♦         | U+2666  | Black Diamond Suit |
+| ♧         | U+2667  | White Club Suit |
+
+## Punctuation and Typography
+
+| Character | Unicode | Description |
+|-----------|---------|-------------|
+| „         | U+201E  | Double Low-9 Quotation Mark |
+| "         | U+201C  | Left Double Quotation Mark |
+| "         | U+201D  | Right Double Quotation Mark |
+| '         | U+2018  | Left Single Quotation Mark |
+| '         | U+2019  | Right Single Quotation Mark |
+| …         | U+2026  | Horizontal Ellipsis |
+| –         | U+2013  | En Dash |
+| —         | U+2014  | Em Dash |
+| ‽         | U+203D  | Interrobang |
+| ¡         | U+00A1  | Inverted Exclamation Mark |
+| ¿         | U+00BF  | Inverted Question Mark |
+
+## Miscellaneous Symbols
+
+| Character | Unicode | Description |
+|-----------|---------|-------------|
+| ™         | U+2122  | Trade Mark Sign |
+| ®         | U+00AE  | Registered Sign |
+| ©         | U+00A9  | Copyright Sign |
+| ℅         | U+2105  | Care Of |
+| ℆         | U+2106  | Cada Una |
+| №         | U+2116  | Numero Sign |
+| ℃         | U+2103  | Degree Celsius |
+| ℉         | U+2109  | Degree Fahrenheit |
+| ℊ         | U+210A  | Script Small G |
+| ℍ         | U+210D  | Double-Struck Capital H |
+
+## Alien and Unusual Glyphs
+
+| Character | Unicode | Description |
+|-----------|---------|-------------|
+| ꩩ         | U+AA69  | Cham Letter Nya |
+| ꯓ         | U+ABD3  | Meetei Mayek Letter Gok |
+| ꨊ         | U+AA0A  | Cham Letter Ba |
+| ꯑ         | U+ABC1  | Meetei Mayek Letter Atiya |
+| ꩽ         | U+AA7D  | Myanmar Letter Aiton A |
+| ꯎ         | U+ABCE  | Meetei Mayek Letter Un |
+| ꤘ         | U+A918  | Kayah Li Vowel Ue |
+| ꭶ         | U+AB76  | Cherokee Small Letter Ga |
+| ꩰ         | U+AA70  | Myanmar Letter Khamti Ga |
+| ꧏ         | U+A9CF  | Javanese Pangrangkep |
+| ꩭ         | U+AA6D  | Cham Letter Final H |
+| ꯇ         | U+ABC7  | Meetei Mayek Letter Til |
+| ꧨ         | U+A9E8  | Javanese Pada Windu |
+| ꤿ         | U+A93F  | Rejang Virama |
+| ꯘ         | U+ABD8  | Meetei Mayek Letter Mit |
+| ꯚ         | U+ABDA  | Meetei Mayek Letter Sam |
+| ꭺ         | U+AB7A  | Cherokee Small Letter Ge |
+| ꤑ         | U+A911  | Kayah Li Vowel I |
+| ꤲ         | U+A932  | Rejang Letter Ba |
+| ꭿ         | U+AB7F  | Cherokee Small Letter Hi |
+
+## Ancient and Archaic Symbols
+
+| Character | Unicode | Description |
+|-----------|---------|-------------|
+| ᚠ         | U+16A0  | Runic Letter Fehu |
+| ᚢ         | U+16A2  | Runic Letter Uruz |
+| ᚦ         | U+16A6  | Runic Letter Thurisaz |
+| ᚨ         | U+16A8  | Runic Letter Ansuz |
+| ᚱ         | U+16B1  | Runic Letter Raido |
+| ᚲ         | U+16B2  | Runic Letter Kauna |
+| ᚷ         | U+16B7  | Runic Letter Gebo |
+| ᚹ         | U+16B9  | Runic Letter Wunjo |
+| ᚺ         | U+16BA  | Runic Letter Haglaz |
+| ᚻ         | U+16BB  | Runic Letter Haegl |
+| ᚾ         | U+16BE  | Runic Letter Naudiz |
+| ᛁ         | U+16C1  | Runic Letter Isaz |
+| ᛂ         | U+16C2  | Runic Letter Jeran |
+| ᛇ         | U+16C7  | Runic Letter Iwaz |
+| ᛈ         | U+16C8  | Runic Letter Pertho |
+| ᛉ         | U+16C9  | Runic Letter Algiz |
+| ᛊ         | U+16CA  | Runic Letter Sowilo |
+| ᛋ         | U+16CB  | Runic Letter Sigel |
+| ᛏ         | U+16CF  | Runic Letter Tiwaz |
+| ᛒ         | U+16D2  | Runic Letter Berkanan |
+
+## Dingbats and Ornamental
+
+| Character | Unicode | Description |
+|-----------|---------|-------------|
+| ❀         | U+2740  | White Florette |
+| ❁         | U+2741  | Eight Petalled Outlined Black Florette |
+| ❂         | U+2742  | Circled Open Centre Eight Pointed Star |
+| ❃         | U+2743  | Heavy Teardrop-Spoked Asterisk |
+| ❇         | U+2747  | Sparkle |
+| ❈         | U+2748  | Heavy Sparkle |
+| ❉         | U+2749  | Balloon-Spoked Asterisk |
+| ❊         | U+274A  | Eight Teardrop-Spoked Propeller Asterisk |
+| ❋         | U+274B  | Heavy Eight Teardrop-Spoked Propeller Asterisk |
+| ❖         | U+2756  | Black Diamond Minus White X |
+| ❘         | U+2758  | Light Vertical Bar |
+| ❙         | U+2759  | Medium Vertical Bar |
+| ❚         | U+275A  | Heavy Vertical Bar |
+| ❛         | U+275B  | Heavy Single Turned Comma Quotation Mark Ornament |
+| ❜         | U+275C  | Heavy Single Comma Quotation Mark Ornament |
+| ❝         | U+275D  | Heavy Double Turned Comma Quotation Mark Ornament |
+| ❞         | U+275E  | Heavy Double Comma Quotation Mark Ornament |
+
+## Box Drawing and Lines
+
+| Character | Unicode | Description |
+|-----------|---------|-------------|
+| ─         | U+2500  | Box Drawings Light Horizontal |
+| ━         | U+2501  | Box Drawings Heavy Horizontal |
+| │         | U+2502  | Box Drawings Light Vertical |
+| ┃         | U+2503  | Box Drawings Heavy Vertical |
+| ┄         | U+2504  | Box Drawings Light Triple Dash Horizontal |
+| ┅         | U+2505  | Box Drawings Heavy Triple Dash Horizontal |
+| ┆         | U+2506  | Box Drawings Light Triple Dash Vertical |
+| ┇         | U+2507  | Box Drawings Heavy Triple Dash Vertical |
+| ┈         | U+2508  | Box Drawings Light Quadruple Dash Horizontal |
+| ┉         | U+2509  | Box Drawings Heavy Quadruple Dash Horizontal |
+| ┊         | U+250A  | Box Drawings Light Quadruple Dash Vertical |
+| ┋         | U+250B  | Box Drawings Heavy Quadruple Dash Vertical |
+| ┌         | U+250C  | Box Drawings Light Down And Right |
+| ┍         | U+250D  | Box Drawings Down Light And Right Heavy |
+| ┎         | U+250E  | Box Drawings Down Heavy And Right Light |
+| ┏         | U+250F  | Box Drawings Heavy Down And Right |

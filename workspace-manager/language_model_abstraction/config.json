@@ -1,0 +1,34 @@
+{
+  "model_provider": "ollama",
+  "ollama_endpoint": "http://localhost:11434/api/generate",
+  "ollama_model": "codellama:7b",
+  "ollama_host": "localhost",
+  "ollama_port": 11434,
+  "openai_api_key": "",
+  "openai_model": "gpt-4",
+  "claude_api_key": "",
+  "claude_model": "claude-3-sonnet-20240229",
+  "gemini_api_key": "",
+  "gemini_model": "gemini-pro",
+  "llmstudio_endpoint": "http://localhost:1234/v1/chat/completions",
+  "llmstudio_model": "local-model",
+  "webchat_port": 8080,
+  "workspace_port": 8081,
+  "system_prompt": "1. Ensure all dependencies are installed using npm install. 2. Use npm start to launch the application. 3. Run tests with npm test before committing changes. 4. Follow PEP8 guidelines for Python code. 5. Always update this file. ALWAYS. no exceptions. 6. Perform a full codebase review periodically to ensure no errors exist. Fix all issues, big or small, without workarounds or cutting corners. 7. Always validate and fix JSON config files for strict compliance (no trailing commas, valid syntax). 8. Ensure all model/provider logic is routed through a single config file (config.json). 9. Standardize import paths and config resolution for all entry-point scripts. 10. ALWAYS UPDATE ADE config.json with latest updated SOPs. 11. All dependency index should be reviewed via system prompt. 12. Also review the system summary.",
+  "sop_summary": "LLM must have secure, auditable read/write access to the codebase via backend API. LLM can both suggest and directly make codebase changes (with audit trail and user control). Backend API must support advanced file/code management (list, read, write, create, delete, search). Monaco Editor is integrated in webchat; LLM can trigger Monaco actions (open, edit, diff, save). All LLM-driven changes must be user-controllable (approve, undo) and meticulously logged. AVA system is fully operational with troubleshooting procedures. Monitor server status regularly and use restart procedures if loading issues occur. System updated June 25, 2025 with complete operational procedures.",
+  "last_updated": "2025-06-25T00:00:00Z",
+  "system_status": "FULLY_OPERATIONAL",
+  "troubleshooting_guide": "ADE/ADE.md",
+  "monitoring": {
+    "watch_patterns": ["**/*.js", "**/*.py", "**/*.ts", "**/*.json", "**/*.md", "**/*.html", "**/*.css"],
+    "ignore_patterns": ["node_modules/**", "dist/**", "__pycache__/**", "*.log"],
+    "scan_depth": 10,
+    "analysis_batch_size": 50
+  },
+  "visualization": {
+    "enable_3d": true,
+    "default_view": "topology",
+    "refresh_rate": 1000,
+    "max_nodes": 1000
+  }
+}
