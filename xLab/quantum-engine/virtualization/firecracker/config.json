@@ -1,0 +1,28 @@
+{
+  "firecracker": {
+    "vm": {
+      "cpu": {
+        "count": 2,
+        "template": "micro"
+      },
+      "memory": {
+        "size_mib": 2048
+      },
+      "network": {
+        "tap_device": "tap0",
+        "host_dev": "eth0"
+      },
+      "disk": {
+        "image_path": "/var/lib/firecracker/images/quantum-engine.img",
+        "size_mib": 10240
+      }
+    },
+    "logging": {
+      "level": "info",
+      "log_path": "/var/log/firecracker.log"
+    },
+    "api": {
+      "socket_path": "/var/run/firecracker.sock"
+    }
+  }
+}

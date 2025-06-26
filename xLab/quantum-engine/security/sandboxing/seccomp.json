@@ -1,0 +1,36 @@
+{
+  "defaultAction": "SCMP_ACT_ERRNO",
+  "architectures": [
+    "SCMP_ARCH_X86_64"
+  ],
+  "syscalls": [
+    {
+      "names": [
+        "execve",
+        "fork",
+        "clone",
+        "open",
+        "read",
+        "write",
+        "close",
+        "exit",
+        "kill"
+      ],
+      "action": "SCMP_ACT_ALLOW"
+    },
+    {
+      "names": [
+        "ptrace",
+        "ftruncate",
+        "mmap",
+        "munmap",
+        "socket",
+        "connect",
+        "bind",
+        "listen",
+        "accept"
+      ],
+      "action": "SCMP_ACT_ERRNO"
+    }
+  ]
+}

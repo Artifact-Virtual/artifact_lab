@@ -1,0 +1,27 @@
+{
+  "name": "quantum-engine",
+  "version": "1.0.0",
+  "description": "A modular quantum engine supporting multiple backends and simulation types.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "graphql": "^15.5.0",
+    "grpc": "^1.24.2",
+    "axios": "^0.21.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
+  "keywords": [
+    "quantum",
+    "simulation",
+    "backend",
+    "quantum-computing"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

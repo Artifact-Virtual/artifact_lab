@@ -1,0 +1,16 @@
+# The contents of the file /quantum-engine/requirements.txt
+
+# Python dependencies for the quantum engine project
+qiskit
+cirq
+qutip
+boto3  # For AWS Braket integration
+flask  # For REST API
+flask-graphql  # For GraphQL support
+grpcio  # For gRPC interface
+protobuf  # For gRPC message serialization
+numpy  # For numerical operations
+scipy  # For scientific computations
+pandas  # For data manipulation and analysis
+matplotlib  # For plotting and visualization
+```

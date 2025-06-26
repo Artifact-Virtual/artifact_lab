@@ -1,0 +1,33 @@
+# This file defines the job scheduling configuration for the quantum engine.
+# It specifies job types and schedules.
+
+jobs:
+  - name: "Quantum Simulation Job"
+    type: "simulation"
+    schedule: "0 * * * *"  # Every hour
+    parameters:
+      backend: "qiskit"
+      method: "vqe"
+      resources:
+        cpu: 2
+        memory: "4Gi"
+
+  - name: "Quantum Optimization Job"
+    type: "optimization"
+    schedule: "*/30 * * * *"  # Every 30 minutes
+    parameters:
+      backend: "cirq"
+      method: "qaoa"
+      resources:
+        cpu: 4
+        memory: "8Gi"
+
+  - name: "Quantum Chemistry Job"
+    type: "chemistry"
+    schedule: "0 0 * * 0"  # Every Sunday at midnight
+    parameters:
+      backend: "qutip"
+      method: "ground_state"
+      resources:
+        cpu: 4
+        memory: "16Gi"

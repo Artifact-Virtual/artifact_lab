@@ -1,0 +1,26 @@
+data_sources:
+  - name: prometheus
+    type: prometheus
+    url: http://localhost:9090
+    scrape_interval: 15s
+    metrics_path: /metrics
+
+  - name: opentelemetry
+    type: opentelemetry
+    endpoint: http://localhost:4317
+    service_name: quantum-engine
+
+formats:
+  - name: json
+    description: JSON format for telemetry data
+  - name: protobuf
+    description: Protobuf format for telemetry data
+
+logging:
+  level: info
+  output: stdout
+  format: json
+
+sampling:
+  rate: 0.1
+  strategy: random
