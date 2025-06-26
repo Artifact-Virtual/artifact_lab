@@ -221,7 +221,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🚀 Workspace Manager</h1>
+            <h1>▶ Workspace Manager</h1>
             <p>Advanced workspace monitoring and dependency analysis system</p>
         </div>
         
@@ -232,7 +232,7 @@
         
         <div class="main-actions">
             <a href="/topology" class="btn btn-primary">🎨 View Topology</a>
-            <a href="/api/analysis" class="btn btn-secondary" target="_blank">📊 Analysis Report</a>
+            <a href="/api/analysis" class="btn btn-secondary" target="_blank">■ Analysis Report</a>
             <a href="/api/metrics" class="btn btn-secondary" target="_blank">📈 System Metrics</a>
         </div>
         
@@ -345,7 +345,7 @@
                             </div>
                             ${getComponentStats(name, comp.stats)}
                             <div class="actions">
-                                <button class="btn btn-secondary" onclick="restartComponent('${name}')">🔄 Restart</button>
+                                <button class="btn btn-secondary" onclick="restartComponent('${name}')">⟲ Restart</button>
                                 ${getComponentActions(name)}
                             </div>
                         </div>
@@ -358,7 +358,7 @@
             const icons = {
                 watcher: '👁️',
                 indexer: '🔍',
-                monitor: '📊',
+                monitor: '■',
                 visualizer: '🎨'
             };
             return icons[name] || '⚙️';

@@ -20,10 +20,13 @@
   "system_status": "FULLY_OPERATIONAL",
   "troubleshooting_guide": "ADE/ADE.md",
   "monitoring": {
-    "watch_patterns": ["**/*.js", "**/*.py", "**/*.ts", "**/*.json", "**/*.md", "**/*.html", "**/*.css"],
-    "ignore_patterns": ["node_modules/**", "dist/**", "__pycache__/**", "*.log"],
-    "scan_depth": 10,
-    "analysis_batch_size": 50
+    "watch_patterns": ["**/*.js", "**/*.py", "**/*.ts", "**/*.json"],
+    "ignore_patterns": ["node_modules/**", "dist/**", "__pycache__/**", "*.log", "logs/**", "*.backup"],
+    "scan_depth": 5,
+    "analysis_batch_size": 10,
+    "health_check_interval": 30000,
+    "file_stability_timeout": 1000,
+    "max_file_size": 1048576
   },
   "visualization": {
     "enable_3d": true,

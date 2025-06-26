@@ -35,7 +35,7 @@ class DependencyIndexer extends EventEmitter {
         this.rootPath = path.resolve(rootPath);
         this.isRunning = true;
         
-        console.log(`🔍 Starting dependency analysis for: ${this.rootPath}`);
+        console.log(`◦ Starting dependency analysis for: ${this.rootPath}`);
         
         const startTime = Date.now();
         await this.performFullAnalysis();
@@ -43,7 +43,7 @@ class DependencyIndexer extends EventEmitter {
         this.stats.analysisTime = Date.now() - startTime;
         this.stats.lastUpdate = new Date();
         
-        console.log(`✅ Dependency analysis complete in ${this.stats.analysisTime}ms`);
+        console.log(`▣ Dependency analysis complete in ${this.stats.analysisTime}ms`);
         this.emit('analysisComplete', this.getAnalysisReport());
     }
 
@@ -61,7 +61,7 @@ class DependencyIndexer extends EventEmitter {
             allFiles.push(...files);
         }
 
-        console.log(`📊 Analyzing ${allFiles.length} files...`);
+        console.log(`▢ Analyzing ${allFiles.length} files...`);
 
         // Analyze files in batches
         const batchSize = this.config.monitoring?.analysis_batch_size || 50;
@@ -71,7 +71,7 @@ class DependencyIndexer extends EventEmitter {
             
             // Progress update
             const progress = Math.round(((i + batch.length) / allFiles.length) * 100);
-            console.log(`📈 Analysis progress: ${progress}%`);
+            console.log(`→ Analysis progress: ${progress}%`);
         }
 
         // Build reverse index
@@ -132,7 +132,7 @@ class DependencyIndexer extends EventEmitter {
             return analysis;
 
         } catch (error) {
-            console.error(`❌ Error analyzing ${filePath}:`, error.message);
+            console.error(`× Error analyzing ${filePath}:`, error.message);
             return null;
         }
     }
@@ -328,7 +328,7 @@ class DependencyIndexer extends EventEmitter {
     }
 
     buildReverseIndex() {
-        console.log('🔄 Building reverse dependency index...');
+        console.log('○ Building reverse dependency index...');
         
         this.reverseIndex.clear();
         
@@ -343,13 +343,13 @@ class DependencyIndexer extends EventEmitter {
             }
         }
         
-        console.log(`✅ Reverse index built with ${this.reverseIndex.size} entries`);
+        console.log(`▣ Reverse index built with ${this.reverseIndex.size} entries`);
     }
 
     async generateFileSummaries() {
         if (!this.llmProvider) return;
         
-        console.log('🤖 Generating AI-powered file summaries...');
+        console.log('○ Generating AI-powered file summaries...');
         
         const files = Array.from(this.fileAnalysis.values());
         const batch = files.slice(0, 10); // Limit for demo
@@ -363,7 +363,7 @@ class DependencyIndexer extends EventEmitter {
                 this.emit('summaryGenerated', { file: fileAnalysis.path, summary });
                 
             } catch (error) {
-                console.error(`❌ Error generating summary for ${fileAnalysis.path}:`, error.message);
+                console.error(`× Error generating summary for ${fileAnalysis.path}:`, error.message);
             }
         }
     }
@@ -543,7 +543,7 @@ Role: [Role in the project]`;
     stop() {
         this.isRunning = false;
         this.emit('stopped');
-        console.log('✅ Dependency indexer stopped');
+        console.log('▣ Dependency indexer stopped');
     }
 }
 

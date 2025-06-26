@@ -14,18 +14,15 @@ async function loadConfig() {
     
     try {
         const config = await fs.readJson(configPath);
-        console.log('✅ Configuration loaded successfully');
+        console.log('▣ Configuration loaded successfully');
         return config;
     } catch (error) {
-        console.error('❌ Failed to load configuration:', error);
+        console.error('× Failed to load configuration:', error);
         process.exit(1);
     }
 }
 
 async function main() {
-    console.log('🚀 Starting Advanced Workspace Manager...');
-    console.log('════════════════════════════════════════');
-    
     try {
         // Load configuration
         const config = await loadConfig();
@@ -34,28 +31,27 @@ async function main() {
         const workspacePath = process.argv[2] || process.cwd();
         
         if (!(await fs.pathExists(workspacePath))) {
-            console.error(`❌ Workspace path does not exist: ${workspacePath}`);
+            console.error(`× Workspace path does not exist: ${workspacePath}`);
             process.exit(1);
         }
         
-        console.log(`📁 Workspace: ${workspacePath}`);
-        console.log(`🤖 LLM Provider: ${config.model_provider}`);
-        console.log(`🔧 Model: ${config[config.model_provider + '_model'] || 'default'}`);
-        console.log('════════════════════════════════════════');
+        console.log(`▣ Workspace: ${workspacePath}`);
+        console.log(`○ LLM Provider: ${config.model_provider}`);
+        console.log(`○ Model: ${config[config.model_provider + '_model'] || 'default'}`);
         
         // Create and start workspace manager
         const manager = new WorkspaceManager(config);
         
         // Handle graceful shutdown
         process.on('SIGINT', async () => {
-            console.log('\n🛑 Received SIGINT, shutting down gracefully...');
+            console.log('\n■ Received SIGINT, shutting down gracefully...');
             await manager.stop();
-            console.log('👋 Goodbye!');
+            console.log('× Goodbye!');
             process.exit(0);
         });
         
         process.on('SIGTERM', async () => {
-            console.log('\n🛑 Received SIGTERM, shutting down gracefully...');
+            console.log('\n■ Received SIGTERM, shutting down gracefully...');
             await manager.stop();
             process.exit(0);
         });
@@ -67,25 +63,25 @@ async function main() {
         setTimeout(async () => {
             try {
                 const report = await manager.generateReport();
-                console.log('\n📊 Initial Analysis Report Generated');
+                console.log('\n▢ Initial Analysis Report Generated');
                 console.log('══════════════════════════════════════');
                 console.log(`Files Analyzed: ${report.analysis.summary.totalFiles}`);
                 console.log(`Dependencies Found: ${report.analysis.summary.totalDependencies}`);
                 console.log(`Analysis Time: ${report.analysis.summary.analysisTime}ms`);
                 
                 if (report.aiSummary) {
-                    console.log('\n🤖 AI Summary:');
+                    console.log('\n○ AI Summary:');
                     console.log('═══════════════');
                     console.log(report.aiSummary);
                 }
                 
             } catch (error) {
-                console.error('❌ Failed to generate initial report:', error);
+                console.error('× Failed to generate initial report:', error);
             }
         }, 5000);
         
     } catch (error) {
-        console.error('❌ Failed to start Workspace Manager:', error);
+        console.error('× Failed to start Workspace Manager:', error);
         process.exit(1);
     }
 }
@@ -95,7 +91,7 @@ export { main };
 
 if (import.meta.url === `file://${process.argv[1]}`) {
     main().catch(error => {
-        console.error('💥 Unhandled error:', error);
+        console.error('× Unhandled error:', error);
         process.exit(1);
     });
 }

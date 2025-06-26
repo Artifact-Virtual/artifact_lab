@@ -10,25 +10,6 @@ import { spawn } from 'child_process';
 import os from 'os';
 import net from 'net';
 
-// Function to display the ASCII banner
-async function displayBanner() {
-    try {
-        const bannerPath = path.join(__dirname, 'assets', 'banner.txt');
-        if (await fs.pathExists(bannerPath)) {
-            const banner = await fs.readFile(bannerPath, 'utf8');
-            console.log('\n' + banner);
-            console.log('\n■ WORKSPACE MANAGER - FULLY OPERATIONAL');
-            console.log('════════════════════════════════════════════════════════════════════════════════');
-            console.log('▣ DevCore Workspace Management System v2.0');
-            console.log('▣ All Components Initialized and Running');
-            console.log('▣ System Ready for Operations');
-            console.log('════════════════════════════════════════════════════════════════════════════════\n');
-        }
-    } catch (error) {
-        console.log('◐ Banner display unavailable:', error.message);
-    }
-}
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -69,19 +50,19 @@ async function checkPort(port = DEFAULT_PORT) {
 }
 
 async function checkSystemRequirements() {
-    console.log('◦ Checking system requirements...');
+    console.log('🔍 Checking system requirements...');
     
     // Check Node.js version
     const nodeVersion = process.version;
     const major = parseInt(nodeVersion.slice(1).split('.')[0]);
     
     if (major < 16) {
-        console.error('× Node.js 16+ required. Current version:', nodeVersion);
+        console.error('❌ Node.js 16+ required. Current version:', nodeVersion);
         console.error('   Download from: https://nodejs.org/');
         process.exit(ERROR_CODES.NODE_VERSION);
     }
     
-    console.log('▣ Node.js version:', nodeVersion);
+    console.log('✅ Node.js version:', nodeVersion);
     
     // Check available memory
     const totalMem = os.totalmem();
@@ -89,26 +70,26 @@ async function checkSystemRequirements() {
     const memUsagePercent = ((totalMem - freeMem) / totalMem) * 100;
     
     if (memUsagePercent > 85) {
-        console.warn('▲  High memory usage detected:', memUsagePercent.toFixed(1) + '%');
+        console.warn('⚠️  High memory usage detected:', memUsagePercent.toFixed(1) + '%');
         console.warn('   Consider closing other applications or reducing analysis_batch_size');
     }
     
     // Check disk space
     const diskUsage = await checkDiskSpace();
     if (diskUsage > 90) {
-        console.warn('▲  Low disk space:', diskUsage.toFixed(1) + '% used');
+        console.warn('⚠️  Low disk space:', diskUsage.toFixed(1) + '% used');
         console.warn('   File watching may stop if disk becomes full');
     }
     
     // Check port availability
     const portAvailable = await checkPort(DEFAULT_PORT);
     if (!portAvailable) {
-        console.error('× Port', DEFAULT_PORT, 'is already in use');
+        console.error('❌ Port', DEFAULT_PORT, 'is already in use');
         console.error('   Solution: Change workspace_port in config or stop the conflicting service');
         process.exit(ERROR_CODES.PORT_IN_USE);
     }
     
-    console.log('▣ Port', DEFAULT_PORT, 'is available');
+    console.log('✅ Port', DEFAULT_PORT, 'is available');
 }
 async function checkDiskSpace() {
     try {
@@ -121,11 +102,11 @@ async function checkDiskSpace() {
 }
 
 async function checkConfiguration() {
-    console.log('○ Checking configuration...');
+    console.log('🔧 Checking configuration...');
     
     const configPath = path.join(__dirname, 'language_model_abstraction', 'config.json');
     if (!(await fs.pathExists(configPath))) {
-        console.error('× Configuration file not found:', configPath);
+        console.error('❌ Configuration file not found:', configPath);
         console.error('   Creating default configuration...');
         
         // Create default config
@@ -144,9 +125,9 @@ async function checkConfiguration() {
         };
         
         await fs.writeJson(configPath, defaultConfig, { spaces: 2 });
-        console.log('▣ Default configuration created');
+        console.log('✅ Default configuration created');
     } else {
-        console.log('▣ Configuration file found');
+        console.log('✅ Configuration file found');
     }
     
     // Validate configuration
@@ -158,10 +139,10 @@ async function checkConfiguration() {
             await checkOllamaConnection(config);
         }
         
-        console.log('▣ Configuration validated');
+        console.log('✅ Configuration validated');
         return config;
     } catch (error) {
-        console.error('× Configuration validation failed:', error.message);
+        console.error('❌ Configuration validation failed:', error.message);
         process.exit(ERROR_CODES.CONFIG_MISSING);
     }
 }
@@ -181,13 +162,13 @@ async function checkOllamaConnection(config) {
         const hasModel = data.models.some(m => m.name.includes(config.ollama_model.split(':')[0]));
         
         if (!hasModel) {
-            console.warn('▲  Model', config.ollama_model, 'not found in Ollama');
+            console.warn('⚠️  Model', config.ollama_model, 'not found in Ollama');
             console.warn('   Run: ollama pull', config.ollama_model);
         } else {
-            console.log('▣ Ollama connection verified');
+            console.log('✅ Ollama connection verified');
         }
     } catch (error) {
-        console.warn('▲  Cannot connect to Ollama:', error.message);
+        console.warn('⚠️  Cannot connect to Ollama:', error.message);
         console.warn('   Make sure Ollama is running or switch to a different provider');
     }
 }
@@ -196,7 +177,7 @@ async function installDependencies() {
     const nodeModulesPath = path.join(__dirname, 'node_modules');
     
     if (!(await fs.pathExists(nodeModulesPath))) {
-        console.log('▢ Installing dependencies...');
+        console.log('📦 Installing dependencies...');
         
         return new Promise((resolve, reject) => {
             const npmCmd = getNpmCommand();
@@ -208,24 +189,24 @@ async function installDependencies() {
             
             npm.on('close', (code) => {
                 if (code === 0) {
-                    console.log('▣ Dependencies installed');
+                    console.log('✅ Dependencies installed');
                     resolve();
                 } else {
-                    console.error('× Failed to install dependencies (exit code:', code + ')');
+                    console.error('❌ Failed to install dependencies (exit code:', code + ')');
                     console.error('   Try running: npm install --verbose');
                     reject(new Error('npm install failed'));
                 }
             });
             
             npm.on('error', (error) => {
-                console.error('× npm command failed:', error.message);
+                console.error('❌ npm command failed:', error.message);
                 console.error('   Make sure npm is installed and in your PATH');
                 reject(error);
             });
         });
     }
     
-    console.log('▣ Dependencies are installed');
+    console.log('✅ Dependencies are installed');
 }
 
 async function createServiceFiles() {
@@ -240,13 +221,13 @@ async function createServiceFiles() {
     if (createSystemd) {
         await createSystemdService();
         if (!isLinux) {
-            console.log('■  Note: Generated systemd service file on Windows - copy to Linux system to use');
+            console.log('ℹ️  Note: Generated systemd service file on Windows - copy to Linux system to use');
         }
     }
 }
 
 async function createPM2Config() {
-    console.log('○ Creating PM2 configuration...');
+    console.log('🔧 Creating PM2 configuration...');
     
     const pm2Config = {
         apps: [{
@@ -270,14 +251,14 @@ async function createPM2Config() {
     await fs.ensureDir(path.join(__dirname, 'logs'));
     await fs.writeJson(path.join(__dirname, 'ecosystem.config.json'), pm2Config, { spaces: 2 });
     
-    console.log('▣ PM2 configuration created: ecosystem.config.json');
+    console.log('✅ PM2 configuration created: ecosystem.config.json');
     console.log('   Start with: pm2 start ecosystem.config.json');
     console.log('   Monitor with: pm2 monit');
     console.log('   Stop with: pm2 stop workspace-manager');
 }
 
 async function createSystemdService() {
-    console.log('○ Creating systemd service...');
+    console.log('🔧 Creating systemd service...');
     
     const serviceContent = `[Unit]
 Description=Workspace Manager - Real-time workspace monitoring
@@ -301,7 +282,7 @@ WantedBy=multi-user.target
     const servicePath = path.join(__dirname, 'workspace-manager.service');
     await fs.writeFile(servicePath, serviceContent);
     
-    console.log('▣ Systemd service created: workspace-manager.service');
+    console.log('✅ Systemd service created: workspace-manager.service');
     console.log('   Install with: sudo cp workspace-manager.service /etc/systemd/system/');
     console.log('   Enable with: sudo systemctl enable workspace-manager');
     console.log('   Start with: sudo systemctl start workspace-manager');
@@ -331,11 +312,11 @@ async function main() {
         // Install dependencies if needed
         await installDependencies();
         
-        console.log('▣ All prerequisites met');
-        console.log('▶ Starting Workspace Manager...');
-        console.log('▢ Workspace:', workspacePath);
-        console.log('○ Dashboard: http://localhost:' + (config.workspace_port || DEFAULT_PORT));
-        console.log('→ Topology: http://localhost:' + (config.workspace_port || DEFAULT_PORT) + '/topology');
+        console.log('✅ All prerequisites met');
+        console.log('🎯 Starting Workspace Manager...');
+        console.log('📁 Workspace:', workspacePath);
+        console.log('🌐 Dashboard: http://localhost:' + (config.workspace_port || DEFAULT_PORT));
+        console.log('🔗 Topology: http://localhost:' + (config.workspace_port || DEFAULT_PORT) + '/topology');
         
         // Set environment variables
         process.env.WORKSPACE_PATH = workspacePath;
@@ -346,24 +327,24 @@ async function main() {
         await startApp();
         
     } catch (error) {
-        console.error('× Startup failed:', error.message);
+        console.error('💥 Startup failed:', error.message);
         console.error('\n📋 Troubleshooting Guide:');
         
         // Specific error guidance
         if (error.code === 'ENOENT' && error.path === 'npm') {
-            console.error('× npm not found in PATH');
+            console.error('❌ npm not found in PATH');
             console.error('   • Reinstall Node.js from https://nodejs.org/');
             console.error('   • Or manually run: npm install');
         } else if (error.message.includes('EADDRINUSE')) {
-            console.error('× Port already in use');
+            console.error('❌ Port already in use');
             console.error('   • Change workspace_port in language_model_abstraction/config.json');
             console.error('   • Or stop the conflicting service');
         } else if (error.message.includes('permission')) {
-            console.error('× Permission denied');
+            console.error('❌ Permission denied');
             console.error('   • Run as administrator/sudo');
             console.error('   • Check file permissions');
         } else {
-            console.error('× General troubleshooting:');
+            console.error('❌ General troubleshooting:');
             console.error('   • Ensure Node.js 16+ is installed');
             console.error('   • Run "npm install" manually');
             console.error('   • Check language_model_abstraction/config.json');
@@ -377,16 +358,16 @@ async function main() {
 
 // Handle graceful shutdown
 process.on('SIGINT', () => {
-    console.log('\n■ Shutting down gracefully...');
+    console.log('\n🛑 Shutting down gracefully...');
     process.exit(0);
 });
 
 process.on('SIGTERM', () => {
-    console.log('\n■ Received SIGTERM, shutting down...');
+    console.log('\n🛑 Received SIGTERM, shutting down...');
     process.exit(0);
 });
 
 main().catch(error => {
-    console.error('× Unhandled startup error:', error);
+    console.error('💥 Unhandled startup error:', error);
     process.exit(ERROR_CODES.UNKNOWN);
 });

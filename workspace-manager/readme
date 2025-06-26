@@ -1,8 +1,41 @@
-# Workspace Manager
+# DevCore Workspace Manager
 
-Real-time file system monitoring, dependency analysis, and topology visualization with **always-on service support**.
+Comprehensive workspace management system with real-time monitoring, dependency analysis, topology visualization, **code formatting**, **backup management**, and **changelog automation**.
 
-## Architecture
+## Quick Start
+
+### Unified Entry Points
+```bash
+# PowerShell (Windows)
+.\run.ps1 [command]
+
+# Bash (Linux/macOS)
+./run.sh [command]
+```
+
+### Available Commands
+```bash
+# Core Services
+ade              # Start ADE Desktop application (default)
+workspace        # Start Workspace Manager web interface
+all              # Start all services together
+
+# Code Management
+format           # Run Code Formatter once
+format-watch     # Run Code Formatter in watch mode
+backup           # Create codebase backup
+backup-list      # List available backups
+backup-clean     # Clean old backups
+
+# Version Control
+changelog        # Update changelog from git commits
+changelog-hooks  # Install git hooks for automatic changelog
+
+# Help
+help             # Show command help
+```
+
+## 🏗️ Architecture
 
 ```
 workspace-manager/
@@ -18,6 +51,9 @@ workspace-manager/
 │   └── llm_provider.js   # Universal LLM interface
 ├── public/
 │   └── index.html        # Dashboard interface
+├── code-formatter.js     # Universal file formatting system
+├── backup-manager.js     # Codebase backup management
+├── changelog-automation.js # Git changelog automation
 ├── start.js              # Enhanced startup with diagnostics
 ├── ecosystem.config.json # PM2 process configuration
 └── workspace-manager.service # systemd service unit

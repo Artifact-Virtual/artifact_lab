@@ -47,19 +47,19 @@
    ✅ CONFIRMED: ADE webchat service works perfectly on port 9000
    ✅ ISOLATED: Desktop IDE is now fully self-contained in ADE-Desktop directory
    
-   📂 FILES REMOVED:
+    FILES REMOVED:
    - ADE/main.py, enhanced_visualizer.py, watcher.py, summarizer.py
    - ADE/dependency_indexer.py, starmap.py, llm_file_operations.py
    - ADE/file_manager*.html, studio.html, ollama_client.py, terminal.*
    - ADE-Desktop/terminal.*, update-manager.js (unused/legacy)
    - Generated files: audit_log.json, system_summary.json, dependency_index.json
    
-   🎯 CURRENT CLEAN ARCHITECTURE:
+    CURRENT CLEAN ARCHITECTURE:
    - run.ps1/sh → Ollama (11500) + Webchat (9000) → Electron UI
    - ADE/ contains only: config.json, ollama_interface.py, studio_enhanced.html, webchat.py, themes.css
    - ADE-Desktop/ contains only: ade_core/, renderer/, main.js, preload.js, package.json
    
-   ⚡ STARTUP OPTIMIZED:
+    STARTUP OPTIMIZED:
    - Fixed path resolution in run.ps1 ($workspaceRoot\ADE-Desktop)
    - Removed unnecessary service wait loops
    - Eliminated all legacy background service startup

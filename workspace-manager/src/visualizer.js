@@ -28,21 +28,21 @@ class TopologyVisualizer extends EventEmitter {
         if (this.isRunning) return;
         
         this.isRunning = true;
-        console.log('🎨 Starting topology visualization...');
+        console.log('◇ Starting topology visualization...');
         
         await this.generateTopology();
         this.emit('started');
         
-        console.log('✅ Topology visualization started');
+        console.log('▣ Topology visualization started');
     }
 
     async generateTopology() {
         if (!this.indexer || !this.indexer.fileAnalysis) {
-            console.log('⚠️ No indexer data available for topology generation');
+            console.log('▲ No indexer data available for topology generation');
             return;
         }
 
-        console.log('🔄 Generating topology from indexed data...');
+        console.log('○ Generating topology from indexed data...');
         
         // Generate file topology
         this.visualization.fileTopology = await this.generateFileTopology();
@@ -54,7 +54,7 @@ class TopologyVisualizer extends EventEmitter {
         this.visualization.nodeCount = this.nodes.size;
         this.visualization.edgeCount = this.edges.size;
         
-        console.log(`✅ Topology generated: ${this.visualization.nodeCount} nodes, ${this.visualization.edgeCount} edges`);
+        console.log(`▣ Topology generated: ${this.visualization.nodeCount} nodes, ${this.visualization.edgeCount} edges`);
         
         this.emit('topologyGenerated', this.visualization);
     }
@@ -715,7 +715,7 @@ class TopologyVisualizer extends EventEmitter {
     async saveVisualization(outputPath) {
         const html = await this.generateHTML();
         await fs.writeFile(outputPath, html);
-        console.log(`✅ Topology visualization saved to: ${outputPath}`);
+        console.log(`▣ Topology visualization saved to: ${outputPath}`);
     }
 
     updateFromIndexer() {
@@ -740,7 +740,7 @@ class TopologyVisualizer extends EventEmitter {
     stop() {
         this.isRunning = false;
         this.emit('stopped');
-        console.log('✅ Topology visualizer stopped');
+        console.log('▣ Topology visualizer stopped');
     }
 }
 

@@ -18,7 +18,7 @@ class AutoLoopAgent(BaseAgent):
         """
         base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'workspace'))
         
-        print(f"🔄 Starting auto-fix loop (max {self.max_iterations} iterations)...")
+        print(f"○ Starting auto-fix loop (max {self.max_iterations} iterations)...")
         
         from DevCore.agents.test_agent import TestAgent
         from DevCore.agents.codegen_agent import CodeGenAgent
@@ -28,31 +28,31 @@ class AutoLoopAgent(BaseAgent):
         
         for iteration in range(self.max_iterations):
             self.current_iteration = iteration + 1
-            print(f"🔄 Auto-fix iteration {self.current_iteration}/{self.max_iterations}")
+            print(f"○ Auto-fix iteration {self.current_iteration}/{self.max_iterations}")
             
             # Run tests
             test_passed = test_agent.run(context)
             
             if test_passed:
-                print("✅ Tests passed! Auto-fix loop complete")
+                print("▣ Tests passed! Auto-fix loop complete")
                 return True
             
             # If tests failed, try to fix the issues
-            print(f"❌ Tests failed on iteration {self.current_iteration}")
+            print(f"× Tests failed on iteration {self.current_iteration}")
             
             # Get test error details
             test_error = context.get('test_error', 'Unknown test failure')
             
             # Attempt to fix the issues
             if not self.attempt_fix(context, test_error, iteration + 1):
-                print(f"❌ Failed to generate fixes on iteration {self.current_iteration}")
+                print(f"× Failed to generate fixes on iteration {self.current_iteration}")
                 continue
             
             # Regenerate code with fixes
-            print(f"🔧 Regenerating code with fixes...")
+            print("▢ Regenerating code with fixes...")
             codegen_agent.run(context)
         
-        print(f"❌ Auto-fix loop completed without success after {self.max_iterations} iterations")
+        print(f"× Auto-fix loop completed without success after {self.max_iterations} iterations")
         return False
 
     def attempt_fix(self, context: Dict[str, Any], error_message: str, iteration: int) -> bool:
@@ -78,7 +78,7 @@ class AutoLoopAgent(BaseAgent):
             return self.apply_fixes(context, fix_response)
             
         except Exception as e:
-            print(f"❌ Error in attempt_fix: {str(e)}")
+            print(f"× Error in attempt_fix: {str(e)}")
             return False
 
     def gather_files_info(self, context: Dict[str, Any]) -> Dict[str, str]:
@@ -151,7 +151,7 @@ Be comprehensive and ensure the fixes address the root cause of the failures.
             fixes = self.parse_fix_response(fix_response)
             
             if not fixes:
-                print("⚠️ No fixes found in LLM response")
+                print("▲ No fixes found in LLM response")
                 return False
             
             # Apply fixes to files
@@ -172,21 +172,21 @@ Be comprehensive and ensure the fixes address the root cause of the failures.
                     with open(full_path, 'w', encoding='utf-8') as f:
                         f.write(fixed_content)
                     
-                    print(f"🔧 Applied fix to: {file_path}")
+                    print(f"▢ Applied fix to: {file_path}")
                     fixes_applied += 1
                     
                 except Exception as e:
-                    print(f"❌ Error applying fix to {file_path}: {str(e)}")
+                    print(f"× Error applying fix to {file_path}: {str(e)}")
             
             if fixes_applied > 0:
-                print(f"✅ Applied {fixes_applied} fixes")
+                print(f"▣ Applied {fixes_applied} fixes")
                 return True
             else:
-                print("❌ No fixes were successfully applied")
+                print("× No fixes were successfully applied")
                 return False
                 
         except Exception as e:
-            print(f"❌ Error applying fixes: {str(e)}")
+            print(f"× Error applying fixes: {str(e)}")
             return False
 
     def parse_fix_response(self, response: str) -> Dict[str, str]:

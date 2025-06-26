@@ -49,14 +49,45 @@ class WorkspaceManager {
         // Initialize LLM provider
         this.llmProvider = new LLMProvider(config);
         
+        // Banner path
+        this.bannerPath = path.join(__dirname, '..', 'assets', 'banner.txt');
+        
         // Initialize components
         this.initializeComponents();
-        
-        // Setup web server
-        this.setupWebServer();
-        
-        // Setup health monitoring
-        this.setupHealthMonitoring();
+    }
+    
+    /**
+     * Display the operational banner when system is fully loaded
+     */
+    async displayOperationalBanner() {
+        try {
+            // Wait a moment for all components to fully initialize
+            await new Promise(resolve => setTimeout(resolve, 3000));
+            
+            try {
+                if (await fs.pathExists(this.bannerPath)) {
+                    const banner = await fs.readFile(this.bannerPath, 'utf8');
+                    console.log('\n' + banner);
+                    console.log('\n■ WORKSPACE MANAGER - FULLY OPERATIONAL ■');
+                    console.log('════════════════════════════════════════════════════════════════════════════════');
+                    console.log('▣ DevCore Workspace Management System v2.0');
+                    console.log('▣ All Components Initialized and Running');
+                    console.log('▣ System Ready for Operations');
+                    console.log(`▣ Dashboard: http://localhost:${this.port}`);
+                    console.log(`▣ Topology: http://localhost:${this.port}/topology`);
+                    console.log('════════════════════════════════════════════════════════════════════════════════\n');
+                } else {
+                    console.log('\n■ WORKSPACE MANAGER - FULLY OPERATIONAL ■');
+                    console.log('════════════════════════════════════════════════════════════════════════════════');
+                    console.log('▣ DevCore Workspace Management System v2.0 - Ready for Operations');
+                    console.log('════════════════════════════════════════════════════════════════════════════════\n');
+                }
+            } catch (error) {
+                console.log('◐ Banner display unavailable:', error.message);
+            }
+        } catch (error) {
+            this.logger.warn('◐ Could not display operational banner:', error.message);
+        }
     }
 
     initializeComponents() {
@@ -75,13 +106,13 @@ class WorkspaceManager {
         // Setup component event handlers
         this.setupComponentHandlers();
         
-        this.logger.info('✅ Components initialized');
+        this.logger.info('▣ Components initialized');
     }
 
     setupComponentHandlers() {
         // Watcher events
         this.watcher.on('fileChanged', async (event) => {
-            this.logger.info(`📝 File changed: ${event.path}`);
+            this.logger.info(`▢ File changed: ${event.path}`);
             
             // Update indexer
             await this.indexer.updateFile(event.fullPath);
@@ -94,7 +125,7 @@ class WorkspaceManager {
         });
 
         this.watcher.on('fileAdded', async (event) => {
-            this.logger.info(`📁 File added: ${event.path}`);
+            this.logger.info(`▢ File added: ${event.path}`);
             
             // Update indexer
             await this.indexer.updateFile(event.fullPath);
@@ -120,7 +151,7 @@ class WorkspaceManager {
 
         // Indexer events
         this.indexer.on('analysisComplete', (report) => {
-            this.logger.info('📊 Analysis complete:', report.summary);
+            this.logger.info('▢ Analysis complete:', report.summary);
             this.broadcastUpdate('analysisComplete', report);
         });
 
@@ -135,7 +166,7 @@ class WorkspaceManager {
 
         // Visualizer events
         this.visualizer.on('topologyGenerated', (visualization) => {
-            this.logger.info('🎨 Topology generated');
+            this.logger.info('◇ Topology generated');
             this.broadcastUpdate('topologyGenerated', visualization);
         });
     }
@@ -162,9 +193,6 @@ class WorkspaceManager {
         
         // API routes
         this.setupAPIRoutes();
-        
-        // WebSocket server
-        this.setupWebSocket();
         
         this.port = this.config.workspace_port || 8081;
     }
@@ -261,13 +289,15 @@ class WorkspaceManager {
 
     setupWebSocket() {
         this.server = this.app.listen(this.port, () => {
-            this.logger.info(`🚀 Workspace Manager server running on port ${this.port}`);
+            this.logger.info(`▶ Workspace Manager server running on port ${this.port}`);
+            // Display banner when system is fully operational
+            this.displayOperationalBanner();
         });
 
         this.wss = new WebSocketServer({ server: this.server });
         
         this.wss.on('connection', (ws) => {
-            this.logger.info('👋 WebSocket client connected');
+            this.logger.info('× WebSocket client connected');
             
             // Send initial state
             ws.send(JSON.stringify({
@@ -280,7 +310,7 @@ class WorkspaceManager {
             }));
             
             ws.on('close', () => {
-                this.logger.info('👋 WebSocket client disconnected');
+                this.logger.info('× WebSocket client disconnected');
             });
             
             ws.on('error', (error) => {
@@ -314,7 +344,7 @@ class WorkspaceManager {
                 // Auto-restart if unhealthy
                 const health = this.healthChecks.get(name);
                 if (!isHealthy && health.consecutiveFailures >= 3) {
-                    this.logger.warn(`🔄 Auto-restarting unhealthy component: ${name}`);
+                    this.logger.warn(`○ Auto-restarting unhealthy component: ${name}`);
                     await this.restartComponent(name);
                 }
                 
@@ -384,7 +414,7 @@ class WorkspaceManager {
             report.recommendations.push('Memory usage is high, consider restarting components or reducing file analysis batch size');
         }
         
-        this.logger.info('🏥 Health check complete:', report);
+        this.logger.info('▢ Health check complete:', report);
         this.broadcastUpdate('healthCheck', report);
     }
 
@@ -397,18 +427,22 @@ class WorkspaceManager {
         this.rootPath = path.resolve(rootPath);
         this.isRunning = true;
         
-        this.logger.info(`🚀 Starting Workspace Manager for: ${this.rootPath}`);
+        this.logger.info(`▶ Starting Workspace Manager for: ${this.rootPath}`);
         
         try {
+            // Setup Express and WebSocket
+            this.setupWebServer();
+            this.setupWebSocket();
+            
             // Start all components
             await this.startAllComponents();
             
-            this.logger.info('✅ Workspace Manager started successfully');
-            this.logger.info(`🌐 Web interface available at: http://localhost:${this.port}`);
-            this.logger.info(`🎨 Topology viewer available at: http://localhost:${this.port}/topology`);
+            this.logger.info('▣ Workspace Manager started successfully');
+            this.logger.info(`○ Web interface available at: http://localhost:${this.port}`);
+            this.logger.info(`◇ Topology viewer available at: http://localhost:${this.port}/topology`);
             
         } catch (error) {
-            this.logger.error('❌ Failed to start Workspace Manager:', error);
+            this.logger.error('× Failed to start Workspace Manager:', error);
             throw error;
         }
     }
@@ -429,7 +463,7 @@ class WorkspaceManager {
         // Start visualizer after indexer
         await this.startComponent('visualizer');
         
-        this.logger.info('✅ All components started');
+        this.logger.info('▣ All components started');
     }
 
     async startComponent(name) {
@@ -439,7 +473,7 @@ class WorkspaceManager {
                 throw new Error(`Component ${name} not found`);
             }
             
-            this.logger.info(`🔄 Starting component: ${name}`);
+            this.logger.info(`○ Starting component: ${name}`);
             
             if (name === 'watcher' || name === 'indexer') {
                 await component.start(this.rootPath);
@@ -447,10 +481,10 @@ class WorkspaceManager {
                 await component.start();
             }
             
-            this.logger.info(`✅ Component started: ${name}`);
+            this.logger.info(`▣ Component started: ${name}`);
             
         } catch (error) {
-            this.logger.error(`❌ Failed to start component ${name}:`, error);
+            this.logger.error(`× Failed to start component ${name}:`, error);
             throw error;
         }
     }
@@ -459,12 +493,12 @@ class WorkspaceManager {
         const restartCount = this.restartCounts.get(name) || 0;
         
         if (restartCount >= this.maxRestarts) {
-            this.logger.error(`❌ Max restarts reached for component: ${name}`);
+            this.logger.error(`× Max restarts reached for component: ${name}`);
             return;
         }
         
         try {
-            this.logger.info(`🔄 Restarting component: ${name}`);
+            this.logger.info(`○ Restarting component: ${name}`);
             
             const component = this.components.get(name);
             if (component && component.stop) {
@@ -476,10 +510,10 @@ class WorkspaceManager {
             await this.startComponent(name);
             
             this.restartCounts.set(name, restartCount + 1);
-            this.logger.info(`✅ Component restarted: ${name}`);
+            this.logger.info(`▣ Component restarted: ${name}`);
             
         } catch (error) {
-            this.logger.error(`❌ Failed to restart component ${name}:`, error);
+            this.logger.error(`× Failed to restart component ${name}:`, error);
             this.restartCounts.set(name, restartCount + 1);
         }
     }
@@ -562,7 +596,7 @@ Recommendations"`;
     async stop() {
         if (!this.isRunning) return;
         
-        this.logger.info('🛑 Stopping Workspace Manager...');
+        this.logger.info('■ Stopping Workspace Manager...');
         
         // Stop all components
         for (const [name, component] of this.components) {
@@ -570,9 +604,9 @@ Recommendations"`;
                 if (component.stop) {
                     await component.stop();
                 }
-                this.logger.info(`✅ Stopped component: ${name}`);
+                this.logger.info(`▣ Stopped component: ${name}`);
             } catch (error) {
-                this.logger.error(`❌ Error stopping component ${name}:`, error);
+                this.logger.error(`× Error stopping component ${name}:`, error);
             }
         }
         
@@ -582,7 +616,7 @@ Recommendations"`;
         }
         
         this.isRunning = false;
-        this.logger.info('✅ Workspace Manager stopped');
+        this.logger.info('▣ Workspace Manager stopped');
     }
 }
 

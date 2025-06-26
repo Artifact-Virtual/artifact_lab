@@ -38,7 +38,7 @@ class AdvancedWatcher extends EventEmitter {
         this.isRunning = true;
         this.stats.startTime = new Date();
 
-        console.log(`🔍 Starting advanced file watcher for: ${this.rootPath}`);
+        console.log(`◦ Starting advanced file watcher for: ${this.rootPath}`);
 
         // Initialize watcher with comprehensive options
         const watcher = chokidar.watch(this.watchPatterns, {
@@ -66,7 +66,7 @@ class AdvancedWatcher extends EventEmitter {
         this.watchers.set('main', watcher);
         this.emit('started', { rootPath: this.rootPath });
         
-        console.log('✅ Advanced watcher started successfully');
+        console.log('▣ Advanced watcher started successfully');
     }
 
     setupEventHandlers(watcher) {
@@ -95,7 +95,7 @@ class AdvancedWatcher extends EventEmitter {
             timestamp: new Date()
         });
 
-        console.log(`📁 Added: ${filePath}`);
+        console.log(`▢ Added: ${filePath}`);
     }
 
     async handleFileChange(filePath, stats) {
@@ -119,7 +119,7 @@ class AdvancedWatcher extends EventEmitter {
             timestamp: new Date()
         });
 
-        console.log(`📝 Changed: ${filePath} (${changes.length} changes)`);
+        console.log(`▢ Changed: ${filePath} (${changes.length} changes)`);
     }
 
     handleFileDelete(filePath) {
@@ -143,7 +143,7 @@ class AdvancedWatcher extends EventEmitter {
             timestamp: new Date()
         });
 
-        console.log(`📁 Directory added: ${dirPath}`);
+        console.log(`▢ Directory added: ${dirPath}`);
     }
 
     handleDirDelete(dirPath) {
@@ -169,7 +169,7 @@ class AdvancedWatcher extends EventEmitter {
     }
 
     handleReady() {
-        console.log(`✅ Initial scan complete. Watching ${this.stats.filesWatched} files`);
+        console.log(`▣ Initial scan complete. Watching ${this.stats.filesWatched} files`);
         this.emit('ready', {
             filesWatched: this.stats.filesWatched,
             timestamp: new Date()
@@ -267,18 +267,18 @@ class AdvancedWatcher extends EventEmitter {
     async stop() {
         if (!this.isRunning) return;
         
-        console.log('🛑 Stopping file watcher...');
+        console.log('■ Stopping file watcher...');
         
         for (const [name, watcher] of this.watchers) {
             await watcher.close();
-            console.log(`✅ Closed watcher: ${name}`);
+            console.log(`▣ Closed watcher: ${name}`);
         }
         
         this.watchers.clear();
         this.isRunning = false;
         this.emit('stopped');
         
-        console.log('✅ File watcher stopped');
+        console.log('▣ File watcher stopped');
     }
 
     getStats() {

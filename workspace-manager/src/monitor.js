@@ -36,7 +36,7 @@ class SystemMonitor extends EventEmitter {
         if (this.isRunning) return;
         
         this.isRunning = true;
-        console.log('📊 Starting system monitoring...');
+        console.log('▢ Starting system monitoring...');
         
         // Initial metrics gathering
         await this.gatherMetrics();
@@ -48,7 +48,7 @@ class SystemMonitor extends EventEmitter {
         }, this.refreshRate);
         
         this.emit('started');
-        console.log('✅ System monitoring started');
+        console.log('▣ System monitoring started');
     }
 
     async gatherMetrics() {
@@ -142,7 +142,7 @@ class SystemMonitor extends EventEmitter {
             await this.updateWorkspaceMetrics();
 
         } catch (error) {
-            console.error('❌ Error gathering system metrics:', error);
+            console.error('× Error gathering system metrics:', error);
         }
     }
 
@@ -329,7 +329,7 @@ class SystemMonitor extends EventEmitter {
         }
         
         this.emit('stopped');
-        console.log('✅ System monitoring stopped');
+        console.log('▣ System monitoring stopped');
     }
 }
 
