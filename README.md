@@ -2,9 +2,9 @@
 
 [Studio] version 1.0.0
 
-> Professional Monaco Editor-based development environment with ADAM-matching aesthetics, AI-powered assistance, and advanced workflow automation.
+> Professional Monaco Editor-based development environment with AI-powered assistance, and advanced workflow automation.
 
-A comprehensive development studio featuring a clean, professional Monaco Editor interface with a pure black theme inspired by ADAM's aesthetics. Combines full IDE capabilities with intelligent AI assistance, advanced file management, and planned workflow automation integrations. Built for modern development teams seeking a premium coding experience with AI-powered assistance and seamless workflow integration.
+A comprehensive development studio featuring a clean, professional Monaco Editor interface. Combines full IDE capabilities with intelligent AI assistance, advanced file management, and planned workflow automation integrations. Built for modern development teams seeking a premium coding experience with AI-powered assistance and seamless workflow integration.
 
 ---
 
@@ -14,7 +14,7 @@ A comprehensive development studio featuring a clean, professional Monaco Editor
 
 - **Modern Desktop IDE**: ADE-Desktop now uses a modern, bezelless iframe instead of deprecated webview technology.
 - **Service Integration**: Robust backend service orchestration (Ollama and webchat on ports 11500 and 9000).
-- **Electron App**: Fully functional desktop IDE with AMOLED theme and service status indicators.
+- **Electron App**: Fully functional desktop IDE with service status indicators.
 - **Cross-Origin Support**: Iframe properly configured to load ADE Studio interface from localhost.
 - **Connection Management**: Robust connection retry logic and error handling for iframe loading.
 - **Backend Services**: Hardened startup scripts with port detection and path-aware service management.
