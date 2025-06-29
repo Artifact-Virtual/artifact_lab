@@ -1,0 +1,85 @@
+
+# VPS Landing Page
+
+
+# api registry
+
+
+# blueprints backlog
+
+
+# qvm 
+
+
+# blockchain
+
+
+
+This is a sophisticated AI system that combines multiple agents and knowledge sources to provide enhanced question-answering capabilities.
+
+
+perfect i like the first iteration. enhance this system and make it more accessible and user firiendly, no clutter and very fluent navigation . all coherent. once dont pay attention to this iamge i have attached, this system must be intergrated with our current iteration carefully.
+firrs you wlll need to understand this blueprint and purpose then understnad why its being implemented (suggest better options if any - free and open source)
+once the system is nicely baked together with both features properly intergrated we will move forwead
+
+Understanding the Windmill Blueprint
+Purpose: Windmill is a powerful workflow automation platform that allows you to:
+
+Create automated workflows with visual scripting
+Schedule tasks and processes
+Handle webhooks and API integrations
+Manage secrets and authentication
+Execute scripts in sandboxed environments
+Why it's being implemented: This will add workflow automation capabilities to our RAG system, allowing users to:
+
+Automate knowledge ingestion from various sources
+Schedule regular updates to knowledge bases
+Create complex multi-step AI workflows
+Integrate with external systems seamlessly
+Better alternatives analysis: Windmill is actually one of the best free/open-source options available. Alternatives like n8n or Zapier either have limitations or costs. Windmill offers:
+
+Self-hosted (free)
+TypeScript/Python script support
+Rich UI builder
+Enterprise-grade features
+
+we need to ensure the mcp servers are exhaustively tooled for almost all kinds of compute and fucntion tasks (eg social media campaign running with scheduling and posting and commenting etc)
+we need to ensure our ai can understand the tools it has at its disposal.
+it needs to have the ability to create agents, workflows, projects, etc. hierarchical time based management as well.
+interface- we need to make the itnerface very very clean for this.
+i suggest a full monochrome theme amoled black default dark and white sharp thin weighted light text like mosteserrate (not limited to, lexend ultra thin also an example)
+workflow building and drag and drop should be the top most feature.
+add a beautiful and high resolution canvas for this.
+
+ensure theming is dark default and have light mode toggle.
+
+DO NOT BREAK FUNCTIONALITY!
+
+increase the overall resolution of the entire interface (netter for people with eye issues) and ensure it is fhd 1920*1080 crystal graphics.
+install everyuthing and add concrete requirements file.
+reduce the size of icons and create color groups based on type or job or department etc.
+add mcp tool discovery and automatic installation.
+add temporal management in scheduling.
+add niche targetted seaching for trend analysis
+ensure everything is able to be set up multi agent and multi phase.
+
+and finally wrap eveything with a chat app that has function and tool calling activated, so the user can chat and ai can set everything up. fine tunable by user before run.
+ai also must be able to manage and operate workflows autonomouosly for as long as needed. add rate limitations so that eevtything remains smooth and we dont end up with errors. add proper cron delays where required throught out the system.
+
+ensure error handling is off the charts. and monitorin is the most polished feature.
+create an overview dashboard, that shows a canvas vew of all operations, businesses, research, teams, workflows, automations active. the canvas only serves organizing purpose and nothing else. user can pin these active process cards to arrange their work (added bonus would be a mind map)
+
+we need to include gemini api and also ollama and llm studio etc. integration for local llm access. we also want to create this llm layar as an abstraction, so ensure you create a config.json method to route the llm loading logic. this way we can change the model and providers and other llm settings without affecting anything in the system, this needs to be built sort of like a kernel and the system built around it.
+we need to install payload cms
+visit this site and understand how to set it up
+https://payloadcms.com/docs/getting-started/installation
+this program also needs a backed automation service that runs persistently and continously, its job its to provide live dependency updates, codebase code and other updates, creates an index of the files in its root folder. and all root directories and all sun directories and all files exhaustively. it applies a small code that helps it recognize files its indexed so it doesnt overwork. it keeps recognizing new files and udating and adding/removing this registry system. then the system uses very tiny ai models (ollama preferably or hugging face) to convert the registry infomatoin into a profound system summary. this stays live and this process can be cron configured to update system information regulaly. giving our main llm ai to have access to the best information always current. this system specifically is to be desigend extremely modular and plug and play that it automatically discovers its neighboring root directories and files as well as deeper within them. so as soon as the main app starts this system is also triggered to run silently in thr background, with priority compute resourece allocated for the workspace
+
+final touches are visual only.
+i want this to be a true amoled space with components almost as dark. monochromic if you will. for icons remove the squares around them and leave just the icon itself. colored.
+change the title of the page to ARTIFACT VIRTUAL - same lightweight typography.
+make an appropriate logo as well. make component sizes slightly smaller to fit more metrics in one view and make it easier on the eyes.
+bright white sharp component subtly glowing borders.
+almost like a holographic smooth aesthetic.
+the canvas should be state of the art with extremely simple drag and drog mnagement.
+ensure our chat is operational, and can invoke all features of the workspace as required by user.
