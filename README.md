@@ -1,8 +1,8 @@
 # ARTIFACT DEVELOPMENT ENGINE
 
-![Dashboard Screenshot](L:/devops/artifact_lab/worxpace/screenshots/dashboard4.png)
+![Dashboard Screenshot](./worxpace/screenshots/dashboard4.png)
 
-![Canvas Screenshot](L:/devops/artifact_lab/worxpace/screenshots/canvas.png)
+![Canvas Screenshot](./worxpace/screenshots/canvas.png)
 
 [Studio] version 1.0.0
 
