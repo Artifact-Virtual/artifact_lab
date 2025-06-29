@@ -1,5 +1,9 @@
 # ARTIFACT DEVELOPMENT ENGINE
 
+![Dashboard Screenshot](L:/devops/artifact_lab/worxpace/screenshots/dashboard4.png)
+
+![Canvas Screenshot](L:/devops/artifact_lab/worxpace/screenshots/canvas.png)
+
 [Studio] version 1.0.0
 
 > Professional Monaco Editor-based development environment with AI-powered assistance, and advanced workflow automation.
